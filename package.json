@@ -1,14 +1,11 @@
 {
-  "name": "universal-app-v2",
+  "name": "UniversalApp",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "devtools": "react-devtools",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prettier": "prettier --write '*.js'"
+    "storybook": "storybook start"
   },
   "dependencies": {
     "react": "16.6.3",
@@ -17,17 +14,26 @@
     "react-navigation": "3.0.9"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^4.1.4",
+    "@storybook/addon-links": "^4.1.4",
+    "@storybook/addons": "^4.1.4",
+    "@storybook/react": "4.1.4",
     "babel-eslint": "10.0.1",
     "babel-jest": "23.6.0",
-    "eslint": "5.10.0",
+    "eslint": "5.11.1",
     "eslint-config-airbnb": "17.1.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
-    "eslint-plugin-react": "7.11.1",
+    "eslint-plugin-react": "7.12.1",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.51.1",
-    "prettier": "1.15.3",
-    "react-test-renderer": "16.6.3"
+    "react-native-storybook-loader": "1.8.0",
+    "react-test-renderer": "16.6.3",
+    "@storybook/react-native": "^4.1.4",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
+    "react-dom": "16.6.3",
+    "prop-types": "^15.6.2"
   },
   "jest": {
     "preset": "react-native"
