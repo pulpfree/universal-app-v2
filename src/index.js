@@ -1,7 +1,7 @@
 import React from 'react'
 
-import TabNavigator from './config/tabs'
+import Navigator from './config/routes'
 
 export default () => (
-  <TabNavigator />
+  <Navigator onNavigationStateChange={null} />
 )
