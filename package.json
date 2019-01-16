@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "run-ios": "react-native run-ios --simulator 'iPad Air 2 (12.1)'",
     "test": "jest",
     "storybook": "storybook start",
     "lint": "eslint .",
@@ -11,14 +12,18 @@
   },
   "dependencies": {
     "add": "2.0.6",
+    "formik": "1.4.2",
     "moment": "2.23.0",
+    "ramda": "0.26.1",
     "react": "16.7.0-alpha.2",
     "react-native": "npm:@brunolemos/react-native",
     "react-native-elements": "1.0.0-beta7",
     "react-native-gesture-handler": "1.0.12",
+    "react-native-paper": "2.4.0",
     "react-native-vector-icons": "6.1.0",
     "react-navigation": "3.0.9",
-    "yarn": "1.12.3"
+    "yarn": "1.12.3",
+    "yup": "0.26.7"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^4.1.4",

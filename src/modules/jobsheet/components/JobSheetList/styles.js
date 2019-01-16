@@ -22,7 +22,7 @@ export default StyleSheet.create({
     padding: 8.5,
     paddingLeft: 14,
     paddingRight: 14,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     borderBottomColor: clr.mdGray,
   },
   itemCell: {

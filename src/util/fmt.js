@@ -36,3 +36,35 @@ export function fmtDate(date) {
 export function ucFirst(txt) {
   return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
 }
+
+export function fmtPhone(value, previousValue) {
+  if (!value) return value
+
+  const digits = value.replace(/[^\d]/g, '')
+  if (!previousValue || value.length > previousValue.length) {
+    // typing forward
+    if (digits.length === 3) return `(${digits})`
+
+    if (digits.length === 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}-`
+  }
+  if (digits.length <= 3) return digits
+
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`
+
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`
+}
+
+export function fmtPostalCode(code) {
+  const postalCode = code.trim()
+  const validPat = /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ] ?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
+  const valid = validPat.test(postalCode)
+  if (!valid) return false
+
+  // add space if missing
+  if (postalCode.length === 6) {
+    const re = /(.{3})(.{3})/
+    return postalCode.replace(re, '$1 $2')
+  }
+
+  return postalCode
+}

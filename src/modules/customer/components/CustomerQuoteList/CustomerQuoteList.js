@@ -45,7 +45,7 @@ const ListItem = ({ item }) => (
     <View style={styles.itemCell}>
       <Text>{fmtDate(item.updatedAt)}</Text>
     </View>
-    <View style={[styles.itemCell, { flex: 1.5 }]}>
+    <View style={[styles.itemCell, { flex: 1.25 }]}>
       <Text>123 Street Avenue</Text>
     </View>
     <ShowYes yesFlag={item.invoiced} />

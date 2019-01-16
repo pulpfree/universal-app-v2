@@ -10,9 +10,11 @@ import QuoteNew from '../modules/quote/screens/QuoteNew'
 import QuotePreview from '../modules/quote/screens/QuotePreview'
 import Home from '../modules/home/screens/Home'
 
+import { ContactSheet } from '../modules/customer/components/ContactSheet'
+
 import clr from './colors'
 
-const homeStack = createStackNavigator(
+const HomeStack = createStackNavigator(
   {
     Home: {
       screen: Home,
@@ -84,5 +86,20 @@ const homeStack = createStackNavigator(
   }
 )
 
+const RootStack = createStackNavigator(
+  {
+    Main: {
+      screen: HomeStack,
+    },
+    ContactSheet: {
+      screen: ContactSheet,
+    },
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+)
+
 // export default homeStack
-export default createAppContainer(homeStack)
+export default createAppContainer(RootStack)

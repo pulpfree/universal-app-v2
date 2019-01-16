@@ -1,11 +1,15 @@
 import React from 'react'
-import { ScrollView, Text } from 'react-native'
+// import { ScrollView, Text } from 'react-native'
 
 import { storiesOf } from '@storybook/react-native'
-import { action } from '@storybook/addon-actions'
-import { linkTo } from '@storybook/addon-links'
+// import { action } from '@storybook/addon-actions'
+// import { linkTo } from '@storybook/addon-links'
 
-import CenterView from './CenterView'
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
+
+// import CenterView from './CenterView'
+
+import { AddressForm } from '../../src/modules/address/components/AddressForm'
 
 import CustomerSearch from '../../src/modules/customer/screens/CustomerSearch'
 import CustomerInfo from '../../src/modules/customer/screens/CustomerInfo'
@@ -13,7 +17,10 @@ import { CustomerInfoHeader } from '../../src/modules/customer/components/Custom
 import { CustomerQuoteList } from '../../src/modules/customer/components/CustomerQuoteList'
 import { CustomerSearch as CustomerSearchBox } from '../../src/modules/customer/components/CustomerSearch'
 import { CustomerSearchList } from '../../src/modules/customer/components/CustomerSearchList'
+import { CustomerForm } from '../../src/modules/customer/components/CustomerForm'
+import { ContactSheet } from '../../src/modules/customer/components/ContactSheet'
 
+import JobSheetNew from '../../src/modules/jobsheet/screens/JobSheetNew'
 import { JobSheetList } from '../../src/modules/jobsheet/components/JobSheetList'
 
 import QuoteSearch from '../../src/modules/quote/screens/QuoteSearch'
@@ -24,6 +31,17 @@ import { QuoteSearchList } from '../../src/modules/quote/components/QuoteSearchL
 import { jobsheets, quotes } from '../mockData/quotes'
 import { customers, customerInfo, quotes as customerQuotes } from '../mockData/customer'
 
+import clr from '../../src/config/colors'
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: clr.primary,
+    accent: '#f1c40f',
+  },
+}
 
 /*
 * ======================== Customer =====================================
@@ -58,6 +76,15 @@ storiesOf('Customer', module)
   .add('info screen', () => (
     <CustomerInfo />
   ))
+  .add('contact sheet', () => (
+    <ContactSheet data={customerInfo} />
+  ))
+
+storiesOf('Customer Form', module)
+  .addDecorator(getStory => <PaperProvider theme={theme}>{getStory()}</PaperProvider>)
+  .add('form', () => (
+    <CustomerForm />
+  ))
 
 /*
  * ======================== Quote =====================================
@@ -75,6 +102,22 @@ storiesOf('Quotes', module)
       data={quotes}
     />
   ))
-  .add('Quote Search screen', () => (
+  .add('search screen', () => (
     <QuoteSearch />
+  ))
+
+/*
+* ======================== Address =====================================
+*/
+storiesOf('Address', module)
+  .add('address form', () => (
+    <AddressForm />
+  ))
+
+/*
+* ======================== JobSheet =====================================
+*/
+storiesOf('JobSheets', module)
+  .add('new jobsheet screen', () => (
+    <JobSheetNew />
   ))

@@ -11,7 +11,7 @@ import styles from './styles'
 import clr from '../../../../config/colors'
 import { ucFirst } from '../../../../util/fmt'
 
-export default function CustomerInfo({ data }) {
+export default function CustomerInfo({ data, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.column}>
@@ -60,6 +60,7 @@ export default function CustomerInfo({ data }) {
       </View>
       <View style={styles.column}>
         <Button
+          onPress={() => navigation.navigate('ContactSheet', { customer: data, navigation })}
           raised
           rounded
           icon={(
@@ -92,7 +93,6 @@ export default function CustomerInfo({ data }) {
           buttonStyle={{
             backgroundColor: clr.black,
           }}
-
         />
       </View>
     </View>
@@ -100,4 +100,5 @@ export default function CustomerInfo({ data }) {
 }
 CustomerInfo.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
+  navigation: PropTypes.instanceOf(Object).isRequired,
 }

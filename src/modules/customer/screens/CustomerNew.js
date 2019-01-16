@@ -6,9 +6,11 @@ import {
   View,
 } from 'react-native'
 
+import { CustomerForm } from '../components/CustomerForm'
+
 const CustomerNew = () => (
-  <View>
-    <Text>Add New Customer</Text>
+  <View style={{ marginTop: 20 }}>
+    <CustomerForm />
   </View>
 )
 

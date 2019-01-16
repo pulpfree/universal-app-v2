@@ -27,7 +27,7 @@ class CustomerInfo extends React.Component {
     const { navigation } = this.props
     return (
       <View>
-        <CustomerInfoHeader data={customerInfo} />
+        <CustomerInfoHeader data={customerInfo} navigation={navigation} />
         <JobSheetList data={jobsheets} />
         <CustomerQuoteList data={customerQuotes} />
       </View>

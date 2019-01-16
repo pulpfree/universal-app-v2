@@ -16,7 +16,7 @@ export default function JobSheetListHeader() {
       <View style={styles.cell}>
         <Text style={styles.cellText}>Date</Text>
       </View>
-      <View style={[styles.cell, { flex: 1.5 }]}>
+      <View style={[styles.cell, { flex: 1.25 }]}>
         <Text style={styles.cellText}>Street</Text>
       </View>
       <View style={[styles.cell, { flex: 0.5 }]}>

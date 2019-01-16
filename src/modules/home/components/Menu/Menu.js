@@ -15,7 +15,8 @@ export default function Menu({ navigation }) {
         buttonStyle={styles.button}
         icon={(
           <Icon
-            name="search"
+            name="page-multiple"
+            type="foundation"
             color={clr.white}
           />
         )}
@@ -26,7 +27,7 @@ export default function Menu({ navigation }) {
         buttonStyle={styles.button}
         icon={(
           <Icon
-            name="search"
+            name="group"
             color={clr.white}
           />
         )}
@@ -37,8 +38,7 @@ export default function Menu({ navigation }) {
         buttonStyle={styles.button}
         icon={(
           <Icon
-            name="plus"
-            type="feather"
+            name="person"
             color={clr.white}
           />
         )}
