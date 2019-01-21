@@ -12,10 +12,13 @@
   },
   "dependencies": {
     "add": "2.0.6",
+    "aws-appsync": "1.7.1",
+    "aws-appsync-react": "1.2.6",
     "formik": "1.4.2",
     "moment": "2.23.0",
     "ramda": "0.26.1",
     "react": "16.7.0-alpha.2",
+    "react-apollo": "2.3.3",
     "react-native": "npm:@brunolemos/react-native",
     "react-native-elements": "1.0.0-beta7",
     "react-native-gesture-handler": "1.0.12",
