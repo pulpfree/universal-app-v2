@@ -9,8 +9,11 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
+import { graphql, compose } from 'react-apollo'
 
 import styles from './styles'
+import SearchCustomer from '../../queries/SearchCustomer'
+import { withSearch } from '../../../common/components/SearchContext'
 
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
@@ -45,12 +48,12 @@ class CustomerSearchList extends React.Component {
 
   render() {
     const { data } = this.props
-    console.log('data:', data)
+    const results = data && data.searchCustomer ? data.searchCustomer : null
 
     return (
       <ScrollView>
         <FlatList
-          data={data}
+          data={results}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
         />
@@ -59,8 +62,25 @@ class CustomerSearchList extends React.Component {
   }
 }
 CustomerSearchList.propTypes = {
-  data: PropTypes.instanceOf(Object).isRequired,
+  data: PropTypes.instanceOf(Object),
   navigation: PropTypes.instanceOf(Object).isRequired,
 }
+CustomerSearchList.defaultProps = {
+  data: null,
+}
 
-export default withNavigation(CustomerSearchList)
+const SearchList = graphql(SearchCustomer, {
+  skip: ({ searchVal }) => !searchVal,
+  options: (props) => {
+    // console.log('prop in graphql:', props)
+    return ({
+      variables: { field: 'name.last', value: props.searchVal },
+    })
+  },
+})
+
+export default compose(
+  withSearch,
+  withNavigation,
+  SearchList,
+)(CustomerSearchList)

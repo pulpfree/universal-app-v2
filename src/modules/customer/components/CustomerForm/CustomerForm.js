@@ -10,6 +10,7 @@ import {
 import ramda from 'ramda'
 import { Button, CheckBox, Icon } from 'react-native-elements'
 import { TextInput } from 'react-native-paper'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 
 import styles from './styles'
 import clr from '../../../../config/colors'
@@ -85,7 +86,7 @@ class CustomerForm extends React.Component {
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <ScrollView style={{ paddingBottom: 260 }}>
+        <ScrollView style={{ paddingBottom: 320 }}>
           <Header label="Name" padTop={false} />
           <View style={styles.inputRow}>
             <View style={styles.input}>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Button, Icon } from 'react-native-elements'
 
+import { LogoutButton } from '../LogoutButton'
 import clr from '../../../../config/colors'
 import styles from './styles'
 
@@ -43,6 +44,7 @@ export default function Menu({ navigation }) {
           />
         )}
       />
+      <LogoutButton />
     </React.Fragment>
   )
 }

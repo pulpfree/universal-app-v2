@@ -3,3 +3,6 @@
 "amplify <category> add" will allow you to add features like user login or a backend API
 "amplify push" will build all your local backend resources and provision it in the cloud
 "amplify publish" will build all your local backend and frontend resources (if you have hosting category added) and provision it in the cloud
+
+
+[issue on forwarding](https://github.com/aws-amplify/amplify-js/issues/1269)
