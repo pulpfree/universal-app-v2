@@ -1,20 +1,20 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 
-import {
-  View,
-} from 'react-native'
+// import {
+//   View,
+// } from 'react-native'
 
 import { CustomerSearch as SearchBox } from '../components/CustomerSearch'
 import { CustomerSearchList } from '../components/CustomerSearchList'
-
-import { customers } from '../../../../storybook/mockData/customer'
+import { SearchProvider } from '../../common/components/SearchContext'
+// import { customers } from '../../../../storybook/mockData/customer'
 
 const CustomerSearch = () => (
-  <View>
+  <SearchProvider>
     <SearchBox />
-    <CustomerSearchList data={customers} />
-  </View>
+    <CustomerSearchList />
+  </SearchProvider>
 )
 
 export default CustomerSearch

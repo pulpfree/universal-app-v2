@@ -1,16 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {
-  // Button,
-  // Text,
-  View,
-} from 'react-native'
-
-// import { Button, Icon } from 'react-native-elements'
-
-// import clr from '../../../config/colors'
+import { View } from 'react-native'
 import { Menu } from '../components/Menu'
+import { Welcome } from '../components/Welcome'
 
 const Home = ({ navigation }) => (
 
@@ -21,27 +14,24 @@ const Home = ({ navigation }) => (
   >
     <View
       style={{
-        flex: 1,
+        flex: 0.75,
       }}
     />
     <View
       style={{
-        flex: 0.75,
+        flex: 1.5,
         flexDirection: 'column',
         justifyContent: 'center',
-        // justifyContent: 'space-between',
-        // alignItems: 'center',
-        // alignContent: 'center',
-        // width: 200,
         height: 400,
-        // margin: 'auto',
+        maxWidth: 600,
       }}
     >
+      <Welcome />
       <Menu navigation={navigation} />
     </View>
     <View
       style={{
-        flex: 1,
+        flex: 0.75,
       }}
     />
   </View>

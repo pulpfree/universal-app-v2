@@ -56,3 +56,5 @@ buck-out/
 *.jsbundle
 
 builds
+
+src/aws-exports

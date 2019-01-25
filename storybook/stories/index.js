@@ -19,6 +19,7 @@ import { CustomerSearch as CustomerSearchBox } from '../../src/modules/customer/
 import { CustomerSearchList } from '../../src/modules/customer/components/CustomerSearchList'
 import { CustomerForm } from '../../src/modules/customer/components/CustomerForm'
 import { ContactSheet } from '../../src/modules/customer/components/ContactSheet'
+import { SearchProvider } from '../../src/modules/common/components/SearchContext'
 
 import JobSheetNew from '../../src/modules/jobsheet/screens/JobSheetNew'
 import { JobSheetList } from '../../src/modules/jobsheet/components/JobSheetList'
@@ -28,9 +29,11 @@ import { QuoteListHeader } from '../../src/modules/quote/components/QuoteListHea
 import { QuoteSearchHeader } from '../../src/modules/quote/components/QuoteSearchHeader'
 import { QuoteSearchList } from '../../src/modules/quote/components/QuoteSearchList'
 
+import { Container } from '../../src/modules/auth/components/Container'
+import { SignIn as PfSignIn } from '../../src/modules/auth/components/SignIn'
+
 import { jobsheets, quotes } from '../mockData/quotes'
 import { customers, customerInfo, quotes as customerQuotes } from '../mockData/customer'
-
 import clr from '../../src/config/colors'
 
 const theme = {
@@ -47,6 +50,7 @@ const theme = {
 * ======================== Customer =====================================
 */
 storiesOf('Customer', module)
+  .addDecorator(getStory => <SearchProvider>{getStory()}</SearchProvider>)
   .add('search header', () => (
     <CustomerSearchBox />
   ))
@@ -90,7 +94,6 @@ storiesOf('Customer Form', module)
  * ======================== Quote =====================================
  */
 storiesOf('Quotes', module)
-  // .addDecorator(getStory => <ScrollView>{getStory()}</ScrollView>)
   .add('search header', () => (
     <QuoteSearchHeader />
   ))
@@ -120,4 +123,13 @@ storiesOf('Address', module)
 storiesOf('JobSheets', module)
   .add('new jobsheet screen', () => (
     <JobSheetNew />
+  ))
+
+/*
+* ======================== Auth =====================================
+*/
+storiesOf('Authentication', module)
+  .addDecorator(getStory => <Container>{getStory()}</Container>)
+  .add('Sign In', () => (
+    <PfSignIn />
   ))
