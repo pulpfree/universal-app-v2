@@ -9,11 +9,15 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
+import { graphql, compose } from 'react-apollo'
 
 import { QuoteListHeader } from '../QuoteListHeader'
 import styles from './styles'
 import { fmtMoney } from '../../../../util/fmt'
-
+import SearchQuotes from '../../queries/SearchQuotes'
+import { withSearch } from '../SearchContext'
+import { Error } from '../../../common/components/Error'
+import { Loader } from '../../../common/components/Loader'
 
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
@@ -21,16 +25,16 @@ const ListItem = ({ item }) => (
       <Text>{item.number}</Text>
     </View>
     <View style={styles.itemCell}>
-      <Text>{`${item.customer.name.last}, ${item.customer.name.first}`}</Text>
+      <Text>{`${item.customerID.name.last}, ${item.customerID.name.first}`}</Text>
     </View>
     <View style={[styles.itemCell, { flex: 1.5 }]}>
-      <Text>{`${item.address.street1}, ${item.address.city}`}</Text>
+      <Text>{`${item.jobsheetID.addressID.street1}, ${item.jobsheetID.addressID.city}`}</Text>
     </View>
     <View style={[styles.itemCell, { flex: 0.75 }]}>
-      <Text style={{ textAlign: 'right' }}>{fmtMoney(item.quotePrice.total, 2, true)}</Text>
+      <Text style={{ textAlign: 'right' }}>{fmtMoney(item.quotePrice.total, null, true)}</Text>
     </View>
     <View style={[styles.itemCell, { flex: 0.75 }]}>
-      <Text style={{ textAlign: 'right' }}>{fmtMoney(item.quotePrice.total, 2, true)}</Text>
+      <Text style={{ textAlign: 'right' }}>{fmtMoney(item.quotePrice.outstanding, null, true)}</Text>
     </View>
   </View>
 )
@@ -38,9 +42,30 @@ ListItem.propTypes = {
   item: PropTypes.instanceOf(Object).isRequired,
 }
 
+const Totals = ({ totalInvoiced, totalOutstanding }) => (
+  <View style={styles.costContainer}>
+    <View style={styles.costCell}>
+      <Text style={styles.costLabel}>Total Costs</Text>
+      <Text style={styles.costValue}>{fmtMoney(totalInvoiced, 0, true, true)}</Text>
+    </View>
+    <View style={styles.costCell}>
+      <Text style={styles.costLabel}>Total Outstanding</Text>
+      <Text style={styles.costValue}>{fmtMoney(totalOutstanding, 0, true, true)}</Text>
+    </View>
+  </View>
+)
+Totals.propTypes = {
+  totalInvoiced: PropTypes.number,
+  totalOutstanding: PropTypes.number,
+}
+Totals.defaultProps = {
+  totalInvoiced: 0.00,
+  totalOutstanding: 0.00,
+}
+
 class QuoteSearchList extends React.Component {
   _renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this._onPressItem(item.customer._id)}>
+    <TouchableOpacity onPress={() => this._onPressItem(item.customerID._id)}>
       <ListItem item={item} />
     </TouchableOpacity>
   )
@@ -54,12 +79,22 @@ class QuoteSearchList extends React.Component {
 
   render() {
     const { data } = this.props
+    const { error, loading } = data
+
+    if (error) return <Error error={error} />
+    if (loading) return <Loader />
+
+    const { searchQuotes } = data
+    const { quotes, totalInvoiced, totalOutstanding } = searchQuotes
 
     return (
       <ScrollView>
+        {data.variables.invoiced
+          && <Totals totalInvoiced={totalInvoiced} totalOutstanding={totalOutstanding} />
+        }
         <FlatList
           ListHeaderComponent={QuoteListHeader}
-          data={data}
+          data={quotes}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
         />
@@ -68,8 +103,33 @@ class QuoteSearchList extends React.Component {
   }
 }
 QuoteSearchList.propTypes = {
-  data: PropTypes.instanceOf(Object).isRequired,
+  data: PropTypes.instanceOf(Object),
   navigation: PropTypes.instanceOf(Object).isRequired,
 }
+QuoteSearchList.defaultProps = {
+  data: null,
+}
 
-export default withNavigation(QuoteSearchList)
+const SearchList = graphql(SearchQuotes, {
+  // fetchPolicy: 'network-only',
+  // fetchPolicy: 'cache-first',
+  // fetchPolicy: 'cache-and-network',
+  // fetchPolicy: 'no-cache',
+  options: (props) => {
+    const variables = {
+      invoiced: props.invoiced,
+      closed: props.closed,
+      year: '',
+    }
+    if (props.period) {
+      variables.year = props.period
+    }
+    return ({ variables })
+  },
+})
+
+export default compose(
+  withSearch,
+  withNavigation,
+  SearchList,
+)(QuoteSearchList)

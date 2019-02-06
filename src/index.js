@@ -1,6 +1,11 @@
 import React from 'react'
 import { Provider as PaperProvider } from 'react-native-paper'
 
+import ApolloClient from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloLink } from 'apollo-link'
+import { withClientState } from 'apollo-link-state'
+
 import AWSAppSyncClient from 'aws-appsync'
 import Amplify, { Auth } from 'aws-amplify'
 import { ApolloProvider } from 'react-apollo'
@@ -9,8 +14,8 @@ import { withAuthenticator } from 'aws-amplify-react-native'
 
 import appSyncConfig from './aws-exports'
 
-// import Navigator from './config/tabs'
-import Navigator from './config/routes'
+import Navigator from './config/tabs'
+// import Navigator from './config/routes'
 import theme from './config/paperTheme'
 
 import { SignIn } from './modules/auth/components/SignIn'
@@ -23,7 +28,7 @@ const client = new AWSAppSyncClient({
   region: appSyncConfig.aws_appsync_region,
   auth: {
     type: appSyncConfig.aws_appsync_authenticationType,
-    jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken()
+    jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken(),
   },
 })
 
@@ -68,6 +73,8 @@ class AppWithAuth extends React.Component {
 
   render() {
     console.log('this.props.authState:', this.props.authState)
+    console.log('authState:', this.props.authState)
+
     return (
       <App onStateChange={this.handleAuthStateChange} />
     )
@@ -80,3 +87,5 @@ export default withAuthenticator(AppWithAuth, false, [
   <ForgotPassword />,
   <RequireNewPassword />,
 ])
+
+// export default App

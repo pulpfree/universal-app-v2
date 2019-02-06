@@ -2,40 +2,45 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
-  Button,
   View,
 } from 'react-native'
+
+import { Query } from 'react-apollo'
 
 import { CustomerInfoHeader } from '../components/CustomerInfoHeader'
 import { CustomerQuoteList } from '../components/CustomerQuoteList'
 import { JobSheetList } from '../../jobsheet/components/JobSheetList'
 
-import { customerInfo, quotes as customerQuotes } from '../../../../storybook/mockData/customer'
-import { jobsheets } from '../../../../storybook/mockData/quotes'
+import CustomerData from '../queries/CustomerData'
+import { Error } from '../../common/components/Error'
+import { Loader } from '../../common/components/Loader'
 
 
-class CustomerInfo extends React.Component {
-  /* componentDidMount() {
-    console.log('componentDidMount in CustomerInfo')
-  }
+export default function CustomerInfo({ navigation }) {
+  const customerID = navigation.getParam('customerID')
 
-  componentWillUnmount() {
-    console.log('componentWillUnmount in CustomerInfo')
-  } */
+  return (
+    <Query
+      query={CustomerData}
+      skip={!customerID}
+      variables={{ customerID }}
+    >
+      {({ loading, error, data }) => {
+        if (error) return <Error error={error} />
+        if (loading) return <Loader />
 
-  render() {
-    const { navigation } = this.props
-    return (
-      <View>
-        <CustomerInfoHeader data={customerInfo} navigation={navigation} />
-        <JobSheetList data={jobsheets} />
-        <CustomerQuoteList data={customerQuotes} />
-      </View>
-    )
-  }
+        const { getCustomer, searchJobSheetsByCustomer, searchQuotesByCustomer } = data
+        return (
+          <View>
+            <CustomerInfoHeader data={getCustomer} navigation={navigation} />
+            <JobSheetList data={searchJobSheetsByCustomer} />
+            <CustomerQuoteList data={searchQuotesByCustomer} />
+          </View>
+        )
+      }}
+    </Query>
+  )
 }
 CustomerInfo.propTypes = {
-  // navigation: PropTypes.instanceOf(Object).isRequired,
+  navigation: PropTypes.instanceOf(Object).isRequired,
 }
-
-export default CustomerInfo

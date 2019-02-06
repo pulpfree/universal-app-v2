@@ -1,13 +1,22 @@
 import { createAppContainer, createStackNavigator } from 'react-navigation'
 
-import QuoteSearch from '../modules/quote/screens/QuoteSearch'
 import CustomerSearch from '../modules/customer/screens/CustomerSearch'
 import CustomerNew from '../modules/customer/screens/CustomerNew'
 import CustomerInfo from '../modules/customer/screens/CustomerInfo'
+
 import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../modules/jobsheet/screens/JobSheet'
+import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
+
+import QuoteSearch from '../modules/quote/screens/QuoteSearch'
 import QuoteNew from '../modules/quote/screens/QuoteNew'
 import QuotePreview from '../modules/quote/screens/QuotePreview'
+import QuoteEdit from '../modules/quote/screens/QuoteEdit'
+
+import GroupForm from '../modules/jobsheet/screens/GroupForm'
+import OtherForm from '../modules/jobsheet/screens/OtherForm'
+import WindowForm from '../modules/jobsheet/screens/WindowForm'
+
 import Home from '../modules/home/screens/Home'
 
 import { ContactSheet } from '../modules/customer/components/ContactSheet'
@@ -27,6 +36,12 @@ const HomeStack = createStackNavigator(
       screen: QuoteSearch,
       navigationOptions: {
         title: 'Search Quotes',
+      },
+    },
+    QuoteEdit: {
+      screen: QuoteEdit,
+      navigationOptions: {
+        title: 'Edit Quotes',
       },
     },
     CustomerSearch: {
@@ -57,6 +72,24 @@ const HomeStack = createStackNavigator(
       screen: JobSheet,
       navigationOptions: {
         title: 'Job Sheet',
+      },
+    },
+    WindowForm: {
+      screen: WindowForm,
+      navigationOptions: {
+        title: 'Window Form',
+      },
+    },
+    GroupForm: {
+      screen: GroupForm,
+      navigationOptions: {
+        title: 'Group Form',
+      },
+    },
+    OtherForm: {
+      screen: OtherForm,
+      navigationOptions: {
+        title: 'Other Form',
       },
     },
     QuoteNew: {
@@ -93,6 +126,9 @@ const RootStack = createStackNavigator(
     },
     ContactSheet: {
       screen: ContactSheet,
+    },
+    SelectRooms: {
+      screen: SelectRooms,
     },
   },
   {

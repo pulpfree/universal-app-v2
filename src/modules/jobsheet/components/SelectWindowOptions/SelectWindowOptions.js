@@ -1,16 +1,92 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
+  Modal,
   Text,
+  TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native'
 
-// import styles from './styles'
+import { Button, Icon } from 'react-native-elements'
+
+import styles from './styles'
+
+import clr from '../../../../config/colors'
+import { WindowOptions } from '../../config/jobSheetConstants'
 
 export default function SelectWindowOptions() {
+  const [showModal, setModal] = useState(true)
   return (
     <View>
-      <Text>SelectWindowOptions</Text>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={showModal}
+      >
+        <View style={styles.container}>
+          <View style={styles.modalBox}>
+            <View style={styles.header}>
+              <Text style={{ width: 30 }} />
+              <Text style={styles.headerText}>Select Window Options</Text>
+              <Icon
+                name="close"
+                onPress={() => setModal(false)}
+                size={30}
+                color={clr.white}
+                containerStyle={styles.iconCont}
+              />
+            </View>
+
+            <View style={styles.formCont}>
+              <View style={styles.optCont}>
+                <View style={styles.optList}>
+                  {WindowOptions.map(opt => (
+                    <View style={styles.optRow} key={opt}>
+                      <TouchableOpacity onPress={() => this._onRoomPress(opt)}>
+                        <Text style={styles.optOption} allowFontScaling={false}>{opt}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+
+                <View style={styles.inputCell}>
+                  <TextInput style={[styles.optInput, { height: 150 }]} />
+                  <TextInput style={styles.optInput} />
+                  <View style={styles.buttonRow}>
+                    <Button
+                      // disabled={!dirty || isSubmitting}
+                      // onPress={this._handleSubmit}
+                      // ref={(input) => { this.submit = input }}
+                      title="Clear"
+                      buttonStyle={styles.submitButtonSecondary}
+                      style={{ width: 130 }}
+                      icon={{
+                        name: 'ios-close-circle-outline',
+                        type: 'ionicon',
+                        color: 'white',
+                      }}
+                    />
+                    <Button
+                      // disabled={!dirty || isSubmitting}
+                      // onPress={this._handleSubmit}
+                      // ref={(input) => { this.submit = input }}
+                      title="Save"
+                      buttonStyle={styles.submitButton}
+                      style={{ width: 130, marginLeft: 20 }}
+                      icon={{
+                        name: 'ios-send',
+                        type: 'ionicon',
+                        color: 'white',
+                      }}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }

@@ -35,10 +35,10 @@ Header.propTypes = {
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
     <View style={styles.itemCell}>
-      <Text>{item.address.street1}</Text>
+      <Text>{item.addressID.street1}</Text>
     </View>
     <View style={styles.itemCell}>
-      <Text>{item.address.city}</Text>
+      <Text>{item.addressID.city}</Text>
     </View>
     <View style={styles.itemCell}>
       <Text>{fmtDate(item.updatedAt)}</Text>

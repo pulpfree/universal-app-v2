@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query($field: String!, $value: String!) {
-    searchCustomer(field: $field, value: $value) {
+  query($field: String, $value: String, $search: String, $active: Boolean) {
+    searchCustomer(field: $field, value: $value, search: $search, active: $active) {
       __typename
       _id
       active

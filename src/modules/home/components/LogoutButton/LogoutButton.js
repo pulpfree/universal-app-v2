@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Auth } from 'aws-amplify'
-import { Button, Icon } from 'react-native-elements'
+import { Button } from 'react-native-elements'
 
 import clr from '../../../../config/colors'
-import styles from './styles'
+import { styles } from './index'
 
 
 export default function Logout() {
@@ -18,24 +18,22 @@ export default function Logout() {
 
   function signOut() {
     return Auth.signOut()
-      .then((data) => {
-        console.log(data)
+      .then(() => {
         Auth.authState('signIn')
       })
-      .catch(err => console.log(err))
+      .catch(err => console.error(err)) // eslint-disable-line
   }
 
   return (
     <Button
+      buttonStyle={styles.button}
+      icon={{
+        name: 'exit-to-app',
+        color: clr.white,
+        size: 32,
+      }}
       onPress={() => signOut()}
       title={`Sign Out ${user}`}
-      buttonStyle={styles.button}
-      icon={(
-        <Icon
-          name="exit-to-app"
-          color={clr.white}
-        />
-      )}
     />
   )
 }

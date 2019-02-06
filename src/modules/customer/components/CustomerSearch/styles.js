@@ -14,6 +14,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
+  input: {
+    color: clr.black,
+  },
   searchContainer: {
     flex: 1,
     padding: 10,

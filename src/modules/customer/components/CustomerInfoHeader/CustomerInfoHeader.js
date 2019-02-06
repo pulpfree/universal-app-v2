@@ -5,7 +5,6 @@ import {
   View,
 } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
-// import Icon from 'react-native-vector-icons/FontAwesome'
 
 import styles from './styles'
 import clr from '../../../../config/colors'
@@ -63,12 +62,10 @@ export default function CustomerInfo({ data, navigation }) {
           onPress={() => navigation.navigate('ContactSheet', { customer: data, navigation })}
           raised
           rounded
-          icon={(
-            <Icon
-              name="phone"
-              color={clr.white}
-            />
-          )}
+          icon={{
+            name: 'phone',
+            color: clr.white,
+          }}
           buttonStyle={{
             backgroundColor: clr.primary,
           }}
@@ -82,12 +79,10 @@ export default function CustomerInfo({ data, navigation }) {
         <Button
           raised
           rounded
-          icon={(
-            <Icon
-              name="clear"
-              color={clr.white}
-            />
-          )}
+          icon={{
+            name: 'clear',
+            color: clr.white,
+          }}
           title="Deactivate"
           style={styles.button}
           buttonStyle={{

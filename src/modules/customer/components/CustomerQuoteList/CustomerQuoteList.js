@@ -39,14 +39,14 @@ ShowYes.propTypes = {
 
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
-    <View style={[styles.itemCell, { flex: 0.75 }]}>
+    <View style={[styles.itemCell, { flex: 0.5 }]}>
       <Text>{`${item.number}/${item.version}`}</Text>
     </View>
     <View style={styles.itemCell}>
       <Text>{fmtDate(item.updatedAt)}</Text>
     </View>
-    <View style={[styles.itemCell, { flex: 1.25 }]}>
-      <Text>123 Street Avenue</Text>
+    <View style={[styles.itemCell, { flex: 1.5 }]}>
+      <Text numberOfLines={1}>{item.jobsheetID.addressID.street1}</Text>
     </View>
     <ShowYes yesFlag={item.invoiced} />
     <ShowYes yesFlag={item.invoiced && item.quotePrice.outstanding === 0} />
@@ -64,27 +64,29 @@ ListItem.propTypes = {
 
 class CustomerQuoteList extends React.Component {
   _renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this._onPressItem(item._id)}>
+    <TouchableOpacity onPress={() => this._onPressItem(item._id, item.jobsheetID._id)}>
       <ListItem item={item} />
     </TouchableOpacity>
   )
 
-  _onPressItem = (quoteID) => {
+  _onPressItem = (quoteID, jobSheetID) => {
     const { navigation } = this.props
-    navigation.navigate('QuotePreview', { quoteID })
+    navigation.navigate('QuoteEdit', { quoteID, jobSheetID })
   }
 
   _keyExtractor = item => item._id
 
   render() {
     const { data } = this.props
+    // console.log('data in CustomerQuoteList render:', data)
+
 
     return (
       <React.Fragment>
         <Header />
         <FlatList
           ListHeaderComponent={CustomerQuoteListHeader}
-          data={data}
+          data={data.quotes}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
         />

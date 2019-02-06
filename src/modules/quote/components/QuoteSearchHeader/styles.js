@@ -11,12 +11,12 @@ export default StyleSheet.create({
     borderBottomWidth: 1.5,
     display: 'flex',
     flexDirection: 'column',
-    paddingLeft: 12,
-    paddingRight: 12,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   searchRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   cell: {
     alignItems: 'center',
@@ -26,35 +26,18 @@ export default StyleSheet.create({
   cellLabel: {
     color: clr.dkGray,
     fontWeight: '600',
+    paddingLeft: 40,
     paddingRight: 10,
   },
-  costContainer: {
-    borderTopColor: clr.mdGray,
-    borderTopWidth: 0.75,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  costCell: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 10,
-  },
-  costLabel: {
-    paddingRight: 5,
-    color: clr.dkGray,
-    fontWeight: '600',
-  },
-  costValue: {
-  },
   picker: {
-    height: 60,
+    height: 80,
     marginTop: 0,
     paddingLeft: 5,
-    width: 120,
+    width: 140,
   },
   pickerItem: {
     fontSize: 17,
-    height: 60,
+    height: 80,
     textAlign: 'left',
   },
 })

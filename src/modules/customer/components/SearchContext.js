@@ -19,6 +19,14 @@ class SearchProvider extends React.Component {
     this.setState({ searchVal: val })
   }
 
+  _handleLastName = (flag) => {
+    this.setState({ lastName: flag, streetName: !flag })
+  }
+
+  _handleStreetName = (flag) => {
+    this.setState({ streetName: flag, lastName: !flag })
+  }
+
   render() {
     const {
       isActive,
@@ -37,6 +45,8 @@ class SearchProvider extends React.Component {
           streetName,
           setActive: this._handleActive,
           setSearchVal: this._handleSearchVal,
+          setLastName: this._handleLastName,
+          setStreetName: this._handleStreetName,
         }}
       >
         {children}
@@ -55,11 +65,18 @@ function withSearch(Component) {
   return function Search(props) {
     return (
       <Consumer>
-        {({ isActive, searchVal }) => (
+        {({
+          isActive,
+          lastName,
+          searchVal,
+          streetName,
+        }) => (
           <Component
             {...props}
             isActive={isActive}
             searchVal={searchVal}
+            lastName={lastName}
+            streetName={streetName}
           />
         )}
       </Consumer>

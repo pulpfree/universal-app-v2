@@ -6,4 +6,5 @@ export default {
   mdGray: '#BDC2CA',
   black: '#000000',
   white: '#ffffff',
+  alert: '#ffeb80',
 }

@@ -11,9 +11,11 @@ import {
 import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
 
-import styles from './styles'
 import SearchCustomer from '../../queries/SearchCustomer'
-import { withSearch } from '../../../common/components/SearchContext'
+import styles from './styles'
+import { Error } from '../../../common/components/Error'
+import { Loader } from '../../../common/components/Loader'
+import { withSearch } from '../SearchContext'
 
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
@@ -48,7 +50,24 @@ class CustomerSearchList extends React.Component {
 
   render() {
     const { data } = this.props
+
+    if (data) {
+      const { error, loading } = data
+      if (error) return <Error error={error} />
+      if (loading) return <Loader />
+    }
+
     const results = data && data.searchCustomer ? data.searchCustomer : null
+
+    if (data && !data.searchCustomer.length) {
+      return (
+        <View style={styles.noResultsCont}>
+          <Text style={styles.noResultsText}>
+            There are no results for your request. Consider refining your search criteria.
+          </Text>
+        </View>
+      )
+    }
 
     return (
       <ScrollView>
@@ -72,10 +91,17 @@ CustomerSearchList.defaultProps = {
 const SearchList = graphql(SearchCustomer, {
   skip: ({ searchVal }) => !searchVal,
   options: (props) => {
-    // console.log('prop in graphql:', props)
-    return ({
-      variables: { field: 'name.last', value: props.searchVal },
-    })
+    const variables = {
+      field: '',
+      search: '',
+    }
+    if (props.lastName) {
+      variables.field = 'name.last'
+      variables.value = props.searchVal
+    }
+    if (props.streetName) variables.search = props.searchVal
+    if (props.isActive !== 'undefined') variables.active = props.isActive
+    return { variables }
   },
 })
 
