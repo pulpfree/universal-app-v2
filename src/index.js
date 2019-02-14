@@ -1,21 +1,22 @@
 import React from 'react'
 import { Provider as PaperProvider } from 'react-native-paper'
 
-import ApolloClient from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloLink } from 'apollo-link'
-import { withClientState } from 'apollo-link-state'
-
-import AWSAppSyncClient from 'aws-appsync'
+// import AWSAppSyncClient from 'aws-appsync'
+import AWSAppSyncClient, { createAppSyncLink, createLinkWithCache } from 'aws-appsync'
 import Amplify, { Auth } from 'aws-amplify'
 import { ApolloProvider } from 'react-apollo'
 import { Rehydrated } from 'aws-appsync-react'
 import { withAuthenticator } from 'aws-amplify-react-native'
 
-import appSyncConfig from './aws-exports'
+import { ApolloLink } from 'apollo-link'
+import { withClientState } from 'apollo-link-state'
+// import gql from 'graphql-tag'
 
-import Navigator from './config/tabs'
-// import Navigator from './config/routes'
+import appSyncConfig from './aws-exports'
+import client from './apollo'
+
+// import Navigator from './config/tabs'
+import Navigator from './config/routes'
 import theme from './config/paperTheme'
 
 import { SignIn } from './modules/auth/components/SignIn'
@@ -23,7 +24,76 @@ import { ConfirmSignIn } from './modules/auth/components/ConfirmSignIn'
 import { ForgotPassword } from './modules/auth/components/ForgotPassword'
 import { RequireNewPassword } from './modules/auth/components/RequireNewPassword'
 
-const client = new AWSAppSyncClient({
+import { defaults, resolvers, typeDefs } from './modules/jobsheet/resolvers/window'
+
+// let nextTodoId = 1
+const stateLink = createLinkWithCache(cache => withClientState({
+  cache,
+  resolvers,
+  defaults,
+  typeDefs,
+  /* resolvers: {
+    Mutation: {
+      updateNetworkStatus: (_, { isConnected }, { cache }) => { // eslint-disable-line no-shadow
+        const data = {
+          networkStatus: {
+            __typename: 'NetworkStatus',
+            isConnected,
+          },
+        }
+        cache.writeData({ data })
+        return null
+      },
+      addTodo: (_, { text }, { cache }) => { // eslint-disable-line no-shadow
+        const query = gql`
+          query GetTodos {
+            todos @client {
+              id
+              text
+              completed
+            }
+          }
+        `
+        const previous = cache.readQuery({ query })
+        const newTodo = {
+          id: nextTodoId++,
+          text,
+          completed: false,
+          __typename: 'TodoItem',
+        }
+        const data = {
+          todos: previous.todos.concat([newTodo]),
+        }
+        cache.writeData({ data })
+        return newTodo
+      },
+      addWindowRooms: (_, { rooms }, { cache }) => { // eslint-disable-line no-shadow
+        const data = {
+          windowRooms: {
+            __typename: 'JobSheet',
+            rooms,
+          },
+        }
+        cache.writeData({ data })
+        return null
+      },
+    },
+  }, */
+  /* defaults: {
+    networkStatus: {
+      __typename: 'NetworkStatus',
+      isConnected: false,
+    },
+    todos: [],
+    windowRooms: {
+      __typename: 'JobSheet',
+      rooms: '',
+    },
+  }, */
+}))
+
+const appSyncLink = createAppSyncLink({
+  // disableOffline: true,
   url: appSyncConfig.aws_appsync_graphqlEndpoint,
   region: appSyncConfig.aws_appsync_region,
   auth: {
@@ -31,6 +101,20 @@ const client = new AWSAppSyncClient({
     jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken(),
   },
 })
+
+// const link = ApolloLink.from([stateLink, appSyncLink])
+// const client = new AWSAppSyncClient({}, { link })
+
+// console.log('result:', result)
+
+/* const client = new AWSAppSyncClient({
+  url: appSyncConfig.aws_appsync_graphqlEndpoint,
+  region: appSyncConfig.aws_appsync_region,
+  auth: {
+    type: appSyncConfig.aws_appsync_authenticationType,
+    jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken(),
+  },
+}) */
 
 const awsExports = {
   Auth: {
@@ -53,6 +137,7 @@ const App = () => (
 
 class AppWithAuth extends React.Component {
   async componentWillMount() {
+    // await client.resetStore()
     // Auth.authState('confirmSignIn')
     const user = await Auth.currentAuthenticatedUser()
     if (user) {
@@ -73,8 +158,6 @@ class AppWithAuth extends React.Component {
 
   render() {
     console.log('this.props.authState:', this.props.authState)
-    console.log('authState:', this.props.authState)
-
     return (
       <App onStateChange={this.handleAuthStateChange} />
     )
@@ -87,5 +170,3 @@ export default withAuthenticator(AppWithAuth, false, [
   <ForgotPassword />,
   <RequireNewPassword />,
 ])
-
-// export default App

@@ -14,12 +14,12 @@ export default StyleSheet.create({
     backgroundColor: clr.white,
     borderRadius: 6,
     flexDirection: 'column',
-    height: 550,
+    height: 470,
     shadowColor: '#333',
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 5,
-    width: 600,
+    width: 560,
   },
   header: {
     backgroundColor: clr.secondary,
@@ -84,5 +84,7 @@ export default StyleSheet.create({
     width: 300,
     height: 35,
     marginBottom: 20,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
 })

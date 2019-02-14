@@ -15,8 +15,7 @@ import { fmtMoney } from '../../../../util/fmt'
 
 const ListItem = ({ item }) => {
   const rooms = item.rooms && item.rooms.length ? item.rooms.join(', ') : ''
-  const product = JSON.parse(item.productID)
-  const { name } = product
+  const { name } = item.productID
   const { costs } = item
   const dims = JSON.parse(item.dims)
   let dimStr = `${dims.width.inch}`
@@ -67,11 +66,12 @@ class WindowList extends React.Component {
 
   render() {
     const { data, jobSheet, navigation } = this.props
-    console.log('jobSheet in WindowList render:', jobSheet)
+    // console.log('jobSheet in WindowList render:', jobSheet)
+    // console.log('data in WindowList render:', data)
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate('WindowForm', { jobSheet })}>
+        <TouchableOpacity onPress={() => navigation.navigate('WindowForm', { jobSheet, isNew: true })}>
           <ListHeader navigation={navigation} title="Windows" />
         </TouchableOpacity>
         <FlatList

@@ -7,6 +7,8 @@ import CustomerInfo from '../modules/customer/screens/CustomerInfo'
 import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../modules/jobsheet/screens/JobSheet'
 import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
+import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
+import { SelectTrim } from '../modules/jobsheet/components/SelectTrim'
 
 import QuoteSearch from '../modules/quote/screens/QuoteSearch'
 import QuoteNew from '../modules/quote/screens/QuoteNew'
@@ -124,12 +126,10 @@ const RootStack = createStackNavigator(
     Main: {
       screen: HomeStack,
     },
-    ContactSheet: {
-      screen: ContactSheet,
-    },
-    SelectRooms: {
-      screen: SelectRooms,
-    },
+    ContactSheet,
+    SelectRooms,
+    SelectWindowOptions,
+    SelectTrim,
   },
   {
     mode: 'modal',

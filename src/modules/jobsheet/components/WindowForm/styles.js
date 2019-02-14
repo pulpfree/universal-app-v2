@@ -73,6 +73,9 @@ export default StyleSheet.create({
     marginBottom: 7,
     fontWeight: '600',
   },
+  modalLinkText: {
+    color: clr.primary,
+  },
   picker: {
     backgroundColor: clr.white,
     borderColor: clr.mdGray,

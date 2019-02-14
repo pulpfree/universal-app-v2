@@ -13,7 +13,7 @@ export default StyleSheet.create({
   headerText: {
     color: clr.ltGray,
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
   },
   navBar: {

@@ -4,7 +4,7 @@ import clr from '../../../../config/colors'
 export default StyleSheet.create({
   headerCont: {
     alignItems: 'center',
-    backgroundColor: clr.mdGray,
+    backgroundColor: clr.secondaryHeader,
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 1,
@@ -13,7 +13,8 @@ export default StyleSheet.create({
     paddingTop: 4,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 16,
+    color: clr.dkGray,
   },
   headerIcon: {
     color: clr.black,

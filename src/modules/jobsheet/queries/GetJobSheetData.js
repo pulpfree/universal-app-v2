@@ -35,7 +35,10 @@ query GetJobSheetData($jobSheetID: ID!) {
         window
       }
       dims
-      productID
+      productID {
+        _id
+        name
+      }
       qty
       rooms
       specs

@@ -8,7 +8,7 @@ export default StyleSheet.create({
   },
   modalBox: {
     ...StyleSheet.flatten(styles.modalBox),
-    height: 485,
+    height: 480,
     width: 635,
   },
   header: {

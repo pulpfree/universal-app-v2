@@ -33,7 +33,7 @@ import { SelectTrim } from '../../src/modules/jobsheet/components/SelectTrim'
 import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeatures'
 import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
 import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
-import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
+// import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
 
 import QuoteSearch from '../../src/modules/quote/screens/QuoteSearch'
 import { QuoteListHeader } from '../../src/modules/quote/components/QuoteListHeader'
@@ -160,9 +160,9 @@ storiesOf('JobSheets', module)
   .add('window list', () => (
     <WindowList data={jobSheet.jobSheetData.windows} />
   ))
-  .add('window form', () => (
+  /* .add('window form', () => (
     <WindowForm data={jobSheet.jobSheetData.jobsheet} />
-  ))
+  )) */
   .add('group form', () => (
     <GroupForm data={jobSheet.jobSheetData.jobsheet} />
   ))

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-
+import PropTypes from 'prop-types'
 import {
-  Modal,
   Text,
   TextInput,
   TouchableOpacity,
@@ -9,87 +8,117 @@ import {
 } from 'react-native'
 
 import { Button, Icon } from 'react-native-elements'
+import { Mutation } from 'react-apollo'
+import { withNavigation } from 'react-navigation'
+import gql from 'graphql-tag'
 
 import styles from './styles'
 import clr from '../../../../config/colors'
 import { Rooms } from '../../config/jobSheetConstants'
+import AddRooms from '../../mutations/AddWindowRooms'
 
-export default function SelectRooms() {
-  const [showModal, setModal] = useState(true)
+const WINDOW_QUERY = gql`{
+  window @client {
+    _id
+    qty
+    rooms
+  }
+}`
+
+function SelectRooms({ navigation }) {
+  const windowID = navigation.getParam('windowID')
+  const [rooms, setRoom] = useState([])
+
+  const addRoom = (rm) => {
+    if (rooms.find(room => room === rm)) return false
+    setRoom([
+      ...rooms,
+      rm,
+    ])
+    return true
+  }
+
+  const clearRooms = () => {
+    setRoom([])
+  }
+
   return (
-    <View>
-      <Modal
-        animationType="fade"
-        transparent
-        visible={showModal}
-      >
-        <View style={styles.container}>
-          <View style={styles.modalBox}>
-            <View style={styles.header}>
-              <Text style={{ width: 30 }} />
-              <Text style={styles.headerText}>Select Rooms</Text>
-              <Icon
-                name="close"
-                onPress={() => setModal(false)}
-                size={30}
-                color={clr.white}
-                containerStyle={styles.iconCont}
-              />
+    <View style={styles.container}>
+      <View style={styles.modalBox}>
+        <View style={styles.header}>
+          <Text style={{ width: 30 }} />
+          <Text style={styles.headerText}>Select Rooms</Text>
+          <Icon
+            name="close"
+            onPress={() => navigation.goBack()}
+            size={30}
+            color={clr.white}
+            containerStyle={styles.iconCont}
+          />
+        </View>
+
+        <View style={styles.formCont}>
+          <View style={styles.optCont}>
+            <View style={styles.optList}>
+              {Rooms.map(rm => (
+                <View style={styles.optRow} key={rm.id}>
+                  <TouchableOpacity onPress={() => addRoom(rm.id)}>
+                    <Text style={styles.optOption} allowFontScaling={false}>
+                      {rm.id}
+                      &nbsp;-&nbsp;
+                      {`[${rm.label}]`}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
 
-            <View style={styles.formCont}>
-              <View style={styles.optCont}>
-                <View style={styles.optList}>
-                  {Rooms.map(rm => (
-                    <View style={styles.rmRow} key={rm.id}>
-                      <TouchableOpacity onPress={() => this._onRoomPress(rm)}>
-                        <Text style={styles.optOption}>
-                          {rm.id}
-                          &nbsp;-&nbsp;
-                          {`[${rm.label}]`}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
+            <View style={styles.inputCell}>
+              <TextInput style={styles.optInput} value={rooms.join(', ')} />
+              <View style={styles.buttonRow}>
+                <Button
+                  buttonStyle={styles.submitButtonSecondary}
+                  disabled={!rooms.length}
+                  onPress={clearRooms}
+                  style={{ width: 130 }}
+                  title="Clear"
+                  icon={{
+                    name: 'ios-close-circle-outline',
+                    type: 'ionicon',
+                    color: 'white',
+                  }}
+                />
 
-                <View style={styles.inputCell}>
-                  <TextInput style={styles.optInput} />
-                  <View style={styles.buttonRow}>
-
+                {/* <Mutation mutation={AddRooms} refetchQueries={[WINDOW_QUERY]}> */}
+                <Mutation mutation={AddRooms}>
+                  {addWindowRooms => (
                     <Button
-                      // disabled={!dirty || isSubmitting}
-                      // onPress={this._handleSubmit}
-                      // ref={(input) => { this.submit = input }}
-                      title="Clear"
-                      buttonStyle={styles.submitButtonSecondary}
-                      style={{ width: 130 }}
-                      icon={{
-                        name: 'ios-close-circle-outline',
-                        type: 'ionicon',
-                        color: 'white',
-                      }}
-                    />
-                    <Button
-                      // disabled={!dirty || isSubmitting}
-                      // onPress={this._handleSubmit}
-                      // ref={(input) => { this.submit = input }}
-                      title="Save"
                       buttonStyle={styles.submitButton}
+                      disabled={!rooms.length}
+                      onPress={() => {
+                        addWindowRooms({ variables: { rooms, windowID } })
+                        navigation.goBack()
+                      }}
                       style={{ width: 130, marginLeft: 20 }}
+                      title="Save"
                       icon={{
                         name: 'ios-send',
                         type: 'ionicon',
                         color: 'white',
                       }}
                     />
-                  </View>
-                </View>
+                  )}
+                </Mutation>
               </View>
             </View>
           </View>
         </View>
-      </Modal>
+      </View>
     </View>
   )
 }
+SelectRooms.propTypes = {
+  navigation: PropTypes.instanceOf(Object).isRequired,
+}
+
+export default withNavigation(SelectRooms)

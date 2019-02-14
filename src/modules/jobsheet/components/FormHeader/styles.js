@@ -6,10 +6,11 @@ export default StyleSheet.create({
     padding: 16,
     paddingTop: 8,
     paddingBottom: 8,
-    backgroundColor: clr.mdGray,
+    backgroundColor: clr.secondaryHeader,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
+    color: clr.dkGray,
   },
 })
