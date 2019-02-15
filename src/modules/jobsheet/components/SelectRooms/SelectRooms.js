@@ -10,28 +10,20 @@ import {
 import { Button, Icon } from 'react-native-elements'
 import { Mutation } from 'react-apollo'
 import { withNavigation } from 'react-navigation'
-import gql from 'graphql-tag'
 
-import styles from './styles'
 import clr from '../../../../config/colors'
+import styles from './styles'
+import { ADD_ROOMS } from '../../mutations/local'
 import { Rooms } from '../../config/jobSheetConstants'
-import AddRooms from '../../mutations/AddWindowRooms'
 
-const WINDOW_QUERY = gql`{
-  window @client {
-    _id
-    qty
-    rooms
-  }
-}`
 
 function SelectRooms({ navigation }) {
-  const windowID = navigation.getParam('windowID')
-  const [rooms, setRoom] = useState([])
+  const rms = navigation.getParam('rooms', [])
+  const [rooms, setRooms] = useState(rms)
 
   const addRoom = (rm) => {
     if (rooms.find(room => room === rm)) return false
-    setRoom([
+    setRooms([
       ...rooms,
       rm,
     ])
@@ -39,7 +31,7 @@ function SelectRooms({ navigation }) {
   }
 
   const clearRooms = () => {
-    setRoom([])
+    setRooms([])
   }
 
   return (
@@ -89,14 +81,13 @@ function SelectRooms({ navigation }) {
                   }}
                 />
 
-                {/* <Mutation mutation={AddRooms} refetchQueries={[WINDOW_QUERY]}> */}
-                <Mutation mutation={AddRooms}>
+                <Mutation mutation={ADD_ROOMS}>
                   {addWindowRooms => (
                     <Button
                       buttonStyle={styles.submitButton}
                       disabled={!rooms.length}
                       onPress={() => {
-                        addWindowRooms({ variables: { rooms, windowID } })
+                        addWindowRooms({ variables: { rooms } })
                         navigation.goBack()
                       }}
                       style={{ width: 130, marginLeft: 20 }}

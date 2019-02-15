@@ -8,9 +8,11 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
+import { graphql } from 'react-apollo'
 
 import styles from './styles'
 import { ListHeader } from '../ListHeader'
+import { SET_WINDOW } from '../../mutations/local'
 import { fmtMoney } from '../../../../util/fmt'
 
 const ListItem = ({ item }) => {
@@ -58,8 +60,12 @@ class WindowList extends React.Component {
   )
 
   _onPressItem = (windowID) => {
-    const { jobSheet, navigation } = this.props
-    navigation.navigate('WindowForm', { jobSheet, windowID })
+    const { jobSheet, navigation, setWindowFromRemote } = this.props
+    const setRes = setWindowFromRemote(windowID)
+    // blocking navigate action so that the WindowForm component doesn't refresh unnecessarily
+    setRes.then(() => {
+      navigation.navigate('WindowForm', { jobSheet, windowID })
+    })
   }
 
   _keyExtractor = item => item._id
@@ -87,9 +93,16 @@ WindowList.propTypes = {
   data: PropTypes.instanceOf(Object),
   jobSheet: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  setWindowFromRemote: PropTypes.func.isRequired,
 }
 WindowList.defaultProps = {
   data: [],
 }
 
-export default withNavigation(WindowList)
+export default graphql(SET_WINDOW, {
+  props: ({ mutate }) => ({
+    setWindowFromRemote: windowID => mutate({ variables: { windowID } }),
+  }),
+})(withNavigation(WindowList))
+
+// export default withNavigation(WindowList)

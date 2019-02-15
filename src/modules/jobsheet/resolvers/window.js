@@ -4,6 +4,9 @@ import JobSheetWindow from '../queries/JobSheetWindow'
 import JobSheetWindowWithProducts from '../queries/JobSheetWindowWithProducts'
 import client from '../../../apollo'
 
+const WINDOW_ID = '1'
+const WINDOW_ID_KEY = 'Window:1'
+
 export const defaults = {
   windowRooms: {
     __typename: 'Window',
@@ -11,7 +14,7 @@ export const defaults = {
   },
   window: {
     __typename: 'Window',
-    _id: 'newid',
+    _id: WINDOW_ID,
     costs: {
       __typename: 'JobSheetItemCosts',
       extendTotal: 0.0,
@@ -32,12 +35,8 @@ export const defaults = {
 
 export const resolvers = {
   Mutation: {
-    /* createWindow: (_, variables, { cache }) => {
-      return null
-    }, */
-    addWindowRooms: (_, { rooms, windowID }, { cache, getCacheKey }) => {
-      // const id = `Window:${windowID}`
-      const id = 'Window:newid'
+    addWindowRooms: (_, { rooms }, { cache }) => {
+      const id = WINDOW_ID_KEY
       const fragment = gql`
         fragment newRooms on Window {
           rooms
@@ -48,10 +47,24 @@ export const resolvers = {
       cache.writeFragment({ fragment, id, data })
       return null
     },
-    setWindowFromRemote: async (_, { windowID }, { cache, getCacheKey }) => {
-      // const id = `Window:${windowID}`
-      const id = 'Window:newid'
-      // const id = getCacheKey({ __typename: 'Window', id: windowID })
+    setField: (_, { field, value }, { cache }) => {
+      const id = WINDOW_ID_KEY
+      // console.log('field:', field)
+      // console.log('value:', value)
+      const fragment = gql`
+        fragment setField on Window {
+          ${field}
+        }
+      `
+      const res = cache.readFragment({ fragment, id })
+      const data = { ...res, [field]: value }
+      cache.writeFragment({ fragment, id, data })
+      // console.log('res from readFragment:', res)
+
+      return null
+    },
+    setWindowFromRemote: async (_, { windowID }, { cache }) => {
+      const id = WINDOW_ID_KEY
       let windowRet
       try {
         windowRet = await client.query({
@@ -67,11 +80,10 @@ export const resolvers = {
       const data = {
         window: {
           __typename: 'Window',
-          // _id: window._id,
-          _id: 'newid',
+          _id: WINDOW_ID,
           costs: {
             __typename: 'JobSheetItemCosts',
-            extendTotal: window.costs.extendTotal,
+            ...window.costs,
           },
           qty: window.qty,
           rooms: window.rooms,
@@ -169,12 +181,4 @@ export const typeDefs = `
     sqft: Int
     trim: String
   }
-`
-
-const ADD_ROOMS = gql`
-mutation AddRooms($rooms: [String]) {
-  addWindowRooms(rooms: $rooms) @client {
-    rooms
-  }
-}
 `

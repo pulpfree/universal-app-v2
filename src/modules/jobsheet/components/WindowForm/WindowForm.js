@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Picker,
@@ -10,7 +10,7 @@ import {
 
 import { Button } from 'react-native-elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
-import { graphql, Mutation, Query } from 'react-apollo'
+import { graphql, Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import { withNavigation } from 'react-navigation'
 // import WindowRooms from '../../queries.local/WindowRooms'
@@ -27,51 +27,31 @@ const WINDOW_QUERY = gql`{
     _id
     costs {
       extendTotal
-      # extendUnit
-      # install
-      # installType
-      # netUnit
-      # options
-      # trim
-      # window
+      extendUnit
+      install
+      installType
+      netUnit
+      options
+      trim
+      window
     }
     qty
     rooms
   }
 }`
 
-const SET_WINDOW = gql`
-  mutation setWindowFromRemote($windowID: ID!) {
-  setWindowFromRemote(windowID: $windowID) @client
-}
-`
-
 function WindowForm({
   navigation,
   products,
-  setWindowFromRemote,
-  windowID,
+  setField,
+  // windowID,
 }) {
-  useEffect(() => {
-    // console.log('loading in useEffect:')
-    const ret = setWindowFromRemote(windowID)
-    ret.then((winRet) => {
-      console.log('winRet in useEffect:', winRet)
-    })
-    return () => {
-      console.log('closing useEffect')
-    }
-  }, [])
-
-  console.log('windowID in WindowForm:', windowID)
-
   return (
-    // <Query query={WINDOW_QUERY} variables={{ _id: 'newid' }} fetchPolicy="no-cache">
     <Query query={WINDOW_QUERY}>
       {({ loading, error, data: { window } }) => {
         if (error) return <Error error={error} />
         if (loading) return <Loader />
-        console.log('data in Query: ', window)
+        // console.log('data in Query: ', window)
         return (
           <KeyboardAwareScrollView style={styles.formCont}>
             <FormHeader label="Style & Sizes" />
@@ -79,16 +59,16 @@ function WindowForm({
               <View style={styles.formCell}>
                 <Text style={styles.cellLabel}>Qty</Text>
                 <Picker
-                  selectedValue={window.qty.toString()}
+                  selectedValue={window.qty}
                   style={styles.pickerSm}
                   itemStyle={styles.pickerItemSm}
-                  // onValueChange={value => setPeriod(value)}
+                  onValueChange={value => setField('qty', value)}
                 >
                   <Picker.Item label="0" value="" />
                   {jsc.Qty.map(n => (
                     <Picker.Item
                       key={n}
-                      label={n}
+                      label={n.toString()}
                       value={n}
                     />
                   ))}
@@ -174,7 +154,7 @@ function WindowForm({
               </View>
 
               <View style={styles.formCell}>
-                <TouchableOpacity onPress={() => navigation.navigate('SelectRooms', { windowID: window._id })}>
+                <TouchableOpacity onPress={() => navigation.navigate('SelectRooms', { rooms: window.rooms })}>
                   <Text style={[styles.cellLabel, styles.modalLinkText]}>Rooms</Text>
                 </TouchableOpacity>
                 <TextInput
@@ -202,6 +182,7 @@ function WindowForm({
                 // value={this.state.text}
                 />
               </View>
+
               <View style={styles.formDetailRow}>
                 <TouchableOpacity onPress={() => navigation.navigate('SelectWindowOptions')}>
                   <Text style={[styles.detailTextLabel, styles.modalLinkText]}>Trim</Text>
@@ -217,6 +198,7 @@ function WindowForm({
                 // value={this.state.text}
                 />
               </View>
+
               <View style={styles.formDetailRow}>
                 <Text style={styles.detailTextLabel}>Installation Method</Text>
                 <TextInput
@@ -343,12 +325,18 @@ function WindowForm({
 WindowForm.propTypes = {
   navigation: PropTypes.instanceOf(Object).isRequired,
   products: PropTypes.instanceOf(Object).isRequired,
-  setWindowFromRemote: PropTypes.func.isRequired,
-  windowID: PropTypes.string.isRequired,
+  setField: PropTypes.func.isRequired,
+  // windowID: PropTypes.string.isRequired,
 }
 
-export default graphql(SET_WINDOW, {
+const SET_FIELD = gql`
+  mutation setField($field: String!, $value: String!) {
+  setField(field: $field, value: $value) @client
+}
+`
+
+export default graphql(SET_FIELD, {
   props: ({ mutate }) => ({
-    setWindowFromRemote: windowID => mutate({ variables: { windowID } }),
+    setField: (field, value) => mutate({ variables: { field, value } }),
   }),
 })(withNavigation(WindowForm))

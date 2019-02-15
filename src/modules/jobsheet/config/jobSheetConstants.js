@@ -1,6 +1,6 @@
 export const Fractions = ['', '1/8', '1/4', '3/8', '1/2', '5/8', '3/4', '7/8']
 
-export const Qty = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+export const Qty = Array(9).fill(1).map((x, y) => x + y)
 
 export const Rooms = [
   { id: 'BH', label: 'Bathroom' },
