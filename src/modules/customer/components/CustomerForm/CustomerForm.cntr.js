@@ -52,7 +52,7 @@ const initialTestValues = {
 }
 
 const initialValues = {
-  address: {},
+  address: { provinceCode: 'ON' },
   email: null,
   name: {},
   phones: {

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import clr from '../../../../config/colors'
+// import clr from '../../../../config/colors'
 
 export default StyleSheet.create({
   checkbox: {
@@ -21,13 +21,15 @@ export default StyleSheet.create({
     paddingLeft: 14,
     fontSize: 16,
   },
+  container: {
+    minHeight: 500,
+  },
   error: {
     color: 'red',
   },
   inputRow: {
     flexDirection: 'row',
     paddingLeft: 20,
-    // justifyContent: 'space-between',
   },
   input: {
     flex: 1,

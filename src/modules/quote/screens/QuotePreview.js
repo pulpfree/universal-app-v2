@@ -19,7 +19,6 @@ import {
 ) */
 
 class QuotePreview extends React.Component {
-
   render() {
     const { navigation } = this.props
     return (

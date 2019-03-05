@@ -14,4 +14,22 @@ export default StyleSheet.create({
   itemCell: {
     flex: 1,
   },
+  costContainer: {
+    borderBottomColor: clr.mdGray,
+    borderBottomWidth: 0.75,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  costCell: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 10,
+  },
+  costLabel: {
+    paddingRight: 5,
+    color: clr.dkGray,
+    fontWeight: '600',
+  },
+  costValue: {
+  },
 })

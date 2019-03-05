@@ -19,10 +19,10 @@ export default function QuoteListHeader() {
         <Text style={styles.cellText}>Address</Text>
       </View>
       <View style={[styles.cell, { flex: 0.75 }]}>
-        <Text style={[styles.cellText, { textAlign: 'right' }]}>Total Cost</Text>
+        <Text style={[styles.cellText, { textAlign: 'right' }]}>Cost</Text>
       </View>
       <View style={[styles.cell, { flex: 0.75 }]}>
-        <Text style={[styles.cellText, { textAlign: 'right' }]}>Balance Due</Text>
+        <Text style={[styles.cellText, { textAlign: 'right' }]}>Outstanding</Text>
       </View>
     </View>
   )

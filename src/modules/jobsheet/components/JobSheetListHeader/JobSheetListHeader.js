@@ -11,13 +11,13 @@ export default function JobSheetListHeader() {
   return (
     <View style={styles.header}>
       <View style={styles.cell}>
-        <Text style={styles.cellText}>Street</Text>
+        <Text allowFontScaling={false} style={styles.cellText}>Street</Text>
       </View>
       <View style={styles.cell}>
-        <Text style={styles.cellText}>City</Text>
+        <Text allowFontScaling={false} style={styles.cellText}>City</Text>
       </View>
       <View style={styles.cell}>
-        <Text style={styles.cellText}>Last Update</Text>
+        <Text allowFontScaling={false} style={styles.cellText}>Last Update</Text>
       </View>
     </View>
   )

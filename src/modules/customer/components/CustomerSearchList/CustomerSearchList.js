@@ -9,8 +9,13 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
+import { graphql, compose } from 'react-apollo'
 
+import SearchCustomer from '../../queries/SearchCustomer'
 import styles from './styles'
+import { Error } from '../../../common/components/Error'
+import { Loader } from '../../../common/components/Loader'
+import { withSearch } from '../SearchContext'
 
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
@@ -45,12 +50,29 @@ class CustomerSearchList extends React.Component {
 
   render() {
     const { data } = this.props
-    console.log('data:', data)
+
+    if (data) {
+      const { error, loading } = data
+      if (error) return <Error error={error} />
+      if (loading) return <Loader />
+    }
+
+    const results = data && data.searchCustomer ? data.searchCustomer : null
+
+    if (data && !data.searchCustomer.length) {
+      return (
+        <View style={styles.noResultsCont}>
+          <Text style={styles.noResultsText}>
+            There are no results for your request. Consider refining your search criteria.
+          </Text>
+        </View>
+      )
+    }
 
     return (
       <ScrollView>
         <FlatList
-          data={data}
+          data={results}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
         />
@@ -59,8 +81,32 @@ class CustomerSearchList extends React.Component {
   }
 }
 CustomerSearchList.propTypes = {
-  data: PropTypes.instanceOf(Object).isRequired,
+  data: PropTypes.instanceOf(Object),
   navigation: PropTypes.instanceOf(Object).isRequired,
 }
+CustomerSearchList.defaultProps = {
+  data: null,
+}
 
-export default withNavigation(CustomerSearchList)
+const SearchList = graphql(SearchCustomer, {
+  skip: ({ searchVal }) => !searchVal,
+  options: (props) => {
+    const variables = {
+      field: '',
+      search: '',
+    }
+    if (props.lastName) {
+      variables.field = 'name.last'
+      variables.value = props.searchVal
+    }
+    if (props.streetName) variables.search = props.searchVal
+    if (props.isActive !== 'undefined') variables.active = props.isActive
+    return { variables }
+  },
+})
+
+export default compose(
+  withSearch,
+  withNavigation,
+  SearchList,
+)(CustomerSearchList)

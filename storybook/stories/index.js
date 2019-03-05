@@ -19,16 +19,37 @@ import { CustomerSearch as CustomerSearchBox } from '../../src/modules/customer/
 import { CustomerSearchList } from '../../src/modules/customer/components/CustomerSearchList'
 import { CustomerForm } from '../../src/modules/customer/components/CustomerForm'
 import { ContactSheet } from '../../src/modules/customer/components/ContactSheet'
+import { SearchProvider } from '../../src/modules/customer/components/SearchContext'
 
 import JobSheetNew from '../../src/modules/jobsheet/screens/JobSheetNew'
+import JobSheet from '../../src/modules/jobsheet/screens/JobSheet'
 import { JobSheetList } from '../../src/modules/jobsheet/components/JobSheetList'
+import { GroupList } from '../../src/modules/jobsheet/components/GroupList'
+import { OtherList } from '../../src/modules/jobsheet/components/OtherList'
+import { WindowList } from '../../src/modules/jobsheet/components/WindowList'
+import { SelectRooms } from '../../src/modules/jobsheet/components/SelectRooms'
+import { SelectWindowOptions } from '../../src/modules/jobsheet/components/SelectWindowOptions'
+import { SelectTrim } from '../../src/modules/jobsheet/components/SelectTrim'
+import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeatures'
+import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
+import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
+// import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
 
 import QuoteSearch from '../../src/modules/quote/screens/QuoteSearch'
 import { QuoteListHeader } from '../../src/modules/quote/components/QuoteListHeader'
 import { QuoteSearchHeader } from '../../src/modules/quote/components/QuoteSearchHeader'
 import { QuoteSearchList } from '../../src/modules/quote/components/QuoteSearchList'
+import { SearchProvider as QuoteSearchProvider } from '../../src/modules/quote/components/SearchContext'
+import { QuoteForm } from '../../src/modules/quote/components/QuoteForm'
+
+import { Container } from '../../src/modules/auth/components/Container'
+import { SignIn as PfSignIn } from '../../src/modules/auth/components/SignIn'
+
+import { Loader } from '../../src/modules/common/components/Loader'
 
 import { jobsheets, quotes } from '../mockData/quotes'
+import jobSheet from '../mockData/jobSheet'
+import quote from '../mockData/quote'
 import { customers, customerInfo, quotes as customerQuotes } from '../mockData/customer'
 
 import clr from '../../src/config/colors'
@@ -47,6 +68,7 @@ const theme = {
 * ======================== Customer =====================================
 */
 storiesOf('Customer', module)
+  .addDecorator(getStory => <SearchProvider>{getStory()}</SearchProvider>)
   .add('search header', () => (
     <CustomerSearchBox />
   ))
@@ -73,9 +95,9 @@ storiesOf('Customer', module)
   .add('search screen', () => (
     <CustomerSearch />
   ))
-  .add('info screen', () => (
+  /* .add('info screen', () => (
     <CustomerInfo />
-  ))
+  )) */
   .add('contact sheet', () => (
     <ContactSheet data={customerInfo} />
   ))
@@ -90,7 +112,7 @@ storiesOf('Customer Form', module)
  * ======================== Quote =====================================
  */
 storiesOf('Quotes', module)
-  // .addDecorator(getStory => <ScrollView>{getStory()}</ScrollView>)
+  .addDecorator(getStory => <QuoteSearchProvider>{getStory()}</QuoteSearchProvider>)
   .add('search header', () => (
     <QuoteSearchHeader />
   ))
@@ -104,6 +126,11 @@ storiesOf('Quotes', module)
   ))
   .add('search screen', () => (
     <QuoteSearch />
+  ))
+
+storiesOf('QuoteForm', module)
+  .add('quote form', () => (
+    <QuoteForm data={quote} />
   ))
 
 /*
@@ -120,4 +147,54 @@ storiesOf('Address', module)
 storiesOf('JobSheets', module)
   .add('new jobsheet screen', () => (
     <JobSheetNew />
+  ))
+  .add('jobsheet screen', () => (
+    <JobSheet />
+  ))
+  .add('group list', () => (
+    <GroupList data={jobSheet.jobSheetData.groups} />
+  ))
+  .add('other list', () => (
+    <OtherList data={jobSheet.jobSheetData.other} />
+  ))
+  .add('window list', () => (
+    <WindowList data={jobSheet.jobSheetData.windows} />
+  ))
+  /* .add('window form', () => (
+    <WindowForm data={jobSheet.jobSheetData.jobsheet} />
+  )) */
+  /* .add('group form', () => (
+    <GroupForm data={jobSheet.jobSheetData.jobsheet} />
+  )) */
+  .add('other form', () => (
+    <OtherForm jobsheet={jobSheet.jobSheetData.jobsheet} />
+  ))
+  .add('select rooms modal', () => (
+    <SelectRooms />
+  ))
+  .add('select window options modal', () => (
+    <SelectWindowOptions />
+  ))
+  .add('select trim modal', () => (
+    <SelectTrim />
+  ))
+  .add('select job features modal', () => (
+    <SelectFeatures />
+  ))
+
+/*
+* ======================== Auth =====================================
+*/
+storiesOf('Authentication', module)
+  .addDecorator(getStory => <Container>{getStory()}</Container>)
+  .add('Sign In', () => (
+    <PfSignIn />
+  ))
+
+/*
+* ======================== Common =====================================
+*/
+storiesOf('Loader', module)
+  .add('Loader', () => (
+    <Loader />
   ))

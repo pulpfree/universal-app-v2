@@ -4,8 +4,6 @@ import clr from '../../../../config/colors'
 
 export default StyleSheet.create({
   itemRow: {
-    // alignItems: 'flex-start',
-    // alignContent: 'space-between',
     justifyContent: 'flex-start',
     borderBottomColor: clr.mdGray,
     borderBottomWidth: 1.25,
@@ -16,5 +14,11 @@ export default StyleSheet.create({
   },
   itemCell: {
     flex: 0.5,
+  },
+  noResultsCont: {
+    padding: 10,
+  },
+  noResultsText: {
+    fontSize: 16,
   },
 })
