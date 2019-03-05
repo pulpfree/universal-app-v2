@@ -8,14 +8,24 @@ import {
 } from 'react-native'
 
 import { Button, Icon } from 'react-native-elements'
+import { Mutation } from 'react-apollo'
 import { withNavigation } from 'react-navigation'
 
 import clr from '../../../../config/colors'
 import styles from './styles'
+import { SET_FIELD, SET_GROUP_FIELD } from '../../mutations/local'
 import { WindowOptions } from '../../config/jobSheetConstants'
 
 function SelectWindowOptions({ navigation }) {
-  const [options, setOption] = useState([])
+  const opts = navigation.getParam('options', '')
+  const type = navigation.getParam('type')
+  const tmpOpts = opts.length > 0 ? opts.trim().split('\n') : []
+  const [options, setOption] = useState(tmpOpts)
+
+  const cst = navigation.getParam('cost', '')
+  const [cost, setCost] = useState(cst)
+
+  const [customFeature, setCustomFeature] = useState(null)
 
   const addOption = (opt) => {
     if (options.find(option => option === opt)) return false
@@ -23,11 +33,25 @@ function SelectWindowOptions({ navigation }) {
       ...options,
       opt,
     ])
+    setCustomFeature(null)
     return true
   }
 
   const clearOptions = () => {
     setOption([])
+    setCost('')
+  }
+
+  let mutation
+  switch (type) {
+    case 'group':
+      mutation = SET_GROUP_FIELD
+      break
+    case 'window':
+      mutation = SET_FIELD
+      break
+    default:
+      return false
   }
 
   return (
@@ -51,7 +75,9 @@ function SelectWindowOptions({ navigation }) {
               {WindowOptions.map(opt => (
                 <View style={styles.optRow} key={opt}>
                   <TouchableOpacity onPress={() => addOption(opt)}>
-                    <Text style={styles.optOption} allowFontScaling={false}>{opt}</Text>
+                    <Text style={styles.optOption} allowFontScaling={false}>
+                      {opt}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               ))}
@@ -59,6 +85,14 @@ function SelectWindowOptions({ navigation }) {
 
             <View style={styles.inputCell}>
               <TextInput
+                onChangeText={text => setCustomFeature(text)}
+                placeholder="Enter custom option"
+                onEndEditing={() => addOption(customFeature)}
+                style={styles.optInput}
+                value={customFeature}
+              />
+              <TextInput
+                editable={false}
                 multiline
                 style={[styles.optInput, { height: 150, lineHeight: 22 }]}
                 value={options.join('\n')}
@@ -66,7 +100,10 @@ function SelectWindowOptions({ navigation }) {
               <TextInput
                 keyboardType="numeric"
                 style={styles.optInput}
+                onChangeText={text => setCost(text)}
                 placeholder="Enter cost"
+                selectTextOnFocus
+                value={cost.toString()}
               />
               <View style={styles.buttonRow}>
                 <Button
@@ -81,18 +118,26 @@ function SelectWindowOptions({ navigation }) {
                     color: 'white',
                   }}
                 />
-                <Button
-                  disabled={!options.length}
-                  // onPress={clearOptions}
-                  title="Save"
-                  buttonStyle={styles.submitButton}
-                  style={{ width: 130, marginLeft: 20 }}
-                  icon={{
-                    name: 'ios-send',
-                    type: 'ionicon',
-                    color: 'white',
-                  }}
-                />
+                <Mutation mutation={mutation}>
+                  {setField => (
+                    <Button
+                      disabled={!options.length}
+                      onPress={() => {
+                        setField({ variables: { field: 'specs.options', value: options.join('\n') } })
+                        setField({ variables: { field: 'costs.options', value: cost } })
+                        navigation.goBack()
+                      }}
+                      title="Save"
+                      buttonStyle={styles.submitButton}
+                      style={{ width: 130, marginLeft: 20 }}
+                      icon={{
+                        name: 'ios-send',
+                        type: 'ionicon',
+                        color: 'white',
+                      }}
+                    />
+                  )}
+                </Mutation>
               </View>
             </View>
           </View>

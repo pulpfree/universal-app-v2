@@ -6,14 +6,9 @@ import { Auth } from 'aws-amplify'
 import appSyncConfig from '../aws-exports'
 import graphql from './graphql'
 
-import { defaults, resolvers, typeDefs } from '../modules/jobsheet/resolvers/window'
-
 const stateLink = createLinkWithCache(cache => withClientState({
   cache,
   ...graphql,
-  // defaults,
-  // resolvers,
-  // typeDefs,
 }))
 
 const appSyncLink = createAppSyncLink({

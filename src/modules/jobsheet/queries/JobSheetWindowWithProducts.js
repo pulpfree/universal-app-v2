@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-query JobSheetWindow($windowID: ID!) {
-  jobSheetWindow(windowID: $windowID) {
+query JobSheetWindowWithProducts($windowID: ID!) {
+  jobSheetWindowWithProducts(windowID: $windowID) {
     _id
     costs {
       extendTotal
@@ -14,28 +14,51 @@ query JobSheetWindow($windowID: ID!) {
       trim
       window
     }
-    dims
+    dims {
+      height {
+        decimal
+        fraction
+        inch
+        overSize
+        round
+        underSize
+      }
+      width {
+        decimal
+        fraction
+        inch
+        overSize
+        round
+        underSize
+      }
+    }
     productID {
       _id
       name
     }
     qty
     rooms
-    specs
+    specs {
+      installType
+      options
+      overSize
+      sqft
+      trim
+    }
     createdAt
     updatedAt
   }
-  products {
-    _id
-    maxHeight
-    maxWidth
-    minHeight
-    minWidth
-    name
-    premium {
-      cost
-      oversizeLimit
-    }
-    sizeCost
-  }
+  # products {
+  #   _id
+  #   maxHeight
+  #   maxWidth
+  #   minHeight
+  #   minWidth
+  #   name
+  #   premium {
+  #     cost
+  #     oversizeLimit
+  #   }
+  #   sizeCost
+  # }
 }`

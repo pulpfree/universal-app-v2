@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query CustomerData($customerID: ID!) {
-    getCustomer(customerID: $customerID) {
+    customer(customerID: $customerID) {
       __typename
       _id
       active

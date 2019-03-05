@@ -163,9 +163,9 @@ storiesOf('JobSheets', module)
   /* .add('window form', () => (
     <WindowForm data={jobSheet.jobSheetData.jobsheet} />
   )) */
-  .add('group form', () => (
+  /* .add('group form', () => (
     <GroupForm data={jobSheet.jobSheetData.jobsheet} />
-  ))
+  )) */
   .add('other form', () => (
     <OtherForm jobsheet={jobSheet.jobSheetData.jobsheet} />
   ))

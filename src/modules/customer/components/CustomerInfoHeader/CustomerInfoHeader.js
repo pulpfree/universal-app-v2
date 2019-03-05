@@ -4,53 +4,53 @@ import {
   Text,
   View,
 } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { Button } from 'react-native-elements'
 
 import styles from './styles'
 import clr from '../../../../config/colors'
 import { ucFirst } from '../../../../util/fmt'
 
-export default function CustomerInfo({ data, navigation }) {
+export default function CustomerInfo({ customer, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.column}>
         <View style={styles.row}>
           <Text style={styles.label}>First</Text>
-          <Text style={styles.value}>{data.name.first}</Text>
+          <Text style={styles.value}>{customer.name.first}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Last</Text>
-          <Text style={styles.value}>{data.name.last}</Text>
+          <Text style={styles.value}>{customer.name.last}</Text>
         </View>
-        {data.name.spouse && (
+        {customer.name.spouse && (
           <View style={styles.row}>
             <Text style={styles.label}>Spouse</Text>
-            <Text style={styles.value}>{data.name.spouse}</Text>
+            <Text style={styles.value}>{customer.name.spouse}</Text>
           </View>
         )}
       </View>
       <View style={styles.column}>
         <View style={styles.row}>
           <Text style={styles.label}>Street</Text>
-          <Text style={styles.value}>{data.address.street1}</Text>
+          <Text style={styles.value}>{customer.address.street1}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>City</Text>
-          <Text style={styles.value}>{data.address.city}</Text>
+          <Text style={styles.value}>{customer.address.city}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Postal Code</Text>
-          <Text style={styles.value}>{data.address.postalCode}</Text>
+          <Text style={styles.value}>{customer.address.postalCode}</Text>
         </View>
       </View>
       <View style={styles.column}>
-        {data.email && (
+        {customer.email && (
           <View style={styles.row}>
             <Text style={styles.label}>Email</Text>
-            <Text style={styles.value}>{data.email}</Text>
+            <Text style={styles.value}>{customer.email}</Text>
           </View>
         )}
-        {data.phones.map(ph => (
+        {customer.phones.map(ph => (
           <View key={ph._id} style={styles.row}>
             <Text style={styles.label}>{ucFirst(ph._id)}</Text>
             <Text style={styles.value}>{ph.number}</Text>
@@ -59,7 +59,7 @@ export default function CustomerInfo({ data, navigation }) {
       </View>
       <View style={styles.column}>
         <Button
-          onPress={() => navigation.navigate('ContactSheet', { customer: data, navigation })}
+          onPress={() => navigation.navigate('ContactSheet', { customer, navigation })}
           raised
           rounded
           icon={{
@@ -94,6 +94,6 @@ export default function CustomerInfo({ data, navigation }) {
   )
 }
 CustomerInfo.propTypes = {
-  data: PropTypes.instanceOf(Object).isRequired,
+  customer: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
 }

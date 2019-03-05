@@ -7,15 +7,16 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
-import { Query } from 'react-apollo'
+import { compose, Query } from 'react-apollo'
 
-import GetJobSheetData from '../queries/GetJobSheetData'
 import { Error } from '../../common/components/Error'
 import { GroupList } from '../components/GroupList'
+import { Header, Menu } from '../components/JobSheetHeader'
+import { JOBSHEET_DATA } from '../queries'
 import { Loader } from '../../common/components/Loader'
 import { OtherList } from '../components/OtherList'
 import { WindowList } from '../components/WindowList'
-import { Header, Menu } from '../components/JobSheetHeader'
+
 
 const JobSheet = ({ navigation }) => {
   const defJobSheetID = __DEV__ ? '5b1846d52aac0450227ebfe9' : null // eslint-disable-line
@@ -23,8 +24,9 @@ const JobSheet = ({ navigation }) => {
 
   return (
     <Query
-      query={GetJobSheetData}
+      query={JOBSHEET_DATA}
       variables={{ jobSheetID }}
+      // fetchPolicy="cache-and-network"
     >
       {({ loading, error, data }) => {
         if (error) return <Error error={error} />
@@ -40,10 +42,10 @@ const JobSheet = ({ navigation }) => {
           <View>
             <Header jobSheet={jobsheet} />
             <ScrollView>
-              <Menu navigation={navigation} />
+              <Menu jobSheet={jobsheet} navigation={navigation} />
               <WindowList data={windows} jobSheet={jobsheet} />
-              <GroupList data={groups} />
-              <OtherList data={other} />
+              <GroupList data={groups} jobSheet={jobsheet} />
+              <OtherList data={other} jobSheet={jobsheet} />
             </ScrollView>
           </View>
         )
@@ -54,4 +56,7 @@ const JobSheet = ({ navigation }) => {
 JobSheet.propTypes = {
   navigation: PropTypes.instanceOf(Object).isRequired,
 }
-export default withNavigation(JobSheet)
+
+export default compose(
+  withNavigation,
+)(JobSheet)

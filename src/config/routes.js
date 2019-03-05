@@ -91,7 +91,7 @@ const HomeStack = createStackNavigator(
     OtherForm: {
       screen: OtherForm,
       navigationOptions: {
-        title: 'Other Form',
+        title: 'Other Item Form',
       },
     },
     QuoteNew: {

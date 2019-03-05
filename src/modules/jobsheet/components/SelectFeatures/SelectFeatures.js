@@ -16,6 +16,7 @@ import { JobFeatures } from '../../config/jobSheetConstants'
 
 function SelectFeatures({ navigation }) {
   const [features, setFeatures] = useState([])
+  const [customFeature, setCustomFeature] = useState(null)
 
   const addFeature = (feat) => {
     if (features.find(feature => feature === feat)) return false
@@ -23,6 +24,7 @@ function SelectFeatures({ navigation }) {
       ...features,
       feat,
     ])
+    setCustomFeature(null)
     return true
   }
 
@@ -59,11 +61,11 @@ function SelectFeatures({ navigation }) {
 
             <View style={styles.inputCell}>
               <TextInput
-                // onChangeText={changeHandler}
+                onChangeText={text => setCustomFeature(text)}
                 placeholder="Enter custom feature"
-                // onEndEditing={e => addFeature(e.target)}
-                onEndEditing={e => addFeature(e.nativeEvent.text)}
+                onEndEditing={() => addFeature(customFeature)}
                 style={styles.optInput}
+                value={customFeature}
               />
               <TextInput
                 multiline

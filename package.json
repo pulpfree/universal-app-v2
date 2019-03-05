@@ -1,5 +1,5 @@
 {
-  "name": "UniversalApp",
+  "name": "universal-app",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -25,6 +25,7 @@
     "graphql-tag": "2.10.1",
     "lodash": "4.17.11",
     "moment": "2.23.0",
+    "mongoose": "5.4.14",
     "ramda": "0.26.1",
     "react": "16.7.0-alpha.2",
     "react-apollo": "2.3.3",

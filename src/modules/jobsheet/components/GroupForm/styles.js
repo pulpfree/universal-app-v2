@@ -1,121 +1,81 @@
 import { StyleSheet } from 'react-native'
 import clr from '../../../../config/colors'
+import { styles } from '../WindowForm'
 
 export default StyleSheet.create({
   formCont: {
-    flexDirection: 'column',
-    marginBottom: 60,
+    ...StyleSheet.flatten(styles.formCont),
   },
   formRow: {
-    backgroundColor: clr.ltGray,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
+    ...StyleSheet.flatten(styles.formRow),
   },
   formCell: {
-    flexDirection: 'column',
+    ...StyleSheet.flatten(styles.formCell),
   },
   formDetails: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
+    ...StyleSheet.flatten(styles.formDetails),
   },
   formDetailRow: {
-    backgroundColor: clr.ltGray,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    padding: 16,
-    paddingBottom: 8,
-    paddingTop: 8,
-    marginBottom: 4,
+    ...StyleSheet.flatten(styles.formDetailRow),
   },
   detailInput: {
-    backgroundColor: clr.white,
-    borderColor: clr.mdGray,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    height: 35,
-    marginRight: 10,
-    width: 100,
+    ...StyleSheet.flatten(styles.detailInput),
   },
   detailBoxInput: {
-    backgroundColor: clr.white,
-    borderColor: clr.mdGray,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    height: 95,
-    width: 300,
+    ...StyleSheet.flatten(styles.detailBoxInput),
   },
   detailTextLabel: {
-    color: clr.dkGray,
-    fontWeight: '600',
-    marginRight: 10,
-    width: 150,
+    ...StyleSheet.flatten(styles.detailTextLabel),
   },
   dimCell: {
-    flexDirection: 'row',
-    width: 120,
-    justifyContent: 'space-between',
-    // alignContent: 'center',
-    alignItems: 'center',
+    ...StyleSheet.flatten(styles.dimCell),
   },
   dimInput: {
-    backgroundColor: clr.white,
-    borderColor: clr.mdGray,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    height: 35,
-    width: 50,
-    paddingLeft: 4,
-    paddingRight: 4,
+    ...StyleSheet.flatten(styles.dimInput),
   },
   cellLabel: {
-    color: clr.dkGray,
-    marginBottom: 7,
-    fontWeight: '600',
+    ...StyleSheet.flatten(styles.cellLabel),
+  },
+  modalLinkText: {
+    ...StyleSheet.flatten(styles.modalLinkText),
   },
   picker: {
-    backgroundColor: clr.white,
-    borderColor: clr.mdGray,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    height: 90,
-    // marginTop: ,
-    paddingBottom: 0,
-    paddingTop: 0,
-    padding: 5,
-    width: 140,
+    ...StyleSheet.flatten(styles.picker),
   },
   pickerSm: {
-    backgroundColor: clr.white,
-    borderColor: clr.mdGray,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    height: 90,
-    // marginTop: 5,
-    paddingBottom: 0,
-    paddingTop: 0,
-    padding: 5,
-    width: 50,
+    ...StyleSheet.flatten(styles.pickerSm),
   },
   pickerItem: {
-    fontSize: 17,
-    height: 90,
-    textAlign: 'left',
+    ...StyleSheet.flatten(styles.pickerItem),
   },
   pickerItemSm: {
-    fontSize: 17,
-    height: 90,
-    textAlign: 'center',
+    ...StyleSheet.flatten(styles.pickerItemSm),
   },
   buttonRow: {
+    ...StyleSheet.flatten(styles.buttonRow),
+  },
+  submitButton: {
+    ...StyleSheet.flatten(styles.submitButton),
+  },
+  submitButtonSecondary: {
+    ...StyleSheet.flatten(styles.submitButtonSecondary),
+  },
+  windowRow: {
+    backgroundColor: clr.white,
+    borderTopWidth: 1,
+    borderTopColor: clr.mdGray,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 16,
   },
-  submitButton: {
-    backgroundColor: clr.primary,
+  windowCell: {
+    flex: 1,
   },
-  submitButtonSecondary: {
-    backgroundColor: clr.black,
+  windowCostCell: {
+    flex: 1,
+    textAlign: 'right',
+  },
+  windowHeadingCell: {
+    flex: 1,
   },
 })

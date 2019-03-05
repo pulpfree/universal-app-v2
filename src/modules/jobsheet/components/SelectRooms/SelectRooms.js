@@ -13,12 +13,13 @@ import { withNavigation } from 'react-navigation'
 
 import clr from '../../../../config/colors'
 import styles from './styles'
-import { ADD_ROOMS } from '../../mutations/local'
+import { SET_FIELD, SET_GROUP_FIELD, SET_OTHER_FIELD } from '../../mutations/local'
 import { Rooms } from '../../config/jobSheetConstants'
 
 
 function SelectRooms({ navigation }) {
   const rms = navigation.getParam('rooms', [])
+  const type = navigation.getParam('type')
   const [rooms, setRooms] = useState(rms)
 
   const addRoom = (rm) => {
@@ -32,6 +33,21 @@ function SelectRooms({ navigation }) {
 
   const clearRooms = () => {
     setRooms([])
+  }
+
+  let mutation
+  switch (type) {
+    case 'group':
+      mutation = SET_GROUP_FIELD
+      break
+    case 'other':
+      mutation = SET_OTHER_FIELD
+      break
+    case 'window':
+      mutation = SET_FIELD
+      break
+    default:
+      return false
   }
 
   return (
@@ -81,13 +97,13 @@ function SelectRooms({ navigation }) {
                   }}
                 />
 
-                <Mutation mutation={ADD_ROOMS}>
-                  {addWindowRooms => (
+                <Mutation mutation={mutation}>
+                  {setField => (
                     <Button
                       buttonStyle={styles.submitButton}
                       disabled={!rooms.length}
                       onPress={() => {
-                        addWindowRooms({ variables: { rooms } })
+                        setField({ variables: { field: 'rooms', value: rooms } })
                         navigation.goBack()
                       }}
                       style={{ width: 130, marginLeft: 20 }}

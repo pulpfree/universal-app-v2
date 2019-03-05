@@ -113,7 +113,7 @@ QuoteSearchList.defaultProps = {
 const SearchList = graphql(SearchQuotes, {
   // fetchPolicy: 'network-only',
   // fetchPolicy: 'cache-first',
-  fetchPolicy: 'cache-and-network',
+  // fetchPolicy: 'cache-and-network',
   // fetchPolicy: 'no-cache',
   options: (props) => {
     const variables = {

@@ -6,17 +6,8 @@ query GroupTypes {
     _id
     name
   }
-  products {
+  products @client {
     _id
-    maxHeight
-    maxWidth
-    minHeight
-    minWidth
     name
-    premium {
-      cost
-      oversizeLimit
-    }
-    sizeCost
   }
 }`

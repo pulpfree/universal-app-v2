@@ -6,23 +6,23 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-
 import { withNavigation } from 'react-navigation'
+import { graphql } from 'react-apollo'
 
-import { styles } from './index'
 import { ListHeader } from '../ListHeader'
+import { Loader } from '../../../common/components/Loader'
+import { SET_GROUP } from '../../mutations/local'
 import { fmtMoney } from '../../../../util/fmt'
+import { styles } from './index'
 
 const ListItem = ({ item }) => {
-  const { costs } = item
-  const specs = JSON.parse(item.specs)
+  const { costs, dims, specs } = item
   const { name } = specs.groupType
   const rooms = item.rooms && item.rooms.length ? item.rooms.join(', ') : ''
-  const dims = JSON.parse(item.dims)
   let dimStr = `${dims.width.inch}`
-  if (dims.width.fraction) dimStr += ` ${dims.width.faction}`
+  if (dims.width.fraction) dimStr += ` ${dims.width.fraction}`
   dimStr += ` x ${dims.height.inch}`
-  if (dims.height.fraction) dimStr += ` ${dims.height.faction}`
+  if (dims.height.fraction) dimStr += ` ${dims.height.fraction}`
 
   return (
     <View style={styles.itemRow}>
@@ -52,27 +52,38 @@ ListItem.propTypes = {
 }
 
 class GroupList extends React.Component {
+  state = {
+    loading: false,
+  }
+
   _renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => this._onPressItem(item._id)}>
       <ListItem item={item} />
     </TouchableOpacity>
   )
 
-  _onPressItem = (jobSheetID) => {
-    const { navigation } = this.props
-    navigation.navigate('GroupForm', { jobSheetID })
+  _onPressItem = (groupID) => {
+    const { jobSheet, navigation, setGroupFromRemote } = this.props
+    const setRes = setGroupFromRemote(groupID)
+    this.setState(() => ({ loading: true }))
+    setRes.then(() => {
+      this.setState(() => ({ loading: false }))
+      navigation.navigate('GroupForm', { groupID, jobSheet })
+    })
   }
 
   _keyExtractor = item => item._id
 
   render() {
-    const { data, navigation } = this.props
+    const { data, jobSheet, navigation } = this.props
+    const { loading } = this.state
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate('GroupForm')}>
+        <TouchableOpacity onPress={() => navigation.navigate('GroupForm', { jobSheet, isNew: true })}>
           <ListHeader navigation={navigation} title="Groups" />
         </TouchableOpacity>
+        {loading && <Loader />}
         <FlatList
           data={data}
           renderItem={this._renderItem}
@@ -84,10 +95,16 @@ class GroupList extends React.Component {
 }
 GroupList.propTypes = {
   data: PropTypes.instanceOf(Object),
+  jobSheet: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  setGroupFromRemote: PropTypes.func.isRequired,
 }
 GroupList.defaultProps = {
   data: [],
 }
 
-export default withNavigation(GroupList)
+export default graphql(SET_GROUP, {
+  props: ({ mutate }) => ({
+    setGroupFromRemote: groupID => mutate({ variables: { groupID } }),
+  }),
+})(withNavigation(GroupList))

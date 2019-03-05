@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import {
   View,
 } from 'react-native'
@@ -10,8 +9,7 @@ import { Query } from 'react-apollo'
 import { CustomerInfoHeader } from '../components/CustomerInfoHeader'
 import { CustomerQuoteList } from '../components/CustomerQuoteList'
 import { JobSheetList } from '../../jobsheet/components/JobSheetList'
-
-import CustomerData from '../queries/CustomerData'
+import { CUSTOMER_DATA } from '../queries'
 import { Error } from '../../common/components/Error'
 import { Loader } from '../../common/components/Loader'
 
@@ -21,19 +19,21 @@ export default function CustomerInfo({ navigation }) {
 
   return (
     <Query
-      query={CustomerData}
+      query={CUSTOMER_DATA}
       skip={!customerID}
       variables={{ customerID }}
+      // fetchPolicy="cache-and-network"
+      // fetchPolicy="network-only"
     >
       {({ loading, error, data }) => {
         if (error) return <Error error={error} />
         if (loading) return <Loader />
 
-        const { getCustomer, searchJobSheetsByCustomer, searchQuotesByCustomer } = data
+        const { customer, searchJobSheetsByCustomer, searchQuotesByCustomer } = data
         return (
           <View>
-            <CustomerInfoHeader data={getCustomer} navigation={navigation} />
-            <JobSheetList data={searchJobSheetsByCustomer} />
+            <CustomerInfoHeader customer={customer} navigation={navigation} />
+            <JobSheetList customer={customer} data={searchJobSheetsByCustomer} />
             <CustomerQuoteList data={searchQuotesByCustomer} />
           </View>
         )

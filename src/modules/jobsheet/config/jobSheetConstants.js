@@ -22,7 +22,6 @@ export const InstallMethods = [
   'Regular Replacement',
   'Steel Frame',
   'Cash and Carry!',
-  'Steel Frame',
   'Cut Out',
 ]
 

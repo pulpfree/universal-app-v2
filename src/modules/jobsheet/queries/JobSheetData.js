@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-query GetJobSheetData($jobSheetID: ID!) {
+query JobSheetData($jobSheetID: ID!) {
   jobSheetData(jobSheetID: $jobSheetID) {
     jobsheet {
       _id
@@ -27,39 +27,48 @@ query GetJobSheetData($jobSheetID: ID!) {
       costs {
         extendTotal
         extendUnit
-        install
-        installType
-        netUnit
-        options
-        trim
-        window
       }
-      dims
+      dims {
+        height {
+          fraction
+          inch
+        }
+        width {
+          fraction
+          inch
+        }
+      }
       productID {
         _id
         name
       }
       qty
       rooms
-      specs
     }
     groups {
       _id
       costs {
         extendTotal
         extendUnit
-        install
-        installType
-        netUnit
-        options
-        trim
-        window
       }
-      dims
-      items
+      dims {
+        height {
+          fraction
+          inch
+        }
+        width {
+          fraction
+          inch
+        }
+      }
       qty
       rooms
-      specs
+      specs {
+        groupType {
+          _id
+          name
+        }
+      }
     }
     other {
       _id
@@ -70,10 +79,12 @@ query GetJobSheetData($jobSheetID: ID!) {
       description
       qty
       rooms
-      specs
+      specs {
+        options
+        location
+      }
       updatedAt
       createdAt
     }
   }
-}
-`
+}`

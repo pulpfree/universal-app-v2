@@ -35,6 +35,7 @@ export default StyleSheet.create({
     borderWidth: 0.5,
     height: 35,
     marginRight: 10,
+    paddingLeft: 8,
     width: 100,
   },
   detailBoxInput: {
@@ -43,6 +44,8 @@ export default StyleSheet.create({
     borderRadius: 4,
     borderWidth: 0.5,
     height: 95,
+    paddingLeft: 8,
+    paddingRight: 8,
     width: 300,
   },
   detailTextLabel: {
@@ -55,7 +58,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: 120,
     justifyContent: 'space-between',
-    // alignContent: 'center',
     alignItems: 'center',
   },
   dimInput: {
@@ -63,10 +65,11 @@ export default StyleSheet.create({
     borderColor: clr.mdGray,
     borderRadius: 4,
     borderWidth: 0.5,
+    fontSize: 17,
     height: 35,
-    width: 50,
-    paddingLeft: 4,
+    paddingLeft: 6,
     paddingRight: 4,
+    width: 50,
   },
   cellLabel: {
     color: clr.dkGray,
@@ -82,7 +85,6 @@ export default StyleSheet.create({
     borderRadius: 4,
     borderWidth: 0.5,
     height: 90,
-    // marginTop: ,
     paddingBottom: 0,
     paddingTop: 0,
     padding: 5,

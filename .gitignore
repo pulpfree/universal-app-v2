@@ -60,3 +60,4 @@ builds
 src/aws-exports
 
 **/*.bak*
+tmp/

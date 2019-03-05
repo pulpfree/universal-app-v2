@@ -1,12 +1,11 @@
 import gql from 'graphql-tag'
 
-export default gql`
-query JobSheetWindow($windowID: ID!) {
-  jobSheetWindow(windowID: $windowID) {
-    _id
+export const WINDOW = gql`
+query GetWindow {
+  window @client {
+    windowID
     jobsheetID
     costs {
-      discounted
       extendTotal
       extendUnit
       install
@@ -47,7 +46,10 @@ query JobSheetWindow($windowID: ID!) {
       sqft
       trim
     }
-    createdAt
-    updatedAt
   }
+}`
+
+export const SOME = gql`
+{
+  test @client
 }`

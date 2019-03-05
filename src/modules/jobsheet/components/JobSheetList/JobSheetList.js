@@ -15,20 +15,21 @@ import styles from './styles'
 import clr from '../../../../config/colors'
 import { fmtDate } from '../../../../util/fmt'
 
-const Header = ({ navigation }) => (
-  <TouchableOpacity onPress={() => navigation.navigate('JobSheetNew')}>
+const Header = ({ customer, navigation }) => (
+  <TouchableOpacity onPress={() => navigation.navigate('JobSheetNew', { customer })}>
     <View style={styles.header}>
       <Text style={styles.headerText}>Job Sheets</Text>
       <Icon
-        name="add-circle"
         color={clr.ltGray}
+        name="add-circle"
+        // onPress={() => navigation.navigate('JobSheetNew')}
         size={24}
-        onPress={() => navigation.navigate('JobSheetNew')}
       />
     </View>
   </TouchableOpacity>
 )
 Header.propTypes = {
+  customer: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
 }
 
@@ -65,11 +66,11 @@ class JobSheetList extends React.Component {
   _keyExtractor = item => item._id
 
   render() {
-    const { data, navigation } = this.props
+    const { customer, data, navigation } = this.props
 
     return (
       <React.Fragment>
-        <Header navigation={navigation} />
+        <Header customer={customer} navigation={navigation} />
         <FlatList
           ListHeaderComponent={JobSheetListHeader}
           data={data}
@@ -81,6 +82,7 @@ class JobSheetList extends React.Component {
   }
 }
 JobSheetList.propTypes = {
+  customer: PropTypes.instanceOf(Object).isRequired,
   data: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
 }

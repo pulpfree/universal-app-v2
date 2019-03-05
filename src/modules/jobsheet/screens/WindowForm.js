@@ -1,56 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'react-native'
+import { graphql } from 'react-apollo'
 
-import gql from 'graphql-tag'
-import { compose, graphql } from 'react-apollo'
-// import { withNavigation } from 'react-navigation'
-
-import PRODUCTS from '../queries/Products'
-import { Error } from '../../common/components/Error'
 import { Header } from '../components/JobSheetHeader'
-import { Loader } from '../../common/components/Loader'
 import { WindowForm as Form } from '../components/WindowForm'
+import { SET_JOBSHEET_ID } from '../mutations/local'
 
-
-const SET_WINDOW = gql`
-  mutation setWindowFromRemote($windowID: ID!) {
-  setWindowFromRemote(windowID: $windowID) @client
-}
-`
-
-const WindowForm = ({ data, navigation }) => {
+const WindowForm = ({ navigation, setJobSheetID }) => {
   const jobSheet = navigation.getParam('jobSheet')
   const windowID = navigation.getParam('windowID')
-  // const isNew = navigation.getParam('isNew', false)
-
-  if (data.error) return <Error error={data.error} />
-  if (data.loading) return <Loader />
-  const { products } = data
+  const isNew = navigation.getParam('isNew', false)
+  if (isNew) {
+    setJobSheetID(jobSheet._id)
+  }
 
   return (
     <View>
       <Header jobSheet={jobSheet} />
-      <Form products={products} windowID={windowID} />
+      <Form windowID={windowID} />
     </View>
   )
 }
 WindowForm.propTypes = {
   navigation: PropTypes.instanceOf(Object).isRequired,
-  data: PropTypes.instanceOf(Object),
-}
-WindowForm.defaultProps = {
-  data: null,
+  setJobSheetID: PropTypes.func.isRequired,
 }
 
-const SetWindow = graphql(SET_WINDOW, {
+export default graphql(SET_JOBSHEET_ID, {
   props: ({ mutate }) => ({
-    setWindowFromRemote: windowID => mutate({ variables: { windowID } }),
+    setJobSheetID: jobSheetID => mutate({ variables: { jobSheetID } }),
   }),
-})
-const FetchProducts = graphql(PRODUCTS)
-
-export default compose(
-  SetWindow,
-  FetchProducts,
-)(WindowForm)
+})(WindowForm)

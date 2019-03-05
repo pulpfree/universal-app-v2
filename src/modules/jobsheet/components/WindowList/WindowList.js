@@ -12,14 +12,14 @@ import { graphql } from 'react-apollo'
 
 import styles from './styles'
 import { ListHeader } from '../ListHeader'
+import { Loader } from '../../../common/components/Loader'
 import { SET_WINDOW } from '../../mutations/local'
 import { fmtMoney } from '../../../../util/fmt'
 
 const ListItem = ({ item }) => {
   const rooms = item.rooms && item.rooms.length ? item.rooms.join(', ') : ''
   const { name } = item.productID
-  const { costs } = item
-  const dims = JSON.parse(item.dims)
+  const { costs, dims } = item
   let dimStr = `${dims.width.inch}`
   if (dims.width.fraction) dimStr += ` ${dims.width.fraction}`
   dimStr += ` x ${dims.height.inch}`
@@ -53,6 +53,10 @@ ListItem.propTypes = {
 }
 
 class WindowList extends React.Component {
+  state = {
+    loading: false,
+  }
+
   _renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => this._onPressItem(item._id)}>
       <ListItem item={item} />
@@ -62,8 +66,10 @@ class WindowList extends React.Component {
   _onPressItem = (windowID) => {
     const { jobSheet, navigation, setWindowFromRemote } = this.props
     const setRes = setWindowFromRemote(windowID)
+    this.setState(() => ({ loading: true }))
     // blocking navigate action so that the WindowForm component doesn't refresh unnecessarily
     setRes.then(() => {
+      this.setState(() => ({ loading: false }))
       navigation.navigate('WindowForm', { jobSheet, windowID })
     })
   }
@@ -72,14 +78,14 @@ class WindowList extends React.Component {
 
   render() {
     const { data, jobSheet, navigation } = this.props
-    // console.log('jobSheet in WindowList render:', jobSheet)
-    // console.log('data in WindowList render:', data)
+    const { loading } = this.state
 
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.navigate('WindowForm', { jobSheet, isNew: true })}>
           <ListHeader navigation={navigation} title="Windows" />
         </TouchableOpacity>
+        {loading && <Loader />}
         <FlatList
           data={data}
           renderItem={this._renderItem}
@@ -104,5 +110,3 @@ export default graphql(SET_WINDOW, {
     setWindowFromRemote: windowID => mutate({ variables: { windowID } }),
   }),
 })(withNavigation(WindowList))
-
-// export default withNavigation(WindowList)

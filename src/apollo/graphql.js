@@ -13,23 +13,34 @@ import {
   typeDefs as jobSheetTypeDefs,
 } from '../modules/jobsheet/resolvers/jobSheet'
 
-/* export default {
-  Mutation: {
-    updatePageName
-  }
-} */
+import {
+  defaults as groupDefaults,
+  resolvers as groupResolvers,
+  typeDefs as groupTypeDefs,
+} from '../modules/jobsheet/resolvers/group'
+
+import {
+  defaults as otherDefaults,
+  resolvers as otherResolvers,
+} from '../modules/jobsheet/resolvers/other'
+
 const graphql = {
   defaults: merge(
-    windowDefaults,
+    groupDefaults,
     jobSheetDefaults,
+    otherDefaults,
+    windowDefaults,
   ),
   resolvers: merge(
-    windowResolvers,
+    groupResolvers,
     jobSheetResolvers,
+    otherResolvers,
+    windowResolvers,
   ),
   typeDefs: [
-    windowTypeDefs,
+    groupTypeDefs,
     jobSheetTypeDefs,
+    windowTypeDefs,
   ],
 }
 
