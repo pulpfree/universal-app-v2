@@ -12,7 +12,7 @@ const stateLink = createLinkWithCache(cache => withClientState({
 }))
 
 const appSyncLink = createAppSyncLink({
-  // disableOffline: true,
+  disableOffline: true,
   url: appSyncConfig.aws_appsync_graphqlEndpoint,
   region: appSyncConfig.aws_appsync_region,
   auth: {

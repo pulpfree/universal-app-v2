@@ -15,6 +15,7 @@
     "add": "2.0.6",
     "amazon-cognito-identity-js": "3.0.7",
     "apollo-cache-inmemory": "1.4.2",
+    "apollo-client": "2.5.1",
     "apollo-link": "1.2.8",
     "apollo-link-state": "0.4.2",
     "aws-amplify": "1.1.19",
@@ -28,7 +29,7 @@
     "mongoose": "5.4.14",
     "ramda": "0.26.1",
     "react": "16.7.0-alpha.2",
-    "react-apollo": "2.3.3",
+    "react-apollo": "2.5.1",
     "react-native": "npm:@brunolemos/react-native",
     "react-native-elements": "1.0.0",
     "react-native-gesture-handler": "1.0.12",
@@ -36,7 +37,6 @@
     "react-native-paper": "2.4.0",
     "react-native-vector-icons": "6.1.0",
     "react-navigation": "3.0.9",
-    "yarn": "1.12.3",
     "yup": "0.26.7"
   },
   "devDependencies": {
