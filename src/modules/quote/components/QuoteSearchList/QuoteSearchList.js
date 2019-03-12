@@ -64,11 +64,13 @@ Totals.defaultProps = {
 }
 
 class QuoteSearchList extends React.Component {
-  _renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this._onPressItem(item.customerID._id)}>
-      <ListItem item={item} />
-    </TouchableOpacity>
-  )
+  _renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => this._onPressItem(item.customerID._id)}>
+        <ListItem item={item} />
+      </TouchableOpacity>
+    )
+  }
 
   _onPressItem = (customerID) => {
     const { navigation } = this.props
@@ -88,17 +90,19 @@ class QuoteSearchList extends React.Component {
     const { quotes, totalInvoiced, totalOutstanding } = searchQuotes
 
     return (
-      <ScrollView>
+      <View>
         {data.variables.invoiced
           && <Totals totalInvoiced={totalInvoiced} totalOutstanding={totalOutstanding} />
         }
         <FlatList
           ListHeaderComponent={QuoteListHeader}
           data={quotes}
+          refreshing={data.networkStatus === 4}
+          onRefresh={() => data.refetch()}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
         />
-      </ScrollView>
+      </View>
     )
   }
 }
@@ -114,7 +118,7 @@ const SearchList = graphql(SearchQuotes, {
   // fetchPolicy: 'network-only',
   // fetchPolicy: 'cache-first',
   // fetchPolicy: 'cache-and-network',
-  fetchPolicy: 'no-cache',
+
   options: (props) => {
     const variables = {
       invoiced: props.invoiced,
@@ -124,7 +128,11 @@ const SearchList = graphql(SearchQuotes, {
     if (props.period) {
       variables.year = props.period
     }
-    return ({ variables })
+    return ({
+      variables,
+      // fetchPolicy: 'no-cache',
+      notifyOnNetworkStatusChange: true,
+    })
   },
 })
 

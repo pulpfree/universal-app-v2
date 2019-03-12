@@ -21,9 +21,7 @@ import { WindowList } from '../components/WindowList'
 
 
 const JobSheet = ({ navigation, setProducts }) => {
-  // const defJobSheetID = __DEV__ ? '5b1846d52aac0450227ebfe9' : null // eslint-disable-line
   const jobSheetID = navigation.getParam('jobSheetID')
-  console.log('jobSheetID in JobSheet:', jobSheetID)
 
   useEffect(() => {
     setProducts()
@@ -33,7 +31,6 @@ const JobSheet = ({ navigation, setProducts }) => {
     <Query
       query={JOBSHEET_DATA}
       variables={{ jobSheetID }}
-      // fetchPolicy="cache-and-network"
     >
       {({ loading, error, data }) => {
         if (error) return <Error error={error} />
