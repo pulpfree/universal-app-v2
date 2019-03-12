@@ -18,11 +18,14 @@ function calcRound(decimal) {
  * Job Sheet functions
  */
 
-export const prepareAddress = (address) => {
+export const prepareAddress = (address, customerID) => {
   const newAddress = { ...address }
 
   delete newAddress.__typename
   delete newAddress._id
+
+  newAddress.associate = 'jobsheet'
+  newAddress.customerID = Types.ObjectId(customerID)
 
   return newAddress
 }

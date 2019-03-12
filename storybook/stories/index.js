@@ -9,10 +9,10 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
 
 // import CenterView from './CenterView'
 
-import { AddressForm } from '../../src/modules/address/components/AddressForm'
+// import { AddressForm } from '../../src/modules/address/components/AddressForm'
 
 import CustomerSearch from '../../src/modules/customer/screens/CustomerSearch'
-import CustomerInfo from '../../src/modules/customer/screens/CustomerInfo'
+// import CustomerInfo from '../../src/modules/customer/screens/CustomerInfo'
 import { CustomerInfoHeader } from '../../src/modules/customer/components/CustomerInfoHeader'
 import { CustomerQuoteList } from '../../src/modules/customer/components/CustomerQuoteList'
 import { CustomerSearch as CustomerSearchBox } from '../../src/modules/customer/components/CustomerSearch'
@@ -31,7 +31,7 @@ import { SelectRooms } from '../../src/modules/jobsheet/components/SelectRooms'
 import { SelectWindowOptions } from '../../src/modules/jobsheet/components/SelectWindowOptions'
 import { SelectTrim } from '../../src/modules/jobsheet/components/SelectTrim'
 import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeatures'
-import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
+// import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
 import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
 // import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
 
@@ -41,6 +41,7 @@ import { QuoteSearchHeader } from '../../src/modules/quote/components/QuoteSearc
 import { QuoteSearchList } from '../../src/modules/quote/components/QuoteSearchList'
 import { SearchProvider as QuoteSearchProvider } from '../../src/modules/quote/components/SearchContext'
 import { QuoteForm } from '../../src/modules/quote/components/QuoteForm'
+import { DiscountForm } from '../../src/modules/quote/components/DiscountForm'
 
 import { Container } from '../../src/modules/auth/components/Container'
 import { SignIn as PfSignIn } from '../../src/modules/auth/components/SignIn'
@@ -127,6 +128,9 @@ storiesOf('Quotes', module)
   .add('search screen', () => (
     <QuoteSearch />
   ))
+  .add('discount form modal', () => (
+    <DiscountForm />
+  ))
 
 storiesOf('QuoteForm', module)
   .add('quote form', () => (
@@ -136,10 +140,10 @@ storiesOf('QuoteForm', module)
 /*
 * ======================== Address =====================================
 */
-storiesOf('Address', module)
+/* storiesOf('Address', module)
   .add('address form', () => (
     <AddressForm />
-  ))
+  )) */
 
 /*
 * ======================== JobSheet =====================================
@@ -166,9 +170,9 @@ storiesOf('JobSheets', module)
   /* .add('group form', () => (
     <GroupForm data={jobSheet.jobSheetData.jobsheet} />
   )) */
-  .add('other form', () => (
+  /* .add('other form', () => (
     <OtherForm jobsheet={jobSheet.jobSheetData.jobsheet} />
-  ))
+  )) */
   .add('select rooms modal', () => (
     <SelectRooms />
   ))

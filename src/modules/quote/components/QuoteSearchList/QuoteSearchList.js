@@ -114,7 +114,7 @@ const SearchList = graphql(SearchQuotes, {
   // fetchPolicy: 'network-only',
   // fetchPolicy: 'cache-first',
   // fetchPolicy: 'cache-and-network',
-  // fetchPolicy: 'no-cache',
+  fetchPolicy: 'no-cache',
   options: (props) => {
     const variables = {
       invoiced: props.invoiced,

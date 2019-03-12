@@ -73,8 +73,10 @@ function WindowForm({
   return (
     <Query query={WINDOW_QUERY}>
       {({ error, data: { products, window } }) => {
+      {/* {({ error, data }) => { */}
         if (error) return <Error error={error} />
-        // console.log('data.window in Query: ', window)
+        {/* console.log('data in Query: ', data) */}
+        {/* console.log('data.window in Query: ', window) */}
         return (
           <KeyboardAwareScrollView style={styles.formCont}>
             {isDuplicate && (

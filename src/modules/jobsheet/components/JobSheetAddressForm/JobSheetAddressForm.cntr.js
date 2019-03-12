@@ -4,9 +4,10 @@ import { withNavigation } from 'react-navigation'
 import { Types } from 'mongoose'
 import { compose, graphql } from 'react-apollo'
 
-import JobSheetAddressForm from './JobSheetAddressForm'
 import { PERSIST_JOBSHEET } from '../../mutations/remote'
 import { CUSTOMER_DATA } from '../../../customer/queries'
+
+import JobSheetAddressForm from './JobSheetAddressForm'
 
 const ValidateSchema = Yup.object().shape({
   street1: Yup.string()
@@ -19,7 +20,7 @@ const ValidateSchema = Yup.object().shape({
 
 const initialValues = {
   provinceCode: 'ON',
-  type: 'res',
+  addressType: 'res',
 }
 const initialValuesTest = { // eslint-disable-line no-unused-vars
   street1: '47 Northgate Dr.',

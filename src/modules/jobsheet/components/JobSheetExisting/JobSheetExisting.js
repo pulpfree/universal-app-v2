@@ -16,6 +16,7 @@ import { Error } from '../../../common/components/Error'
 import { Header } from '../../../common/components/Header'
 import { Loader } from '../../../common/components/Loader'
 import { PERSIST_JOBSHEET } from '../../mutations/remote'
+import { prepareAddress } from '../../utils'
 
 function JobSheetExisting({ customer, navigation }) {
   return (
@@ -52,7 +53,7 @@ function JobSheetExisting({ customer, navigation }) {
                       jobSheetInput: {
                         customerID: customer._id,
                       },
-                      addressID: customer.address._id,
+                      addressInput: prepareAddress(customer.address, customer._id),
                     },
                   })
                 }}

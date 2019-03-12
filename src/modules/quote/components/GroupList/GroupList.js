@@ -7,12 +7,16 @@ import {
   View,
 } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { graphql } from 'react-apollo'
+
+import { TOGGLE_ITEM } from '../../mutations/local'
+
 import { styles } from './index'
 import { fmtMoney } from '../../../../util/fmt'
 
+
 const ListItem = ({ item, quoteGroups }) => {
-  const specs = JSON.parse(item.specs)
-  const { groupType: { name } } = specs
+  const { groupType: { name } } = item.specs
   const { _id: itemID, qty } = item
   const { extendUnit, extendTotal } = item.costs
   const isSelected = quoteGroups.includes(itemID)
@@ -51,18 +55,19 @@ class GroupList extends React.Component {
     )
   }
 
-  _onPressItem = (customerID) => {
-    // const { navigation } = this.props
-    // navigation.navigate('CustomerInfo', { customerID })
+  _onPressItem = (itemID) => {
+    const { toggleQuoteItem } = this.props
+    toggleQuoteItem(itemID, 'group')
   }
 
   _keyExtractor = item => item._id
 
   render() {
-    const { jobSheetGroups } = this.props
+    const { jobSheetGroups, quoteGroups } = this.props
     return (
       <FlatList
         data={jobSheetGroups}
+        extraData={quoteGroups}
         renderItem={this._renderItem}
         keyExtractor={this._keyExtractor}
       />
@@ -72,9 +77,14 @@ class GroupList extends React.Component {
 GroupList.propTypes = {
   quoteGroups: PropTypes.instanceOf(Object),
   jobSheetGroups: PropTypes.instanceOf(Object).isRequired,
+  toggleQuoteItem: PropTypes.func.isRequired,
 }
 GroupList.defaultProps = {
   quoteGroups: null,
 }
 
-export default GroupList
+export default graphql(TOGGLE_ITEM, {
+  props: ({ mutate }) => ({
+    toggleQuoteItem: (itemID, itemType) => mutate({ variables: { itemID, itemType } }),
+  }),
+})(GroupList)

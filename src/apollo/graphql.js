@@ -24,17 +24,24 @@ import {
   resolvers as otherResolvers,
 } from '../modules/jobsheet/resolvers/other'
 
+import {
+  defaults as quoteDefaults,
+  resolvers as quoteResolvers,
+} from '../modules/quote/resolvers/quote'
+
 const graphql = {
   defaults: merge(
     groupDefaults,
     jobSheetDefaults,
     otherDefaults,
+    quoteDefaults,
     windowDefaults,
   ),
   resolvers: merge(
     groupResolvers,
     jobSheetResolvers,
     otherResolvers,
+    quoteResolvers,
     windowResolvers,
   ),
   typeDefs: [

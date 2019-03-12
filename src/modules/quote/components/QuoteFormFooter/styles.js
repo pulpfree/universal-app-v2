@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native'
 
-import clr from '../../../../config/colors'
+// import clr from '../../../../config/colors'
 
 export default StyleSheet.create({
   container: {
     flexDirection: 'column',
     padding: 16,
+    paddingRight: 20,
     flex: 1,
   },
   row: {

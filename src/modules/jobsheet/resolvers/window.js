@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 import { JOBSHEET_WINDOW, PRODUCTS } from '../queries'
-// import client from '../../../apollo'
+import client from '../../../apollo'
 import {
   calcSizes,
   calcCosts,
@@ -73,7 +73,6 @@ export const defaults = {
       trim: '',
     },
   },
-  // products: [],
 }
 
 export const resolvers = {
@@ -341,8 +340,7 @@ export const resolvers = {
 
       cache.writeFragment({ fragment, id, data })
     },
-    setWindowFromRemote: async (_, { windowID }, { cache, client }) => {
-      console.log('clien:', client)
+    setWindowFromRemote: async (_, { windowID }, { cache }) => {
       const id = WINDOW_ID_KEY
       let windowRet
       try {
@@ -426,24 +424,6 @@ export const resolvers = {
     },
   },
   Query: {
-    products: async (_, _args, { cache, client }) => {
-      const id = 'Products:1'
-      // console.log('products local query -- should be loading this once')
-
-      const query = PRODUCTS
-      let productRet
-      try {
-        productRet = await client.query({
-          query,
-        })
-      } catch (e) {
-        console.error(e) // eslint-disable-line no-console
-        return null
-      }
-      const { data } = productRet
-      cache.writeData({ data, id })
-      return data.products
-    },
     searchProduct: (_, { productID }, { cache }) => {
       const query = PRODUCTS
       const pd = cache.readQuery({ query })

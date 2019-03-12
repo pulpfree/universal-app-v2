@@ -14,6 +14,7 @@ import QuoteSearch from '../modules/quote/screens/QuoteSearch'
 import QuoteNew from '../modules/quote/screens/QuoteNew'
 import QuotePreview from '../modules/quote/screens/QuotePreview'
 import QuoteEdit from '../modules/quote/screens/QuoteEdit'
+import { DiscountForm } from '../modules/quote/components/DiscountForm'
 
 import GroupForm from '../modules/jobsheet/screens/GroupForm'
 import OtherForm from '../modules/jobsheet/screens/OtherForm'
@@ -43,7 +44,7 @@ const HomeStack = createStackNavigator(
     QuoteEdit: {
       screen: QuoteEdit,
       navigationOptions: {
-        title: 'Edit Quotes',
+        title: 'Edit Quote',
       },
     },
     CustomerSearch: {
@@ -127,6 +128,7 @@ const RootStack = createStackNavigator(
       screen: HomeStack,
     },
     ContactSheet,
+    DiscountForm,
     SelectRooms,
     SelectWindowOptions,
     SelectTrim,

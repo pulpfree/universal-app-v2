@@ -8,10 +8,15 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
+import { graphql } from 'react-apollo'
 
-import { CustomerQuoteListHeader } from '../CustomerQuoteListHeader'
+import { SET_QUOTE } from '../../../quote/mutations/local'
+
 import styles from './styles'
+import { CustomerQuoteListHeader } from '../CustomerQuoteListHeader'
 import { fmtDate, fmtMoney } from '../../../../util/fmt'
+import { Loader } from '../../../common/components/Loader'
+
 
 const Header = () => (
   <View style={styles.header}>
@@ -63,6 +68,10 @@ ListItem.propTypes = {
 }
 
 class CustomerQuoteList extends React.Component {
+  state = {
+    loading: false,
+  }
+
   _renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => this._onPressItem(item._id, item.jobsheetID._id)}>
       <ListItem item={item} />
@@ -70,20 +79,26 @@ class CustomerQuoteList extends React.Component {
   )
 
   _onPressItem = (quoteID, jobSheetID) => {
-    const { navigation } = this.props
-    navigation.navigate('QuoteEdit', { quoteID, jobSheetID })
+    const { navigation, setQuoteFromRemote } = this.props
+    const setRes = setQuoteFromRemote(jobSheetID, quoteID)
+    this.setState(() => ({ loading: true }))
+    // blocking navigate action so that the WindowForm component doesn't refresh unnecessarily
+    setRes.then(() => {
+      this.setState(() => ({ loading: false }))
+      navigation.navigate('QuoteEdit', { quoteID, jobSheetID })
+    })
   }
 
   _keyExtractor = item => item._id
 
   render() {
     const { data } = this.props
-    // console.log('data in CustomerQuoteList render:', data)
-
+    const { loading } = this.state
 
     return (
       <React.Fragment>
         <Header />
+        {loading && <Loader />}
         <FlatList
           ListHeaderComponent={CustomerQuoteListHeader}
           data={data.quotes}
@@ -97,6 +112,11 @@ class CustomerQuoteList extends React.Component {
 CustomerQuoteList.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  setQuoteFromRemote: PropTypes.func.isRequired,
 }
 
-export default withNavigation(CustomerQuoteList)
+export default graphql(SET_QUOTE, {
+  props: ({ mutate }) => ({
+    setQuoteFromRemote: (jobSheetID, quoteID) => mutate({ variables: { jobSheetID, quoteID } }),
+  }),
+})(withNavigation(CustomerQuoteList))

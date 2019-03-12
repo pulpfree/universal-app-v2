@@ -1,6 +1,15 @@
 import gql from 'graphql-tag'
 
 /**
+ * JobSheet mutations
+ */
+
+const SET_PRODUCTS = gql`
+mutation setProductsFromRemote {
+  setProductsFromRemote @client
+}`
+
+/**
  * Window mutations
  */
 
@@ -130,6 +139,7 @@ export {
   SET_OTHER,
   SET_OTHER_FIELD,
   SET_OTHER_JOBSHEET_ID,
+  SET_PRODUCTS,
   SET_SIZES,
   SET_WINDOW,
   SET_WINDOW_FROM_GROUP,

@@ -134,8 +134,12 @@ const GROUP_QUERY = gql`{
       trim
     }
   }
-}
-`
+  products @client {
+    _id
+    name
+  }
+}`
+
 const GROUP_WINDOW_QUERY = gql`{
   groupWindow @client {
     # _id

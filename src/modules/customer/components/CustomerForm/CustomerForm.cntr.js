@@ -2,6 +2,9 @@ import * as Yup from 'yup'
 
 import { withFormik } from 'formik'
 import { withNavigation } from 'react-navigation'
+import { compose, graphql } from 'react-apollo'
+
+import { PERSIST_CUSTOMER } from '../../mutations/remote'
 
 import CustomerForm from './CustomerForm'
 
@@ -32,13 +35,14 @@ const CustomerSchema = Yup.object().shape({
   }),
 })
 
-const initialTestValues = {
+const initialValuesTest = {
   address: {
     street1: '123 Street Ave.',
     city: 'Someplace',
     postalCode: 'L3C 5Y2',
     provinceCode: 'ON',
   },
+  addressType: 'res',
   email: null,
   name: {
     first: 'Test',
@@ -53,6 +57,7 @@ const initialTestValues = {
 
 const initialValues = {
   address: { provinceCode: 'ON' },
+  addressType: 'res',
   email: null,
   name: {},
   phones: {
@@ -61,9 +66,19 @@ const initialValues = {
   },
 }
 
+const extractPhones = (phones) => {
+  const numbers = []
+  if (phones.home.number) {
+    numbers.push(phones.home)
+  }
+  if (phones.mobile.number) {
+    numbers.push(phones.mobile)
+  }
+  return numbers
+}
+
 const Form = withFormik({
   enableReinitialize: true,
-  mapPropsToValues: () => (initialValues),
   displayName: 'ContactForm',
   handleSubmit: async (values, { props, setSubmitting, setErrors }) => {
     if (!values.email && !values.phones.home.number && !values.phones.mobile.number) {
@@ -71,13 +86,57 @@ const Form = withFormik({
       setSubmitting(false)
       return false
     }
-    // console.log('values in handleSubmit:', values)
-    // console.log('props:', props)
-    props.navigation.navigate('CustomerInfo')
+    const { address } = values
+    const variables = {
+      customerInput: {
+        // _id: ID
+        email: values.email,
+        name: values.name,
+        phones: extractPhones(values.phones),
+      },
+      addressInput: {
+        associate: 'customer',
+        city: address.city,
+        postalCode: address.postalCode,
+        provinceCode: address.provinceCode,
+        street1: address.street1,
+        type: values.addressType,
+      },
+    }
+    let graphqlReturn
+    try {
+      graphqlReturn = await props.customerPersist(variables)
+      if (graphqlReturn && graphqlReturn.errors) {
+        console.log('graphqlReturn.errors:', graphqlReturn.errors) // eslint-disable-line no-console
+        return false
+      }
+    } catch (error) {
+      console.log('error:', error) // eslint-disable-line no-console
+    }
+    return true
   },
+  mapPropsToValues: () => (initialValues),
   validationSchema: CustomerSchema,
   validateOnBlur: true,
   validateOnChange: false,
 })(CustomerForm)
 
-export default withNavigation(Form)
+const PersistCustomer = graphql(PERSIST_CUSTOMER, {
+  props: ({ mutate }) => ({
+    customerPersist: variables => mutate({
+      variables: { ...variables },
+      errorPolicy: 'all',
+    }),
+  }),
+  options: props => ({
+    onCompleted: (data) => {
+      props.navigation.navigate('CustomerInfo', { customerID: data.customerPersist._id })
+    },
+  }),
+  errorPolicy: 'all',
+})
+
+export default compose(
+  withNavigation,
+  PersistCustomer,
+)(Form)

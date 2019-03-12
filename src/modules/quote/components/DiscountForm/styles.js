@@ -2,16 +2,14 @@ import { StyleSheet } from 'react-native'
 
 import { styles } from '../../../jobsheet/components/SelectRooms'
 
-import clr from '../../../../config/colors'
-
 export default StyleSheet.create({
   container: {
     ...StyleSheet.flatten(styles.container),
   },
   modalBox: {
     ...StyleSheet.flatten(styles.modalBox),
-    height: 300,
-    width: 400,
+    height: 310,
+    width: 530,
   },
   header: {
     ...StyleSheet.flatten(styles.header),
@@ -19,30 +17,33 @@ export default StyleSheet.create({
   headerText: {
     ...StyleSheet.flatten(styles.headerText),
   },
-  infoCont: {
-    padding: 20,
+  formCont: {
+    ...StyleSheet.flatten(styles.formCont),
+    flexDirection: 'row',
   },
   iconCont: {
     ...StyleSheet.flatten(styles.iconCont),
   },
-  row: {
+  cell: {
+    flex: 1,
+    // padding:
+  },
+  infoRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    height: 50,
+    marginBottom: 8,
+    // marginRight: 20,
   },
-  label: {
-    fontWeight: '600',
-    color: clr.dkGray,
-    paddingRight: 15,
+  infoLabel: {
+    flex: 1,
   },
-  value: {
-    paddingRight: 15,
+  infoValue: {
+    flex: 1,
+    textAlign: 'right',
   },
-  button: {
-    paddingRight: 25,
+  optInput: {
+    ...StyleSheet.flatten(styles.optInput),
   },
-  name: {
-    fontSize: 16,
-    fontWeight: '600',
+  submitButton: {
+    ...StyleSheet.flatten(styles.submitButton),
   },
 })

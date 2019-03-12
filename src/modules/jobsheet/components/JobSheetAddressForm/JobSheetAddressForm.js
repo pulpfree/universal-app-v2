@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
@@ -40,19 +40,22 @@ function AddressForm({
     handleSubmit(e)
   }
 
+  const city = useRef(null)
+  const postalCode = useRef(null)
+
   return (
     <View style={styles.container}>
       <View style={styles.field}>
         <TextInput
           autoCapitalize="words"
           autoCorrect={false}
+          autoFocus
           blurOnSubmit={false}
           error={ramda.hasPath(['street1'], errors)}
           label="Street"
           name="street1"
           onChangeText={handleChange('street1')}
-          // onSubmitEditing={() => this.city.focus()}
-          // ref={(input) => { this.street1 = input }}
+          onSubmitEditing={() => city.current.focus()}
           returnKeyType="next"
           value={values.street1}
         />
@@ -70,8 +73,8 @@ function AddressForm({
           label="City"
           name="city"
           onChangeText={handleChange('city')}
-          // onSubmitEditing={() => this.postalCode.focus()}
-          // ref={(input) => { this.city = input }}
+          onSubmitEditing={() => postalCode.current.focus()}
+          ref={city}
           returnKeyType="next"
           value={values.city}
         />
@@ -89,9 +92,8 @@ function AddressForm({
           label="Postal Code"
           name="postalCode"
           onChangeText={text => _setPostalCode(text)}
-          // onSubmitEditing={() => this.email.focus()}
-          // ref={(input) => { this.postalCode = input }}
-          returnKeyType="next"
+          ref={postalCode}
+          returnKeyType="go"
           value={values.postalCode}
         />
         {ramda.hasPath(['postalCode'], errors)
@@ -106,8 +108,6 @@ function AddressForm({
           blurOnSubmit={false}
           label="Province"
           name="provinceCode"
-          // onChangeText={text => this._setField('provinceCode', text)}
-          // onSubmitEditing={() => this.email.focus()}
           returnKeyType="next"
           value={values.provinceCode}
         />

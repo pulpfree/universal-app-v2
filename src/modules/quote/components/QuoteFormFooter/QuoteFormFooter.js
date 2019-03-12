@@ -2,8 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native'
+// import { Icon } from 'react-native-elements'
+import { withNavigation } from 'react-navigation'
 
 import styles from './styles'
 import { fmtMoney } from '../../../../util/fmt'
@@ -26,7 +29,7 @@ TotalRow.defaultProps = {
   isDiscount: false,
   isTotal: false,
 }
-const QuoteFormFooter = ({ discount, quotePrice }) => {
+const QuoteFormFooter = ({ discount, navigation, quotePrice }) => {
   const totals = {
     discountTotal: 0.00,
     subTotal: 0.00,
@@ -50,7 +53,9 @@ const QuoteFormFooter = ({ discount, quotePrice }) => {
   return (
     <View style={styles.container}>
       {haveDiscount && <TotalRow label="Total" value={totals.discountTotal} isDiscount />}
-      <TotalRow label="Subtotal" value={totals.subTotal} />
+      <TouchableOpacity onPress={() => navigation.navigate('DiscountForm', { quotePrice })}>
+        <TotalRow label="Subtotal" value={totals.subTotal} />
+      </TouchableOpacity>
       <TotalRow label="Tax" value={totals.tax} />
       <TotalRow label="Total" value={totals.total} isTotal />
     </View>
@@ -58,7 +63,8 @@ const QuoteFormFooter = ({ discount, quotePrice }) => {
 }
 QuoteFormFooter.propTypes = {
   discount: PropTypes.instanceOf(Object).isRequired,
+  navigation: PropTypes.instanceOf(Object).isRequired,
   quotePrice: PropTypes.instanceOf(Object).isRequired,
 }
 
-export default QuoteFormFooter
+export default withNavigation(QuoteFormFooter)
