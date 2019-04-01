@@ -35,13 +35,17 @@ import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeat
 import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
 // import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
 
+import Payments from '../../src/modules/quote/screens/Payments'
+import QuotePreview from '../../src/modules/quote/screens/QuotePreview'
 import QuoteSearch from '../../src/modules/quote/screens/QuoteSearch'
+import { DeleteInvoice } from '../../src/modules/quote/components/DeleteInvoice'
+import { DiscountForm } from '../../src/modules/quote/components/DiscountForm'
+import { InvoiceOptions } from '../../src/modules/quote/components/InvoiceOptions'
+import { QuoteForm } from '../../src/modules/quote/components/QuoteForm'
 import { QuoteListHeader } from '../../src/modules/quote/components/QuoteListHeader'
 import { QuoteSearchHeader } from '../../src/modules/quote/components/QuoteSearchHeader'
 import { QuoteSearchList } from '../../src/modules/quote/components/QuoteSearchList'
 import { SearchProvider as QuoteSearchProvider } from '../../src/modules/quote/components/SearchContext'
-import { QuoteForm } from '../../src/modules/quote/components/QuoteForm'
-import { DiscountForm } from '../../src/modules/quote/components/DiscountForm'
 
 import { Container } from '../../src/modules/auth/components/Container'
 import { SignIn as PfSignIn } from '../../src/modules/auth/components/SignIn'
@@ -135,6 +139,26 @@ storiesOf('Quotes', module)
 storiesOf('QuoteForm', module)
   .add('quote form', () => (
     <QuoteForm data={quote} />
+  ))
+
+storiesOf('QuotePreview', module)
+  .add('quote preview', () => (
+    <QuotePreview />
+  ))
+
+storiesOf('InvoiceOptions', module)
+  .add('invoice options', () => (
+    <InvoiceOptions />
+  ))
+
+storiesOf('Payments', module)
+  .add('payment form', () => (
+    <Payments />
+  ))
+
+storiesOf('DeleteInvoice', module)
+  .add('delete invoice', () => (
+    <DeleteInvoice />
   ))
 
 /*

@@ -90,7 +90,7 @@ const Menu = ({ jobSheet, navigation, setQuoteFromRemote }) => {
           const jobSheetID = jobSheet._id
           const setRes = setQuoteFromRemote(jobSheetID, quoteID)
           setRes.then(() => {
-            navigation.navigate('QuoteEdit', { jobSheetID, quoteID })
+            navigation.navigate('QuoteEdit', { jobSheetID, quoteID, isNew: true })
           })
         }}
         refetchQueries={[

@@ -24,4 +24,10 @@ export const prepareQuote = (quote) => {
   return newQuote
 }
 
-export const dummy = () => {}
+export const pdfPreviewArgs = quote => (
+  {
+    number: quote.number,
+    type: quote.invoiced ? 'invoice' : 'quote',
+    version: quote.version,
+  }
+)

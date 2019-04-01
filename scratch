@@ -1,1 +1,28 @@
-yarn add -D @storybook/addon-actions @storybook/addon-links @storybook/addons @storybook/react
+{
+  "_id":"5c9bdce2962b5d8234c0fc8c",
+  "items":{"group":["5c6ea585d30c2737329c7069"],
+  "other":[],
+  "window":["5c31351dea79e11b149c1443"]},
+  "quotePrice":{
+    "outstanding":3700,
+    "payments":0,
+    "subtotal":3274.3362831858412,
+    "tax":425.66371681415876,
+    "total":3700
+  },
+  "closed":false,
+  "invoiced":true,
+  "pdfCreated":false,
+  "version":1,
+  "customerID":"5b2122022aac043b0c7ec06d",
+  "jobsheetID":"5c3134d2ea79e17e759c1442",
+  "number":9005,
+  "discount":{
+    "description":"",
+    "discount":0,
+    "subtotal":0,
+    "tax":0,
+    "total":0
+  },
+  "itemCosts":{"group":1700,"other":0,"subtotal":3700,"window":2000},"createdAt":"2019-03-27T20:28:18.632Z","updatedAt":"2019-03-28T21:16:05.094Z","__v":0
+}

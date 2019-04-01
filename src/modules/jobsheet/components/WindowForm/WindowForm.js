@@ -46,7 +46,6 @@ function WindowForm({
     }
   ), [])
   const [isDuplicate, setDuplicate] = useState(false)
-
   const costsInstall = useRef(null)
 
   const _handleRemove = (func, windowID) => {
@@ -73,10 +72,7 @@ function WindowForm({
   return (
     <Query query={WINDOW_QUERY}>
       {({ error, data: { products, window } }) => {
-      {/* {({ error, data }) => { */}
         if (error) return <Error error={error} />
-        {/* console.log('data in Query: ', data) */}
-        {/* console.log('data.window in Query: ', window) */}
         return (
           <KeyboardAwareScrollView style={styles.formCont}>
             {isDuplicate && (
@@ -204,7 +200,7 @@ function WindowForm({
                     {
                       options: window.specs.options,
                       cost: window.costs.options,
-                      type: 'group',
+                      type: 'window',
                     }
                   )}
                 >
@@ -224,7 +220,16 @@ function WindowForm({
               </View>
 
               <View style={styles.formDetailRow}>
-                <TouchableOpacity onPress={() => navigation.navigate('SelectTrim', { trim: window.specs.trim, cost: window.costs.trim })}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(
+                    'SelectTrim',
+                    {
+                      trim: window.specs.trim,
+                      cost: window.costs.trim,
+                      type: 'window',
+                    }
+                  )}
+                >
                   <Text style={[styles.detailTextLabel, styles.modalLinkText]}>Trim</Text>
                 </TouchableOpacity>
                 <TextInput

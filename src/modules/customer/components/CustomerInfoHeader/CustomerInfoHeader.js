@@ -22,7 +22,7 @@ export default function CustomerInfo({ customer, navigation }) {
           <Text style={styles.label}>Last</Text>
           <Text style={styles.value}>{customer.name.last}</Text>
         </View>
-        {customer.name.spouse && (
+        {customer.name.spouse !== '' && (
           <View style={styles.row}>
             <Text style={styles.label}>Spouse</Text>
             <Text style={styles.value}>{customer.name.spouse}</Text>

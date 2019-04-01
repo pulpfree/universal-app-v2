@@ -24,6 +24,13 @@ const awsExports = {
     region: appSyncConfig.aws_appsync_region,
     userPoolId: appSyncConfig.aws_user_pools_id,
     userPoolWebClientId: appSyncConfig.aws_user_pools_web_client_id,
+    identityPoolId: appSyncConfig.aws_cognito_identity_pool_id,
+  },
+  Storage: {
+    AWSS3: {
+      bucket: 'ca-universalwindows',
+      region: 'ca-central-1', //OPTIONAL -  Amazon service region
+    },
   },
 }
 Amplify.configure(awsExports)

@@ -4,7 +4,7 @@ import {
   Text,
   View,
 } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
 
 import styles from './styles'
 import clr from '../../../../config/colors'

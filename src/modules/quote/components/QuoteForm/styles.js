@@ -3,6 +3,11 @@ import { StyleSheet } from 'react-native'
 import clr from '../../../../config/colors'
 
 export default StyleSheet.create({
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
   container: {
     flexDirection: 'column',
   },
@@ -47,10 +52,12 @@ export default StyleSheet.create({
   },
   submitButton: {
     backgroundColor: clr.primary,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   submitButtonCont: {
-    marginLeft: 20,
-    marginRight: 20,
+    // marginLeft: 20,
+    // marginRight: 20,
   },
   subTotal: {
     backgroundColor: clr.ltGray,

@@ -10,11 +10,14 @@ import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
 import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
 import { SelectTrim } from '../modules/jobsheet/components/SelectTrim'
 
-import QuoteSearch from '../modules/quote/screens/QuoteSearch'
+import Payments from '../modules/quote/screens/Payments'
+import QuoteEdit from '../modules/quote/screens/QuoteEdit'
 import QuoteNew from '../modules/quote/screens/QuoteNew'
 import QuotePreview from '../modules/quote/screens/QuotePreview'
-import QuoteEdit from '../modules/quote/screens/QuoteEdit'
+import QuoteSearch from '../modules/quote/screens/QuoteSearch'
+import { DeleteInvoice } from '../modules/quote/components/DeleteInvoice'
 import { DiscountForm } from '../modules/quote/components/DiscountForm'
+import { InvoiceOptions } from '../modules/quote/components/InvoiceOptions'
 
 import GroupForm from '../modules/jobsheet/screens/GroupForm'
 import OtherForm from '../modules/jobsheet/screens/OtherForm'
@@ -104,7 +107,13 @@ const HomeStack = createStackNavigator(
     QuotePreview: {
       screen: QuotePreview,
       navigationOptions: {
-        title: 'Quote Preview',
+        title: 'PDF Preview',
+      },
+    },
+    Payments: {
+      screen: Payments,
+      navigationOptions: {
+        title: 'Invoice Payments',
       },
     },
   },
@@ -129,6 +138,8 @@ const RootStack = createStackNavigator(
     },
     ContactSheet,
     DiscountForm,
+    DeleteInvoice,
+    InvoiceOptions,
     SelectRooms,
     SelectWindowOptions,
     SelectTrim,

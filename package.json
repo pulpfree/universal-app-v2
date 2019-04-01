@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "run-ios": "react-native run-ios --simulator 'iPad Air 2 (12.1)'",
+    "run-ios": "react-native run-ios --simulator 'iPad Air 2 (com.apple.CoreSimulator.SimRuntime.iOS-12-2)'",
     "devtools": "react-devtools",
     "test": "jest",
     "storybook": "storybook start",
@@ -35,8 +35,10 @@
     "react-native-gesture-handler": "1.0.12",
     "react-native-keyboard-aware-scrollview": "2.0.0",
     "react-native-paper": "2.4.0",
+    "react-native-pdf": "5.0.12",
     "react-native-vector-icons": "6.1.0",
     "react-navigation": "3.0.9",
+    "rn-fetch-blob": "0.10.15",
     "yup": "0.26.7"
   },
   "devDependencies": {

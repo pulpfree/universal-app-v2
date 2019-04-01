@@ -15,7 +15,15 @@ mutation quoteRemove($id: ID!) {
   }
 }`
 
+const CREATE_INVOICE = gql`
+mutation createInvoice($id: ID!) {
+  createInvoice(id: $id) {
+    _id
+  }
+}`
+
 export {
+  CREATE_INVOICE,
   PERSIST_QUOTE,
   REMOVE_QUOTE,
 }

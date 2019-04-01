@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   FlatList,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -14,7 +13,7 @@ import { graphql, compose } from 'react-apollo'
 import { QuoteListHeader } from '../QuoteListHeader'
 import styles from './styles'
 import { fmtMoney } from '../../../../util/fmt'
-import SearchQuotes from '../../queries/SearchQuotes'
+import { QUOTE_SEARCH } from '../../queries/remote'
 import { withSearch } from '../SearchContext'
 import { Error } from '../../../common/components/Error'
 import { Loader } from '../../../common/components/Loader'
@@ -64,13 +63,11 @@ Totals.defaultProps = {
 }
 
 class QuoteSearchList extends React.Component {
-  _renderItem = ({ item }) => {
-    return (
-      <TouchableOpacity onPress={() => this._onPressItem(item.customerID._id)}>
-        <ListItem item={item} />
-      </TouchableOpacity>
-    )
-  }
+  _renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => this._onPressItem(item.customerID._id)}>
+      <ListItem item={item} />
+    </TouchableOpacity>
+  )
 
   _onPressItem = (customerID) => {
     const { navigation } = this.props
@@ -90,7 +87,7 @@ class QuoteSearchList extends React.Component {
     const { quotes, totalInvoiced, totalOutstanding } = searchQuotes
 
     return (
-      <View>
+      <View style={{ paddingBottom: 100 }}>
         {data.variables.invoiced
           && <Totals totalInvoiced={totalInvoiced} totalOutstanding={totalOutstanding} />
         }
@@ -114,7 +111,7 @@ QuoteSearchList.defaultProps = {
   data: null,
 }
 
-const SearchList = graphql(SearchQuotes, {
+const SearchList = graphql(QUOTE_SEARCH, {
   // fetchPolicy: 'network-only',
   // fetchPolicy: 'cache-first',
   // fetchPolicy: 'cache-and-network',
