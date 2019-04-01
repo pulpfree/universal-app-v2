@@ -14,19 +14,19 @@ import { Loader } from '../../../common/components/Loader'
 import styles from './styles'
 
 export default function PDF({ previewArgs }) {
-  Auth.configure({
+ /*  Auth.configure({
     // To get the aws credentials, you need to configure 
     // the Auth module with your Cognito Federated Identity Pool
     identityPoolId: appSyncConfig.aws_cognito_identity_pool_id,
     region: appSyncConfig.aws_appsync_region,
-  })
+  }) */
 
-  Storage.configure({
+  /* Storage.configure({
     AWSS3: {
       bucket: 'ca-universalwindows',
       region: 'ca-central-1',
     },
-  })
+  }) */
   // console.log('previewargs  ', previewArgs)
   Storage.list('quote/')
     .then(result => console.log('result: ', result))
