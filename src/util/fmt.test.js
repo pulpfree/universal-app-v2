@@ -1,6 +1,6 @@
 import * as f from './fmt'
 
-// To test this file, use: npm test -- utils-test
+// To test this file, use: yarn test ./src/util/
 
 describe('fmtMoney', () => {
   const number = 12345.06789

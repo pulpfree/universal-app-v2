@@ -99,7 +99,7 @@ const QuoteForm = ({ isNew, navigation }) => {
                     type: 'ionicon',
                     name: 'ios-eye',
                   }}
-                  onPress={() => navigation.navigate('QuotePreview', { previewArgs: pdfPreviewArgs(quote) })}
+                  onPress={() => navigation.navigate('QuotePreview', { previewArgs: pdfPreviewArgs(quote), customerID: quote.customerID._id })}
                   title="Preview"
                   type="clear"
                   buttonStyle={styles.navButton}

@@ -32,8 +32,11 @@ const awsExports = {
       region: 'ca-central-1', //OPTIONAL -  Amazon service region
     },
   },
+  // aws_user_files_s3_bucket: 'ca-universalwindows',
+  // aws_user_files_s3_bucket_region: 'ca-central-1',
 }
 Amplify.configure(awsExports)
+
 
 const App = () => (
   <ApolloProvider client={client}>
