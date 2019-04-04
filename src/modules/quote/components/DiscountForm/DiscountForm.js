@@ -20,7 +20,7 @@ function DiscountForm({ navigation }) {
   const quotePrice = navigation.getParam('quotePrice')
 
   const [discount, setDiscount] = useState('')
-  const [description, setDescription] = useState(null)
+  const [description, setDescription] = useState('')
 
   const descriptionField = useRef(null)
 

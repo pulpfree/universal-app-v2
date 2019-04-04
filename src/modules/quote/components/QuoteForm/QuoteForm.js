@@ -59,7 +59,6 @@ const QuoteForm = ({ isNew, navigation }) => {
     <Query query={QUOTE_JOBSHEET}>
       {({ data: { jobSheet, quote } }) => {
         const { groups, other, windows } = jobSheet
-        console.log('quote: ', quote)
 
         return (
           <View style={styles.container}>

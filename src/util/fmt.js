@@ -33,10 +33,6 @@ export function fmtDate(date) {
   return dte.format('YYYY-MM-DD')
 }
 
-export function ucFirst(txt) {
-  return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
-}
-
 export function fmtPhone(value, previousValue) {
   if (!value) return value
 
@@ -69,7 +65,11 @@ export function fmtPostalCode(code) {
   return postalCode
 }
 
-export function capitalize(s) {
+export function ucFirst(s) {
   if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
+}
+
+export function capitalize(s) {
+  return ucFirst(s)
 }

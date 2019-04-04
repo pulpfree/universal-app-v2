@@ -32,6 +32,7 @@
     "react-native-mail": "3.0.7",
     "react-native-paper": "2.15.0",
     "react-native-pdf": "5.0.12",
+    "react-native-sms": "1.9.0",
     "react-native-vector-icons": "6.4.2",
     "react-navigation": "3.6.0",
     "rn-fetch-blob": "0.10.15",

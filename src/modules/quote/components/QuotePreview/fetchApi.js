@@ -35,23 +35,25 @@ const fetchApi = (args) => {
   const [state, dispatch] = useReducer(dataFetchReducer, {
     isLoading: false,
     isError: false,
-    data: '',
+    data: { filePath: '', signedURL: '' },
   })
 
   useEffect(() => {
     let didCancel = false
-    let fp
+    let filePath
 
     const fetchFile = async () => {
       dispatch({ type: 'FETCH_INIT' })
 
       let queryRet
+      let signedURL
       try {
         queryRet = await client.query({
           query: PDF_SIGNED_URL,
           variables: { input: args },
           fetchPolicy: 'network-only',
         })
+        signedURL = queryRet.data.pdfSignedURL.data.url
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
         if (!didCancel) {
@@ -63,11 +65,11 @@ const fetchApi = (args) => {
       try {
         blobRet = await RNFetchBlob
           .config({ fileCache: true })
-          .fetch('GET', queryRet.data.pdfSignedURL.data.url)
+          .fetch('GET', signedURL)
 
         if (!didCancel) {
-          fp = blobRet.path()
-          dispatch({ type: 'FETCH_SUCCESS', payload: fp })
+          filePath = blobRet.path()
+          dispatch({ type: 'FETCH_SUCCESS', payload: { filePath, signedURL } })
         }
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
@@ -81,7 +83,7 @@ const fetchApi = (args) => {
 
     return () => {
       didCancel = true
-      RNFetchBlob.fs.unlink(fp).then(() => {
+      RNFetchBlob.fs.unlink(filePath).then(() => {
         console.log('fp unlinked') // eslint-disable-line no-console
       })
     }
