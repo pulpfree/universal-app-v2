@@ -134,7 +134,7 @@ export const resolvers = {
         queryRet = await client.query({
           query: QUOTE_JOBSHEET,
           variables: { jobSheetID, quoteID },
-          fetchPolicy: 'network-only',
+          // fetchPolicy: 'network-only',
         })
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
