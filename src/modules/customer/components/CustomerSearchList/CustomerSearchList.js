@@ -50,7 +50,6 @@ class CustomerSearchList extends React.Component {
 
   render() {
     const { data } = this.props
-    console.log('data in CustomerSearchList:', data)
 
     if (data) {
       const { error, loading } = data

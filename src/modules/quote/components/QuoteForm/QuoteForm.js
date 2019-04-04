@@ -12,7 +12,7 @@ import { withNavigation } from 'react-navigation'
 
 import { QUOTE_JOBSHEET } from '../../queries/local'
 import { TOGGLE_ALL } from '../../mutations/local'
-import { PERSIST_QUOTE, REMOVE_QUOTE } from '../../mutations/remote'
+import { CREATE_INVOICE, PERSIST_QUOTE, REMOVE_QUOTE } from '../../mutations/remote'
 import { CUSTOMER_DATA } from '../../../customer/queries'
 
 import { GroupList } from '../GroupList'
@@ -24,7 +24,7 @@ import clr from '../../../../config/colors'
 import { fmtMoney } from '../../../../util/fmt'
 import { Error } from '../../../common/components/Error'
 import { Loader } from '../../../common/components/Loader'
-import { prepareQuote } from '../../utils'
+import { pdfPreviewArgs, prepareQuote } from '../../utils'
 
 const SubTotal = ({ subTotal }) => {
   if (!subTotal) return null
@@ -38,7 +38,7 @@ SubTotal.propTypes = {
   subTotal: PropTypes.number.isRequired,
 }
 
-const QuoteForm = ({ navigation }) => {
+const QuoteForm = ({ isNew, navigation }) => {
   const _handleRemove = (func, quoteID) => {
     AlertIOS.alert(
       'Confirm Delete Quote',
@@ -59,8 +59,7 @@ const QuoteForm = ({ navigation }) => {
     <Query query={QUOTE_JOBSHEET}>
       {({ data: { jobSheet, quote } }) => {
         const { groups, other, windows } = jobSheet
-        // console.log('quote in query: ', quote)
-        // console.log('jobSheet in query: ', jobSheet)
+        console.log('quote: ', quote)
 
         return (
           <View style={styles.container}>
@@ -92,6 +91,7 @@ const QuoteForm = ({ navigation }) => {
                   )}
                 </Mutation>
                 <Button
+                  disabled={isNew || quote.version <= 0}
                   icon={{
                     containerStyle: styles.navButtonIconCont,
                     iconStyle: styles.navButtonIcon,
@@ -99,6 +99,7 @@ const QuoteForm = ({ navigation }) => {
                     type: 'ionicon',
                     name: 'ios-eye',
                   }}
+                  onPress={() => navigation.navigate('QuotePreview', { previewArgs: pdfPreviewArgs(quote), customerID: quote.customerID._id })}
                   title="Preview"
                   type="clear"
                   buttonStyle={styles.navButton}
@@ -168,30 +169,58 @@ const QuoteForm = ({ navigation }) => {
                 <Text style={styles.secondaryText}>Summary</Text>
               </View>
               <QuoteFormFooter discount={quote.discount} quotePrice={quote.quotePrice} />
-              <Mutation
-                mutation={PERSIST_QUOTE}
-                onCompleted={() => navigation.goBack()}
-                refetchQueries={[
-                  { query: CUSTOMER_DATA, variables: { customerID: quote.customerID._id } },
-                ]}
-              >
-                {(quotePersist, { error, loading }) => (
-                  <View style={{ flexDirection: 'column' }}>
-                    <Button
-                      onPress={() => quotePersist({
-                        variables: { input: prepareQuote(quote) },
-                      })}
-                      title="Save Quote"
-                      raised
-                      color={clr.primary}
-                      buttonStyle={styles.submitButton}
-                      containerStyle={styles.submitButtonCont}
-                    />
-                    {error && <Error error={error} />}
-                    {loading && <Loader />}
-                  </View>
-                )}
-              </Mutation>
+              <View style={styles.buttonRow}>
+                <Mutation
+                  mutation={PERSIST_QUOTE}
+                  onCompleted={() => navigation.navigate('CustomerInfo', { customerID: quote.customerID._id })}
+                  refetchQueries={[
+                    { query: CUSTOMER_DATA, variables: { customerID: quote.customerID._id } },
+                  ]}
+                >
+                  {(quotePersist, { error, loading }) => (
+                    <View style={{ flexDirection: 'column' }}>
+                      <Button
+                        disabled={loading}
+                        onPress={() => quotePersist({
+                          variables: { input: prepareQuote(quote) },
+                        })}
+                        title="Save Quote"
+                        raised
+                        color={clr.primary}
+                        buttonStyle={styles.submitButton}
+                        containerStyle={styles.submitButtonCont}
+                      />
+                      {error && <Error error={error} />}
+                      {loading && <Loader />}
+                    </View>
+                  )}
+                </Mutation>
+                <Mutation
+                  mutation={CREATE_INVOICE}
+                  onCompleted={() => navigation.navigate('CustomerInfo', { customerID: quote.customerID._id })}
+                  refetchQueries={[
+                    { query: CUSTOMER_DATA, variables: { customerID: quote.customerID._id } },
+                  ]}
+                >
+                  {(createInvoice, { error, loading }) => (
+                    <View style={{ flexDirection: 'column' }}>
+                      <Button
+                        disabled={quote.version <= 0}
+                        onPress={() => createInvoice({
+                          variables: { id: quote.quoteID },
+                        })}
+                        title="Create Invoice"
+                        raised
+                        color={clr.primary}
+                        buttonStyle={styles.submitButton}
+                        containerStyle={styles.submitButtonCont}
+                      />
+                      {error && <Error error={error} />}
+                      {loading && <Loader />}
+                    </View>
+                  )}
+                </Mutation>
+              </View>
             </ScrollView>
           </View>
         )
@@ -200,6 +229,7 @@ const QuoteForm = ({ navigation }) => {
   )
 }
 QuoteForm.propTypes = {
+  isNew: PropTypes.bool.isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
 }
 

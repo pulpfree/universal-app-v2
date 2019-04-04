@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  View,
+  ScrollView,
 } from 'react-native'
 
 import { Query } from 'react-apollo'
@@ -13,6 +13,9 @@ import { CUSTOMER_DATA } from '../queries'
 import { Error } from '../../common/components/Error'
 import { Loader } from '../../common/components/Loader'
 
+// todo: issue regarding Flatlist inside ScrollView, see:
+// Voliki comment: https://github.com/facebook/react-native/issues/19971
+// and sadafk831 comment: https://github.com/facebook/react-native/issues/1966#issuecomment-285130701
 
 export default function CustomerInfo({ navigation }) {
   const customerID = navigation.getParam('customerID')
@@ -25,17 +28,32 @@ export default function CustomerInfo({ navigation }) {
       // fetchPolicy="cache-and-network"
       // fetchPolicy="network-only"
     >
-      {({ loading, error, data }) => {
+      {({
+        loading,
+        error,
+        data,
+        networkStatus,
+        refetch,
+      }) => {
         if (error) return <Error error={error} />
         if (loading) return <Loader />
-
         const { customer, searchJobSheetsByCustomer, searchQuotesByCustomer } = data
         return (
-          <View>
-            <CustomerInfoHeader customer={customer} navigation={navigation} />
-            <JobSheetList customer={customer} data={searchJobSheetsByCustomer} />
-            <CustomerQuoteList data={searchQuotesByCustomer} />
-          </View>
+          <ScrollView>
+            <CustomerInfoHeader
+              customer={customer}
+              navigation={navigation}
+            />
+            <JobSheetList
+              data={searchJobSheetsByCustomer}
+              customer={customer}
+            />
+            <CustomerQuoteList
+              data={searchQuotesByCustomer}
+              networkStatus={networkStatus}
+              refetch={refetch}
+            />
+          </ScrollView>
         )
       }}
     </Query>

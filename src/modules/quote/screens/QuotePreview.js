@@ -1,32 +1,38 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
+import { View } from 'react-native'
+import { withNavigation } from 'react-navigation'
 
 import {
-  // Alert,
-  Button,
-  Text,
-  View,
-} from 'react-native'
+  fetchApi,
+  Menu,
+  PDF,
+  styles,
+} from '../components/QuotePreview'
+import { Error } from '../../common/components/Error'
+import { Loader } from '../../common/components/Loader'
 
-/* const Quotes = ({ navigation }) => (
-  <View>
-    <Text>Quote View</Text>
-    <Button
-      title="Customer Info"
-      onPress={() => navigation.navigate('CustomerInfo')}
-    />
-  </View>
-) */
+function QuotePreview({ navigation }) {
+  const previewArgs = navigation.getParam('previewArgs')
+  const customerID = navigation.getParam('customerID')
+  const { data, isLoading, isError } = fetchApi(previewArgs)
+  // console.log('customerID in QuotePreview:', customerID)
 
-class QuotePreview extends React.Component {
-  render() {
-    const { navigation } = this.props
-    return (
-      <View>
-        <Text>Quote Preview</Text>
-      </View>
-    )
-  }
+  return (
+    <View style={styles.container}>
+      <Menu
+        filePath={data}
+        fileArgs={previewArgs}
+        customerID={customerID}
+      />
+      { isLoading && <Loader />}
+      { isError && <Error error="An error occurred" /> }
+      {data !== '' && <PDF filePath={data} /> }
+    </View>
+  )
+}
+QuotePreview.propTypes = {
+  navigation: PropTypes.instanceOf(Object).isRequired,
 }
 
-export default QuotePreview
+export default withNavigation(QuotePreview)

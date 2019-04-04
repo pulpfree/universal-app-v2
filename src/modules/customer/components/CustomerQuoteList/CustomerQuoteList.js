@@ -73,13 +73,21 @@ class CustomerQuoteList extends React.Component {
   }
 
   _renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this._onPressItem(item._id, item.jobsheetID._id)}>
+    <TouchableOpacity
+      onPress={() => this._onPressItem(item)}
+    >
       <ListItem item={item} />
     </TouchableOpacity>
   )
 
-  _onPressItem = (quoteID, jobSheetID) => {
+  _onPressItem = (item) => {
     const { navigation, setQuoteFromRemote } = this.props
+    if (item.invoiced) {
+      navigation.navigate('InvoiceOptions', { quote: item })
+      return
+    }
+    const jobSheetID = item.jobsheetID._id
+    const quoteID = item._id
     const setRes = setQuoteFromRemote(jobSheetID, quoteID)
     this.setState(() => ({ loading: true }))
     // blocking navigate action so that the WindowForm component doesn't refresh unnecessarily
@@ -92,18 +100,22 @@ class CustomerQuoteList extends React.Component {
   _keyExtractor = item => item._id
 
   render() {
-    const { data } = this.props
+    const { data, refetch, networkStatus } = this.props
     const { loading } = this.state
 
     return (
       <React.Fragment>
-        <Header />
+        <TouchableOpacity onPress={() => refetch()}>
+          <Header />
+        </TouchableOpacity>
         {loading && <Loader />}
         <FlatList
           ListHeaderComponent={CustomerQuoteListHeader}
           data={data.quotes}
-          renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
+          onRefresh={() => refetch()}
+          refreshing={networkStatus === 4}
+          renderItem={this._renderItem}
         />
       </React.Fragment>
     )
@@ -111,6 +123,8 @@ class CustomerQuoteList extends React.Component {
 }
 CustomerQuoteList.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
+  refetch: PropTypes.func.isRequired,
+  networkStatus: PropTypes.number.isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
   setQuoteFromRemote: PropTypes.func.isRequired,
 }

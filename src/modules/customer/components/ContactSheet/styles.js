@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 
+// todo: import from common
 import { styles } from '../../../jobsheet/components/SelectRooms'
-
 import clr from '../../../../config/colors'
 
 export default StyleSheet.create({

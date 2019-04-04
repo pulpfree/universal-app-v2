@@ -177,6 +177,10 @@ const GROUP_WINDOW_QUERY = gql`{
       sqft
     }
   }
+  products @client {
+    _id
+    name
+  }
 }`
 
 const OTHER_QUERY = gql`{
