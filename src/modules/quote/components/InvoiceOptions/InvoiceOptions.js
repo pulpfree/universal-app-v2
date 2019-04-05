@@ -9,7 +9,7 @@ import { pdfPreviewArgs } from '../../utils'
 
 function InvoiceOptions({ navigation }) {
   const quote = navigation.getParam('quote')
-  console.log('quote in InvoiceOptions:', quote)
+  // console.log('quote in InvoiceOptions:', quote)
   return (
     <View style={styles.container}>
       <View style={styles.modalBox}>

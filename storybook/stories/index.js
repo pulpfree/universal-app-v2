@@ -14,6 +14,7 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
 import CustomerSearch from '../../src/modules/customer/screens/CustomerSearch'
 // import CustomerInfo from '../../src/modules/customer/screens/CustomerInfo'
 import { CustomerInfoHeader } from '../../src/modules/customer/components/CustomerInfoHeader'
+// import { CustomerInfoMenu } from '../../src/modules/customer/components/CustomerInfoMenu'
 import { CustomerQuoteList } from '../../src/modules/customer/components/CustomerQuoteList'
 import { CustomerSearch as CustomerSearchBox } from '../../src/modules/customer/components/CustomerSearch'
 import { CustomerSearchList } from '../../src/modules/customer/components/CustomerSearchList'
@@ -92,6 +93,9 @@ storiesOf('Customer', module)
       data={customerInfo}
     />
   ))
+  /* .add('info menu', () => (
+    <CustomerInfoMenu />
+  )) */
   .add('jobsheet list', () => (
     <JobSheetList
       data={jobsheets}

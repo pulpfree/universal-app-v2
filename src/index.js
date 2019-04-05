@@ -9,8 +9,8 @@ import { withAuthenticator } from 'aws-amplify-react-native'
 import appSyncConfig from './aws-exports'
 import client from './apollo'
 
-import Navigator from './config/routes'
-// import Navigator from './config/tabs'
+// import Navigator from './config/routes'
+import Navigator from './config/tabs'
 import theme from './config/paperTheme'
 
 import { SignIn } from './modules/auth/components/SignIn'
