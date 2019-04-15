@@ -138,6 +138,8 @@ android {
 }
 
 dependencies {
+    implementation project(':bugsnag-react-native')
+    implementation project(':react-native-exception-handler')
     implementation project(':react-native-sms')
     implementation project(':react-native-mail')
     implementation project(':react-native-fs')

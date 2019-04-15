@@ -17,6 +17,7 @@
     "aws-amplify-react-native": "2.1.9",
     "aws-appsync": "1.7.2",
     "aws-appsync-react": "1.2.7",
+    "bugsnag-react-native": "2.16.0",
     "formik": "1.5.1",
     "graphql-tag": "2.10.1",
     "lodash": "4.17.11",
@@ -27,6 +28,7 @@
     "react-apollo": "2.5.3",
     "react-native": "0.59.3",
     "react-native-elements": "1.1.0",
+    "react-native-exception-handler": "2.10.7",
     "react-native-fs": "2.13.3",
     "react-native-gesture-handler": "1.1.0",
     "react-native-keyboard-aware-scrollview": "2.0.0",
@@ -49,8 +51,10 @@
     "@storybook/react-native": "^5.0.6",
     "@types/react": "16.8.10",
     "@types/react-native": "0.57.42",
+    "babel-core": "^6.26.3",
     "babel-eslint": "10.0.1",
     "babel-jest": "24.5.0",
+    "babel-runtime": "^6.26.0",
     "eslint": "5.16.0",
     "eslint-config-airbnb": "17.1.0",
     "eslint-config-react-app": "3.0.8",
@@ -63,9 +67,7 @@
     "prop-types": "15.7.2",
     "react-dom": "16.8.6",
     "react-native-storybook-loader": "1.8.0",
-    "react-test-renderer": "16.8.3",
-    "babel-core": "^6.26.3",
-    "babel-runtime": "^6.26.0"
+    "react-test-renderer": "16.8.3"
   },
   "jest": {
     "preset": "react-native"

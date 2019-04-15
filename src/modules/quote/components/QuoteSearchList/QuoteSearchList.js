@@ -10,10 +10,11 @@ import {
 import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
 
+import { QUOTE_SEARCH } from '../../queries/remote'
+
 import { QuoteListHeader } from '../QuoteListHeader'
 import styles from './styles'
 import { fmtMoney } from '../../../../util/fmt'
-import { QUOTE_SEARCH } from '../../queries/remote'
 import { withSearch } from '../SearchContext'
 import { Error } from '../../../common/components/Error'
 import { Loader } from '../../../common/components/Loader'
@@ -80,8 +81,8 @@ class QuoteSearchList extends React.Component {
     const { data } = this.props
     const { error, loading } = data
 
-    if (error) return <Error error={error} />
     if (loading) return <Loader />
+    if (error) return <Error error={error} />
 
     const { searchQuotes } = data
     const { quotes, totalInvoiced, totalOutstanding } = searchQuotes
