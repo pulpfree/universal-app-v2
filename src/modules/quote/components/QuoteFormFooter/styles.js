@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-// import clr from '../../../../config/colors'
+import clr from '../../../../config/colors'
 
 export default StyleSheet.create({
   container: {
@@ -19,6 +19,11 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  linked: {
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'dotted',
+    textDecorationColor: clr.primary,
+  },
   totalsVal: {
     fontSize: 18,
     fontWeight: '600',
@@ -29,7 +34,7 @@ export default StyleSheet.create({
     fontSize: 20,
   },
   strikeThrough: {
-    textDecorationStyle: 'solid',
     textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
   },
 })

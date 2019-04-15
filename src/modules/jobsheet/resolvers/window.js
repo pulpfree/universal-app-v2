@@ -347,6 +347,7 @@ export const resolvers = {
         windowRet = await client.query({
           query: JOBSHEET_WINDOW,
           variables: { windowID },
+          fetchPolicy: 'network-only',
         })
       } catch (e) {
         console.error(e) // eslint-disable-line no-console

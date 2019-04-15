@@ -1,10 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-
-import {
-  Text,
-  View,
-} from 'react-native'
+import { View } from 'react-native'
 
 import { CustomerForm } from '../components/CustomerForm'
 

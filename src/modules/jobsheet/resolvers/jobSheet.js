@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+// import gql from 'graphql-tag'
 import { PRODUCTS } from '../queries'
 import client from '../../../apollo'
 
@@ -7,18 +7,19 @@ export const defaults = {
     __typename: 'JobSheet',
     _id: 'new2',
   },
-  products: {
-    __typename: 'Product',
-    _id: '',
-    name: '',
-  },
 }
 
+// note: when populated, this causes error when attempting to read from cache
+/* products: {
+  __typename: 'Product',
+    _id: '',
+    name: '',
+},
+ */
 export const typeDefs = `
-  type JobSheet {
-    _id: ID
-  }
-`
+type JobSheet {
+  _id: ID
+}`
 
 export const resolvers = {
   Mutation: {
@@ -36,14 +37,18 @@ export const resolvers = {
       const id = 'Products:1'
 
       // Check if products is already cached, if not proceed
-      const prodQuery = gql`{
+      /* const prodQuery = gql`{
         products @client {
           _id
           name
         }
-      }`
+      }` */
+      /**
       const res = cache.readQuery({ query: prodQuery, id })
-      if (res.products && res.products.length) return null
+      console.log('cached products:', res.products)
+      console.log('isArray(res.products):', Array.isArray(res.products))
+      if (res.products && Array.isArray(res.products)) return null
+      */
 
       // console.log('products remote query -- should only ever be loading this only once !!!')
       const query = PRODUCTS

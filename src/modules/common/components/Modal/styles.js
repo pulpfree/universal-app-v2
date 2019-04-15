@@ -24,4 +24,51 @@ export default StyleSheet.create({
     shadowRadius: 5,
     width: 560,
   },
+  button: {
+    backgroundColor: clr.primary,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 20,
+  },
+  buttonTitle: {
+    fontSize: 16,
+    color: clr.white,
+  },
+  formCont: {
+    flexDirection: 'column',
+    marginTop: 20,
+    justifyContent: 'space-evenly',
+  },
+  infoCont: {
+    flexDirection: 'row',
+    padding: 15,
+    justifyContent: 'space-evenly',
+    borderBottomWidth: 1,
+    borderBottomColor: clr.dkGray,
+  },
+  infoCell: {
+    flexDirection: 'column',
+  },
+  infoRow: {
+    flexDirection: 'row',
+    paddingBottom: 10,
+  },
+  infoLabel: {
+    width: 100,
+    color: clr.dkGray,
+    fontWeight: '600',
+  },
+  infoValue: {},
+  right: {
+    textAlign: 'right',
+    width: 60,
+  },
+  warnText: {
+    textAlign: 'center',
+    fontSize: 18,
+  },
 })

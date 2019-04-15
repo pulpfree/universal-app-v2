@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
@@ -31,22 +31,19 @@ function CustomerForm({
   setFieldValue,
   values,
 }) {
-  const [addressType, setAddressType] = useState(values.addressType)
-
-  const _setAddressType = (value) => {
-    setAddressType(value)
-    setFieldValue('addressType', value)
+  const _setPhone = (number, name) => {
+    setFieldValue(`phones.${name}`, fmtPhone(number))
   }
 
-  const _setPhone = (number, name) => {
-    setFieldValue(`phones.${name}.number`, fmtPhone(number))
+  const _getPhone = (name) => {
+    if (ramda.hasPath(['phones', name], values)) {
+      return values.phones[name]
+    }
+    return ''
   }
 
   const _setPostalCode = (value) => {
-    const code = fmtPostalCode(value)
-    if (code) {
-      setFieldValue('address.postalCode', code)
-    }
+    setFieldValue('address.postalCode', fmtPostalCode(value) || value)
   }
 
   const _handleSubmit = (e) => {
@@ -198,20 +195,20 @@ function CustomerForm({
         <View style={styles.checkboxContainer}>
           <Text style={styles.checkboxLabel}>Property Type</Text>
           <CheckBox
-            checked={addressType === 'res'}
+            checked={values.address.type === 'res'}
             checkedColor={clr.black}
             checkedIcon="dot-circle-o"
             containerStyle={styles.checkbox}
-            onPress={() => _setAddressType('res')}
+            onPress={() => setFieldValue('address.type', 'res')}
             title="Residential"
             uncheckedIcon="circle-o"
           />
           <CheckBox
-            checked={addressType === 'com'}
+            checked={values.address.type === 'com'}
             checkedColor={clr.black}
             checkedIcon="dot-circle-o"
             containerStyle={styles.checkbox}
-            onPress={() => _setAddressType('com')}
+            onPress={() => setFieldValue('address.type', 'com')}
             title="Commercial"
             uncheckedIcon="circle-o"
           />
@@ -249,20 +246,20 @@ function CustomerForm({
             onSubmitEditing={() => phoneHome.current.focus()}
             ref={phoneMobile}
             returnKeyType="next"
-            value={values.phones.mobile.number}
+            value={_getPhone('mobile')}
           />
         </View>
 
         <View style={[styles.input, { flex: 0.75 }]}>
           <TextInput
-            blurOnSubmit
+            blurOnSubmit={false}
             keyboardType="phone-pad"
             label="Home Phone"
             name="phones.home.number"
             onChangeText={text => _setPhone(text, 'home')}
             ref={phoneHome}
             returnKeyType="go"
-            value={values.phones.home.number}
+            value={_getPhone('home')}
           />
         </View>
       </View>

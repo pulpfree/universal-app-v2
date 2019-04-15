@@ -13,6 +13,7 @@ import { JOBSHEET_DATA } from '../queries'
 import { SET_PRODUCTS } from '../mutations/local'
 
 import { Error } from '../../common/components/Error'
+import { FeatureList } from '../components/FeatureList'
 import { GroupList } from '../components/GroupList'
 import { Header, Menu } from '../components/JobSheetHeader'
 import { Loader } from '../../common/components/Loader'
@@ -24,7 +25,10 @@ const JobSheet = ({ navigation, setProducts }) => {
   const jobSheetID = navigation.getParam('jobSheetID')
 
   useEffect(() => {
-    setProducts()
+    const pRet = setProducts()
+    pRet.then((data) => {
+      console.log('data:', data)
+    })
   }, [])
 
   return (
@@ -43,13 +47,14 @@ const JobSheet = ({ navigation, setProducts }) => {
         } = data.jobSheetData
 
         return (
-          <View>
+          <View style={{ paddingBottom: 50 }}>
             <Header jobSheet={jobsheet} />
             <ScrollView>
               <Menu jobSheet={jobsheet} navigation={navigation} />
               <WindowList data={windows} jobSheet={jobsheet} />
               <GroupList data={groups} jobSheet={jobsheet} />
               <OtherList data={other} jobSheet={jobsheet} />
+              <FeatureList jobSheet={jobsheet} />
             </ScrollView>
           </View>
         )

@@ -328,13 +328,16 @@ export const resolvers = {
           tax
           total
         }
+        itemCosts {
+          subtotal
+        }
       }`
       const fragRes = cache.readFragment({ fragment, id })
 
       const total = parseFloat(discount)
       const subtotal = parseFloat(total / taxDivisor)
       const tax = parseFloat(total - subtotal)
-      const discountAmount = fragRes.quotePrice.total - total
+      const discountAmount = fragRes.itemCosts.subtotal - total
 
       const data = {
         ...fragRes,

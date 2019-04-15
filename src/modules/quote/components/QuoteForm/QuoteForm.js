@@ -98,7 +98,10 @@ const QuoteForm = ({ isNew, navigation }) => {
                     type: 'ionicon',
                     name: 'ios-eye',
                   }}
-                  onPress={() => navigation.navigate('QuotePreview', { previewArgs: pdfPreviewArgs(quote), customerID: quote.customerID._id })}
+                  onPress={() => navigation.navigate(
+                    'QuotePreview',
+                    { previewArgs: pdfPreviewArgs(quote), customerID: quote.customerID._id }
+                  )}
                   title="Preview"
                   type="clear"
                   buttonStyle={styles.navButton}
@@ -167,7 +170,7 @@ const QuoteForm = ({ isNew, navigation }) => {
               <View style={styles.secondaryHeader}>
                 <Text style={styles.secondaryText}>Summary</Text>
               </View>
-              <QuoteFormFooter discount={quote.discount} quotePrice={quote.quotePrice} />
+              <QuoteFormFooter discount={quote.discount} quote={quote} />
               <View style={styles.buttonRow}>
                 <Mutation
                   mutation={PERSIST_QUOTE}

@@ -33,20 +33,12 @@ export function fmtDate(date) {
   return dte.format('YYYY-MM-DD')
 }
 
-export function fmtPhone(value, previousValue) {
-  if (!value) return value
-
+// todo: should put this into the utils file, and rename to phone
+export function fmtPhone(value) {
   const digits = value.replace(/[^\d]/g, '')
-  if (!previousValue || value.length > previousValue.length) {
-    // typing forward
-    if (digits.length === 3) return `(${digits})`
 
-    if (digits.length === 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}-`
-  }
   if (digits.length <= 3) return digits
-
   if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`
-
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`
 }
 

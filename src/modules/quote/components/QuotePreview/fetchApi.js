@@ -11,7 +11,11 @@ import client from '../../../../apollo'
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_INIT':
-      return { ...state, isLoading: true, isError: false }
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      }
     case 'FETCH_SUCCESS':
       return {
         ...state,
@@ -59,7 +63,6 @@ const fetchApi = (args) => {
         if (!didCancel) {
           dispatch({ type: 'FETCH_FAILURE' })
         }
-        return
       }
       let blobRet
       try {
@@ -84,7 +87,7 @@ const fetchApi = (args) => {
     return () => {
       didCancel = true
       RNFetchBlob.fs.unlink(filePath).then(() => {
-        console.log('fp unlinked') // eslint-disable-line no-console
+        console.log('filePath unlinked in fetchApi') // eslint-disable-line no-console
       })
     }
   }, [args])

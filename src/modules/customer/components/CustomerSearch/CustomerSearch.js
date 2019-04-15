@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import {
   Text,
   Switch,
@@ -14,22 +13,13 @@ import styles from './styles'
 
 
 export default function CustomerSearchHeader() {
-  /* const _setName = (id) => {
-    if (id === 'lastName') {
-      setLastName(!lastName)
-      setStreetName(false)
-    } else if (id === 'streetName') {
-      setLastName(false)
-      setStreetName(!streetName)
-    }
-  } */
+  const [sVal, setSVal] = useState('')
 
   return (
     <SearchConsumer>
       {({
         isActive,
         setActive,
-        searchVal,
         lastName,
         streetName,
         setSearchVal,
@@ -40,13 +30,17 @@ export default function CustomerSearchHeader() {
           <SearchBar
             autoFocus
             inputStyle={styles.input}
-            onChangeText={val => setSearchVal(val)}
-            // onClear={someMethod}
+            onChangeText={
+              (val) => {
+                setSVal(val)
+                setSearchVal(val)
+              }
+            }
             autoCorrect={false}
             containerStyle={styles.searchContainer}
             lightTheme
             placeholder="Search Customer"
-            value={searchVal}
+            value={sVal}
           />
           <CheckBox
             checked={lastName}

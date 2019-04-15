@@ -7,6 +7,13 @@ mutation quotePersist($input: QuoteInput!) {
   }
 }`
 
+const PERSIST_QUOTE_DISCOUNT = gql`
+mutation quotePersistDiscount($input: QuoteDiscountInput!) {
+  quotePersistDiscount(input: $input) {
+    _id
+  }
+}`
+
 const REMOVE_QUOTE = gql`
 mutation quoteRemove($id: ID!) {
   quoteRemove(id: $id) {
@@ -25,5 +32,6 @@ mutation createInvoice($id: ID!) {
 export {
   CREATE_INVOICE,
   PERSIST_QUOTE,
+  PERSIST_QUOTE_DISCOUNT,
   REMOVE_QUOTE,
 }

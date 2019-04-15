@@ -1,7 +1,7 @@
 import CUSTOMER from './Customer'
 import CUSTOMER_DATA from './CustomerData'
-import SEARCH_CUSTOMER from './SearchCustomer'
 import CUSTOMER_QUOTES from './Quotes'
+import SEARCH_CUSTOMER from './SearchCustomer'
 
 export {
   CUSTOMER,

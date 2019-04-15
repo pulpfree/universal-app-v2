@@ -10,9 +10,10 @@ import { Query } from 'react-apollo'
 import { CUSTOMER } from '../../../customer/queries'
 
 import { Error } from '../../../common/components/Error'
-import { getMobilePhone, stripPhoneDigits } from '../../../../util/utils'
 import { capitalize } from '../../../../util/fmt'
+import { getMobilePhone, stripPhoneDigits } from '../../../../util/utils'
 import { styles } from './index'
+import { AdminEmail } from '../../config/constants'
 
 const setFileParams = file => (
   {
@@ -57,6 +58,39 @@ const handleEmail = (customer, file) => {
   })
 }
 
+const handleAdminEmail = (customer, file) => {
+  const customerName = `${customer.name.first} ${customer.name.last}`
+  const fileParams = setFileParams(file)
+  const body = `
+  Hello Administrator,<br><br>
+  Please find attached a copy of the ${fileParams.type}: #${fileParams.number} for customer: ${customerName}<br>
+  Regards,<br>
+  Universal Windows
+  `
+  const params = {
+    subject: `Universal Windows ${fileParams.type} ${fileParams.number} (contains attachment)`,
+    recipients: [AdminEmail],
+    body,
+    isHTML: true,
+    attachment: {
+      path: file.path,
+      type: 'pdf',
+      name: fileParams.fileNm,
+    },
+  }
+
+  Mailer.mail(params, (error, event) => {
+    Alert.alert(
+      error,
+      event,
+      [
+        { text: 'Ok' },
+      ],
+      { cancelable: false }
+    )
+  })
+}
+
 const handleSMS = (customer, file, signedURL) => {
   let phone = getMobilePhone(customer.phones)
   if (!phone) return false
@@ -72,13 +106,12 @@ Regards, Universal Windows ${signedURL}`
   SendSMS.send({
     body,
     recipients: [phone],
-    // recipients: ['9059849393'], // me
-    // recipients: ['9056870071'], // Joe
     successTypes: ['sent', 'queued'],
     // allowAndroidSendWithoutReadPermission: true
   }, (completed, cancelled, error) => {
     console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + ' error: ' + error) // eslint-disable-line
   })
+  return true
 }
 
 export default function Menu({
@@ -112,10 +145,16 @@ export default function Menu({
             />
             <Button
               buttonStyle={styles.button}
-              // disabled={!filePath || loading || !getMobilePhone(customer.phones)}
-              disabled={!filePath || loading}
+              disabled={!filePath || loading || !getMobilePhone(customer.phones)}
               onPress={() => handleSMS(customer, file, signedURL)}
               title="Message PDF"
+              titleStyle={styles.buttonCont}
+            />
+            <Button
+              buttonStyle={styles.buttonSecondary}
+              disabled={!filePath || loading}
+              onPress={() => handleAdminEmail(customer, file)}
+              title="Email Admin"
               titleStyle={styles.buttonCont}
             />
             {error && <Error error={error} />}

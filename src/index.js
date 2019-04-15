@@ -9,8 +9,8 @@ import { withAuthenticator } from 'aws-amplify-react-native'
 import appSyncConfig from './aws-exports'
 import client from './apollo'
 
-// import Navigator from './config/routes'
-import Navigator from './config/tabs'
+import Navigator from './config/routes'
+// import Navigator from './config/tabs'
 import theme from './config/paperTheme'
 
 import { SignIn } from './modules/auth/components/SignIn'
@@ -24,14 +24,15 @@ const awsExports = {
     region: appSyncConfig.aws_appsync_region,
     userPoolId: appSyncConfig.aws_user_pools_id,
     userPoolWebClientId: appSyncConfig.aws_user_pools_web_client_id,
+    // this was added when attempting to hook up Storage
     identityPoolId: appSyncConfig.aws_cognito_identity_pool_id,
   },
-  Storage: {
-    AWSS3: {
-      bucket: 'ca-universalwindows',
-      region: 'ca-central-1', //OPTIONAL -  Amazon service region
-    },
-  },
+  // Storage: {
+  //   AWSS3: {
+  //     bucket: 'ca-universalwindows',
+  //     region: 'ca-central-1', //OPTIONAL -  Amazon service region
+  //   },
+  // },
   // aws_user_files_s3_bucket: 'ca-universalwindows',
   // aws_user_files_s3_bucket_region: 'ca-central-1',
 }
@@ -59,7 +60,7 @@ class AppWithAuth extends React.Component {
   }
 
   handleAuthStateChange(state) { // eslint-disable-line
-    // console.log('state in handleAuthStateChange: ', state) // eslint-disable-line
+    console.log('state in handleAuthStateChange: ', state) // eslint-disable-line
     // if (state === 'signedIn') {
     // Do something when the user has signed-in
     // }

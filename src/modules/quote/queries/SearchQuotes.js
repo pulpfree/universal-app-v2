@@ -29,6 +29,9 @@ query($year: String, $invoiced: Boolean, $closed: Boolean) {
       }
       quotePrice {
         outstanding
+        payments
+        subtotal
+        tax
         total
       }
       createdAt

@@ -17,19 +17,20 @@ function QuotePreview({ navigation }) {
   const customerID = navigation.getParam('customerID')
   const { data, isLoading, isError } = fetchApi(previewArgs)
   const { filePath, signedURL } = data
+  const haveFile = filePath !== ''
 
-  if (isLoading) return <Loader />
   if (isError) return <Error error="An error occurred" />
 
   return (
     <View style={styles.container}>
       <Menu
-        filePath={filePath}
-        fileArgs={previewArgs}
         customerID={customerID}
+        fileArgs={previewArgs}
+        filePath={filePath}
         signedURL={signedURL}
       />
-      {filePath !== '' && <PDF filePath={filePath} />}
+      {isLoading && <Loader />}
+      {haveFile && <PDF filePath={filePath} />}
     </View>
   )
 }

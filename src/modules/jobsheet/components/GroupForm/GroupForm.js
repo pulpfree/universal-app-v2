@@ -111,7 +111,6 @@ function GroupForm({
     <Query query={GROUP_QUERY}>
       {({ error, data: { group } }) => {
         if (error) return <Error error={error} />
-        // console.log('data.group in Query: ', group)
         return (
           <KeyboardAwareScrollView style={styles.formCont}>
             {isDuplicate && (
@@ -161,8 +160,9 @@ function GroupForm({
                 <Text style={styles.cellLabel}>Opening Width</Text>
                 <View style={styles.dimCell}>
                   <TextInput
-                    style={styles.dimInput}
+                    keyboardType="numeric"
                     onChangeText={text => setGroupField('dims.width.inch', text)}
+                    style={styles.dimInput}
                     value={group.dims.width.inch.toString()}
                   />
                   <Picker
@@ -186,8 +186,9 @@ function GroupForm({
                 <Text style={styles.cellLabel}>Opening Height</Text>
                 <View style={styles.dimCell}>
                   <TextInput
-                    style={styles.dimInput}
+                    keyboardType="numeric"
                     onChangeText={text => setGroupField('dims.height.inch', text)}
+                    style={styles.dimInput}
                     value={group.dims.height.inch.toString()}
                   />
                   <Picker
@@ -224,7 +225,6 @@ function GroupForm({
             <Query query={GROUP_WINDOW_QUERY}>
               {({ error, data: { groupWindow } }) => { // eslint-disable-line no-shadow
                 if (error) return <Error error={error} />
-                // console.log('data.groupWindow: ', groupWindow)
                 return (
                   <View style={styles.formRow}>
                     <View style={styles.formCell}>
@@ -268,6 +268,7 @@ function GroupForm({
                       <Text style={styles.cellLabel}>Width</Text>
                       <View style={styles.dimCell}>
                         <TextInput
+                          keyboardType="numeric"
                           onChangeText={text => setGroupWindowField('dims.width.inch', text)}
                           style={styles.dimInput}
                           value={groupWindow.dims.width.inch.toString()}
@@ -293,6 +294,7 @@ function GroupForm({
                       <Text style={styles.cellLabel}>Height</Text>
                       <View style={styles.dimCell}>
                         <TextInput
+                          keyboardType="numeric"
                           onChangeText={text => setGroupWindowField('dims.height.inch', text)}
                           style={styles.dimInput}
                           value={groupWindow.dims.height.inch.toString()}

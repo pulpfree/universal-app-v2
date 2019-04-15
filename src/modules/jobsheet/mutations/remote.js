@@ -68,8 +68,17 @@ mutation jobSheetRemoveWindow($id: ID!) {
   }
 }`
 
+const PERSIST_FEATURES = gql`
+mutation jobSheetPersistFeatures($id: ID!, $features: String!) {
+  jobSheetPersistFeatures(id: $id, features: $features) {
+    _id
+    features
+  }
+}`
+
 export {
   PERSIST_GROUP,
+  PERSIST_FEATURES,
   PERSIST_JOBSHEET,
   PERSIST_OTHER,
   PERSIST_WINDOW,

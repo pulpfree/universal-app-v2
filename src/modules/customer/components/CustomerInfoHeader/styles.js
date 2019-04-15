@@ -4,7 +4,7 @@ import clr from '../../../../config/colors'
 
 export default StyleSheet.create({
   button: {
-    width: 160,
+    width: 140,
   },
   container: {
     flexDirection: 'row',
@@ -12,7 +12,6 @@ export default StyleSheet.create({
     padding: 15,
   },
   column: {
-    // flex: 1,
     flexDirection: 'column',
   },
   row: {

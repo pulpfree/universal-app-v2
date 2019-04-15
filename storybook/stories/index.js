@@ -13,14 +13,15 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
 
 import CustomerSearch from '../../src/modules/customer/screens/CustomerSearch'
 // import CustomerInfo from '../../src/modules/customer/screens/CustomerInfo'
+import { CustomerInfoMenu } from '../../src/modules/customer/components/CustomerInfoMenu'
 import { CustomerInfoHeader } from '../../src/modules/customer/components/CustomerInfoHeader'
-// import { CustomerInfoMenu } from '../../src/modules/customer/components/CustomerInfoMenu'
 import { CustomerQuoteList } from '../../src/modules/customer/components/CustomerQuoteList'
 import { CustomerSearch as CustomerSearchBox } from '../../src/modules/customer/components/CustomerSearch'
 import { CustomerSearchList } from '../../src/modules/customer/components/CustomerSearchList'
 import { CustomerForm } from '../../src/modules/customer/components/CustomerForm'
 import { ContactSheet } from '../../src/modules/customer/components/ContactSheet'
 import { SearchProvider } from '../../src/modules/customer/components/SearchContext'
+import { DeleteCustomer } from '../../src/modules/customer/components/DeleteCustomer'
 
 import JobSheetNew from '../../src/modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../../src/modules/jobsheet/screens/JobSheet'
@@ -93,9 +94,6 @@ storiesOf('Customer', module)
       data={customerInfo}
     />
   ))
-  /* .add('info menu', () => (
-    <CustomerInfoMenu />
-  )) */
   .add('jobsheet list', () => (
     <JobSheetList
       data={jobsheets}
@@ -110,6 +108,12 @@ storiesOf('Customer', module)
   .add('contact sheet', () => (
     <ContactSheet data={customerInfo} />
   ))
+  .add('info menu', () => (
+    <CustomerInfoMenu />
+  ))
+  /* .add('delete customer', () => (
+    <DeleteCustomer />
+  )) */
 
 storiesOf('Customer Form', module)
   .addDecorator(getStory => <PaperProvider theme={theme}>{getStory()}</PaperProvider>)

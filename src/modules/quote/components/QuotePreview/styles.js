@@ -24,6 +24,9 @@ export default StyleSheet.create({
   button: {
     backgroundColor: clr.primary,
   },
+  buttonSecondary: {
+    backgroundColor: clr.secondary,
+  },
   buttonCont: {
     marginLeft: 10,
     marginRight: 10,

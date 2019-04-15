@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Text,
-  View,
-} from 'react-native'
+import { Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 
 import styles from './styles'
@@ -29,6 +26,7 @@ export default function CustomerInfo({ customer, navigation }) {
           </View>
         )}
       </View>
+
       <View style={styles.column}>
         <View style={styles.row}>
           <Text style={styles.label}>Street</Text>
@@ -43,8 +41,9 @@ export default function CustomerInfo({ customer, navigation }) {
           <Text style={styles.value}>{customer.address.postalCode}</Text>
         </View>
       </View>
+
       <View style={styles.column}>
-        {customer.email && (
+        {customer.email !== '' && (
           <View style={styles.row}>
             <Text style={styles.label}>Email</Text>
             <Text style={styles.value}>{customer.email}</Text>
@@ -57,37 +56,40 @@ export default function CustomerInfo({ customer, navigation }) {
           </View>
         ))}
       </View>
+
       <View style={styles.column}>
         <Button
-          onPress={() => navigation.navigate('ContactSheet', { customer, navigation })}
-          raised
-          rounded
+          buttonStyle={{
+            backgroundColor: clr.primary,
+          }}
           icon={{
             name: 'phone',
             color: clr.white,
           }}
-          buttonStyle={{
-            backgroundColor: clr.primary,
-          }}
+          onPress={() => navigation.navigate('ContactSheet', { customer, navigation })}
+          raised
+          rounded
+          title="Contact"
           titleStyle={{
             color: clr.white,
           }}
-          title="Contact"
           style={styles.button}
         />
         <View style={styles.spacer} />
         <Button
-          raised
-          rounded
-          icon={{
-            name: 'clear',
-            color: clr.white,
-          }}
-          title="Deactivate"
-          style={styles.button}
           buttonStyle={{
             backgroundColor: clr.black,
           }}
+          onPress={() => navigation.navigate('CustomerInfoMenu', { customer })}
+          raised
+          rounded
+          icon={{
+            type: 'ionicon',
+            name: 'ios-cog',
+            color: clr.white,
+          }}
+          title="Options"
+          style={styles.button}
         />
       </View>
     </View>

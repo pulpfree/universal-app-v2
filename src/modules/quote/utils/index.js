@@ -1,4 +1,5 @@
 import { Types } from 'mongoose'
+import constants from '../config/constants'
 
 export const prepareQuote = (quote) => {
   const newQuote = { ...quote }
@@ -31,3 +32,32 @@ export const pdfPreviewArgs = quote => (
     version: quote.version,
   }
 )
+
+export const calculateDiscount = (quote, discount, description) => {
+  const taxMultiplier = parseFloat(constants.HST / 100)
+  const taxDivisor = parseFloat(1 + taxMultiplier)
+  const { quotePrice } = quote
+
+  const total = parseFloat(discount)
+  const subtotal = parseFloat(total / taxDivisor)
+  const tax = parseFloat(total - subtotal)
+  const discountAmount = quote.itemCosts.subtotal - total
+  const outstanding = parseFloat(total - quotePrice.payments)
+  return {
+    _id: quote._id,
+    discount: {
+      description,
+      discount: parseFloat(discountAmount),
+      subtotal,
+      tax,
+      total,
+    },
+    quotePrice: {
+      outstanding,
+      payments: parseFloat(quotePrice.payments),
+      subtotal,
+      tax,
+      total,
+    },
+  }
+}

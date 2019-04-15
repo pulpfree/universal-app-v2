@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { withNavigation } from 'react-navigation'
 
 import { Button } from 'react-native-elements'
@@ -25,7 +25,7 @@ function DeleteInvoice({ navigation }) {
               <Text style={styles.infoLabel}>Address</Text>
               <Text style={styles.infoValue}>24 Aquaduct St, Welland</Text>
             </View>
-            
+
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Last Updated</Text>
               <Text style={styles.infoValue}>Mon. Apr. 1st, 2019</Text>

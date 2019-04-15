@@ -2,13 +2,18 @@ import { createAppContainer, createStackNavigator } from 'react-navigation'
 
 import CustomerSearch from '../modules/customer/screens/CustomerSearch'
 import CustomerNew from '../modules/customer/screens/CustomerNew'
+import CustomerProfile from '../modules/customer/screens/CustomerProfile'
 import CustomerInfo from '../modules/customer/screens/CustomerInfo'
+import { CustomerInfoMenu } from '../modules/customer/components/CustomerInfoMenu'
+import { DeleteCustomer } from '../modules/customer/components/DeleteCustomer'
+import { ToggleActive as CustomerToggleActive } from '../modules/customer/components/ToggleActive'
 
 import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../modules/jobsheet/screens/JobSheet'
 import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
 import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
 import { SelectTrim } from '../modules/jobsheet/components/SelectTrim'
+import { SelectFeatures } from '../modules/jobsheet/components/SelectFeatures'
 
 import Payments from '../modules/quote/screens/Payments'
 import QuoteEdit from '../modules/quote/screens/QuoteEdit'
@@ -66,6 +71,12 @@ const HomeStack = createStackNavigator(
       screen: CustomerInfo,
       navigationOptions: {
         title: 'Customer Details',
+      },
+    },
+    CustomerProfile: {
+      screen: CustomerProfile,
+      navigationOptions: {
+        title: 'Customer Profile',
       },
     },
     JobSheetNew: {
@@ -137,9 +148,13 @@ const RootStack = createStackNavigator(
       screen: HomeStack,
     },
     ContactSheet,
+    CustomerInfoMenu,
+    CustomerToggleActive,
     DiscountForm,
+    DeleteCustomer,
     DeleteInvoice,
     InvoiceOptions,
+    SelectFeatures,
     SelectRooms,
     SelectWindowOptions,
     SelectTrim,

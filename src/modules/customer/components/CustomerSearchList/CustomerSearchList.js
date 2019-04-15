@@ -10,8 +10,10 @@ import {
 
 import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
+import { debounce } from 'lodash'
 
-import SearchCustomer from '../../queries/SearchCustomer'
+import { SEARCH_CUSTOMER } from '../../queries'
+
 import styles from './styles'
 import { Error } from '../../../common/components/Error'
 import { Loader } from '../../../common/components/Loader'
@@ -88,10 +90,8 @@ CustomerSearchList.defaultProps = {
   data: null,
 }
 
-const SearchList = graphql(SearchCustomer, {
+const SearchList = graphql(SEARCH_CUSTOMER, {
   skip: ({ searchVal }) => !searchVal,
-  // fetchPolicy: 'network-only',
-  fetchPolicy: 'no-cache',
   options: (props) => {
     const variables = {
       field: '',
@@ -103,7 +103,10 @@ const SearchList = graphql(SearchCustomer, {
     }
     if (props.streetName) variables.search = props.searchVal
     if (props.isActive !== 'undefined') variables.active = props.isActive
-    return { variables }
+    return {
+      variables,
+      fetchPolicy: 'network-only',
+    }
   },
 })
 

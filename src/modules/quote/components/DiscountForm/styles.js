@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 
+import clr from '../../../../config/colors'
 import { styles } from '../../../jobsheet/components/SelectRooms'
 
 export default StyleSheet.create({
@@ -26,12 +27,10 @@ export default StyleSheet.create({
   },
   cell: {
     flex: 1,
-    // padding:
   },
   infoRow: {
     flexDirection: 'row',
     marginBottom: 8,
-    // marginRight: 20,
   },
   infoLabel: {
     flex: 1,
@@ -45,5 +44,11 @@ export default StyleSheet.create({
   },
   submitButton: {
     ...StyleSheet.flatten(styles.submitButton),
+  },
+  itemsTotalRow: {
+    borderBottomColor: clr.dkGray,
+    borderBottomWidth: 0.75,
+    flexDirection: 'row',
+    marginBottom: 20,
   },
 })

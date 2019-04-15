@@ -9,7 +9,8 @@ import { pdfPreviewArgs } from '../../utils'
 
 function InvoiceOptions({ navigation }) {
   const quote = navigation.getParam('quote')
-  // console.log('quote in InvoiceOptions:', quote)
+  const customerID = navigation.getParam('customerID')
+
   return (
     <View style={styles.container}>
       <View style={styles.modalBox}>
@@ -17,8 +18,10 @@ function InvoiceOptions({ navigation }) {
 
         <View style={styles.body}>
           <TouchableOpacity onPress={() => {
-            // navigation.goBack()
-            navigation.navigate('QuotePreview', { previewArgs: pdfPreviewArgs(quote) })
+            navigation.navigate(
+              'QuotePreview',
+              { previewArgs: pdfPreviewArgs(quote), customerID }
+            )
           }}
           >
             <View style={styles.optRow}>
@@ -32,7 +35,7 @@ function InvoiceOptions({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('DiscountForm', { quotePrice: quote.quotePrice })}>
+          <TouchableOpacity onPress={() => navigation.navigate('DiscountForm', { quote, customerID })}>
             <View style={styles.optRow}>
               <Text style={styles.optText}>Adjust Discount</Text>
             </View>

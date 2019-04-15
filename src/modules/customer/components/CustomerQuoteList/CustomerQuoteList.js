@@ -82,8 +82,10 @@ class CustomerQuoteList extends React.Component {
 
   _onPressItem = (item) => {
     const { navigation, setQuoteFromRemote } = this.props
+    const customerID = navigation.getParam('customerID')
+
     if (item.invoiced) {
-      navigation.navigate('InvoiceOptions', { quote: item })
+      navigation.navigate('InvoiceOptions', { quote: item, customerID })
       return
     }
     const jobSheetID = item.jobsheetID._id

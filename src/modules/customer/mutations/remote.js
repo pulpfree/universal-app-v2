@@ -7,6 +7,23 @@ mutation customerPersist($customerInput: CustomerInput!, $addressInput: AddressI
   }
 }`
 
+const REMOVE_CUSTOMER = gql`
+mutation customerRemove($id: ID!) {
+  customerRemove(id: $id) {
+    n
+    ok
+  }
+}`
+
+const TOGGLE_ACTIVE_CUSTOMER = gql`
+mutation customerToggleActive($id: ID!) {
+  customerToggleActive(id: $id) {
+    active
+  }
+}`
+
 export {
   PERSIST_CUSTOMER,
+  REMOVE_CUSTOMER,
+  TOGGLE_ACTIVE_CUSTOMER,
 }

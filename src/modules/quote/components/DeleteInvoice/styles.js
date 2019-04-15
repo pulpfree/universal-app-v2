@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import clr from '../../../../config/colors'
+// import clr from '../../../../config/colors'
 import { styles } from '../../../common/components/Modal'
 
 export default StyleSheet.create({
@@ -16,50 +16,34 @@ export default StyleSheet.create({
     ...StyleSheet.flatten(styles.body),
   },
   button: {
-    backgroundColor: clr.primary,
-    paddingLeft: 20,
-    paddingRight: 20,
+    ...StyleSheet.flatten(styles.button),
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginTop: 20,
+    ...StyleSheet.flatten(styles.buttonRow),
   },
   buttonTitle: {
-    fontSize: 16,
-    color: clr.white,
+    ...StyleSheet.flatten(styles.buttonTitle),
   },
   formCont: {
-    flexDirection: 'column',
-    marginTop: 20,
-    justifyContent: 'space-evenly',
+    ...StyleSheet.flatten(styles.formCont),
   },
   infoCont: {
-    flexDirection: 'row',
-    padding: 15,
-    justifyContent: 'space-evenly',
-    borderBottomWidth: 1,
-    borderBottomColor: clr.dkGray,
+    ...StyleSheet.flatten(styles.infoCont),
   },
   infoCell: {
-    flexDirection: 'column',
+    ...StyleSheet.flatten(styles.infoCell),
   },
   infoRow: {
-    flexDirection: 'row',
-    paddingBottom: 10,
+    ...StyleSheet.flatten(styles.infoRow),
   },
   infoLabel: {
-    width: 100,
-    color: clr.dkGray,
-    fontWeight: '600',
+    ...StyleSheet.flatten(styles.infoLabel),
   },
   infoValue: {},
   right: {
-    textAlign: 'right',
-    width: 60,
+    ...StyleSheet.flatten(styles.right),
   },
   warnText: {
-    textAlign: 'center',
-    fontSize: 18,
+    ...StyleSheet.flatten(styles.warnText),
   },
 })

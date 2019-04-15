@@ -35,14 +35,17 @@ export const prepareAddress = (address, customerID) => {
 */
 
 export const calcSizes = (window) => {
-  if (!ramda.hasPath(['dims', 'height', 'inch'], window) || !ramda.hasPath(['dims', 'height', 'inch'], window)) return false
+  if (
+    !ramda.hasPath(['dims', 'height', 'inch'], window)
+    || !ramda.hasPath(['dims', 'height', 'inch'], window)
+  ) return false
 
   let decimal = 0.00
   const newWin = {
     dims: {
       height: {
         decimal: null,
-        fraction: null,
+        fraction: '',
         inch: null,
         overSize: null,
         round: null,
@@ -50,7 +53,7 @@ export const calcSizes = (window) => {
       },
       width: {
         decimal: null,
-        fraction: null,
+        fraction: '',
         inch: null,
         overSize: null,
         round: null,
@@ -137,7 +140,7 @@ export const calcCosts = (window, product) => {
 
   if (specs.overSize) {
     premium = specs.overSize * product.premium.cost
-    productCost = product.sizeCost[[maxStdSize]]
+    productCost = product.sizeCost[[maxStdSize]] || 0.00
   } else {
     productCost = product.sizeCost[[specs.sqft]]
   }
@@ -244,13 +247,13 @@ export const calcGroupSizes = (dims) => {
       height: {
         decimal: null,
         diff: null,
-        fraction: null,
+        fraction: '',
         inch: null,
       },
       width: {
         decimal: null,
         diff: null,
-        fraction: null,
+        fraction: '',
         inch: null,
       },
     },

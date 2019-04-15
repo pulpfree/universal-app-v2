@@ -39,9 +39,18 @@ export default gql`
         invoiced
         number
         version
-         quotePrice {
+        quotePrice {
           outstanding
+          payments
+          subtotal
+          tax
           total
+        }
+        itemCosts {
+          group
+          other
+          subtotal
+          window
         }
         jobsheetID {
           _id

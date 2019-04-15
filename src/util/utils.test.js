@@ -7,12 +7,12 @@ const phones = [
   {
     countryCode: '1',
     _id: 'home',
-    number: '(905) 687-0000'
+    number: '(905) 687-0000',
   },
   {
     countryCode: '1',
     _id: 'mobile',
-    number: '(905) 984-9393'
+    number: '(905) 984-9393',
   },
 ]
 
@@ -29,5 +29,12 @@ describe('stripPhoneDigits', () => {
     const strippedPhone = u.stripPhoneDigits(phone)
     expect(strippedPhone).toEqual('9059849393')
     expect(typeof strippedPhone).toEqual('string')
+  })
+})
+
+describe('phonesArToObj', () => {
+  it('return array of phone objects', () => {
+    const phoneObj = u.phonesArToObj(phones)
+    expect(phoneObj.home.number).toEqual('(905) 687-0000')
   })
 })

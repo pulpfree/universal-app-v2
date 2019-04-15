@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { debounce } from 'lodash'
+
 const { Provider, Consumer } = React.createContext()
 
 class SearchProvider extends React.Component {
@@ -11,12 +13,12 @@ class SearchProvider extends React.Component {
     searchVal: '',
   }
 
+  _handleSearchVal = debounce((val) => {
+    this.setState({ searchVal: val })
+  }, 300)
+
   _handleActive = (active) => {
     this.setState({ isActive: active })
-  }
-
-  _handleSearchVal = (val) => {
-    this.setState({ searchVal: val })
   }
 
   _handleLastName = (flag) => {
