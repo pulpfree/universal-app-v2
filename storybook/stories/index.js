@@ -21,7 +21,7 @@ import { CustomerSearchList } from '../../src/modules/customer/components/Custom
 import { CustomerForm } from '../../src/modules/customer/components/CustomerForm'
 import { ContactSheet } from '../../src/modules/customer/components/ContactSheet'
 import { SearchProvider } from '../../src/modules/customer/components/SearchContext'
-import { DeleteCustomer } from '../../src/modules/customer/components/DeleteCustomer'
+// import { DeleteCustomer } from '../../src/modules/customer/components/DeleteCustomer'
 
 import JobSheetNew from '../../src/modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../../src/modules/jobsheet/screens/JobSheet'
@@ -36,6 +36,7 @@ import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeat
 // import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
 import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
 // import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
+import { Notes } from '../../src/modules/jobsheet/components/Notes'
 
 import Payments from '../../src/modules/quote/screens/Payments'
 import QuotePreview from '../../src/modules/quote/screens/QuotePreview'
@@ -169,6 +170,10 @@ storiesOf('DeleteInvoice', module)
     <DeleteInvoice />
   ))
 
+storiesOf('Notes', module)
+  .add('notes modal', () => (
+    <Notes />
+  ))
 /*
 * ======================== Address =====================================
 */

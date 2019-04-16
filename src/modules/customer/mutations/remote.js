@@ -22,8 +22,16 @@ mutation customerToggleActive($id: ID!) {
   }
 }`
 
+const PERSIST_NOTES = gql`
+mutation customerPersistNotes($id: ID!, $notes: String!) {
+  customerPersistNotes(id: $id, notes: $notes) {
+    notes
+  }
+}`
+
 export {
   PERSIST_CUSTOMER,
+  PERSIST_NOTES,
   REMOVE_CUSTOMER,
   TOGGLE_ACTIVE_CUSTOMER,
 }

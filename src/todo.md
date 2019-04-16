@@ -1,5 +1,5 @@
 # To Do
 
-1. Extend expiry time on signed URLs
+1. Delete group window
 
 ## Completed

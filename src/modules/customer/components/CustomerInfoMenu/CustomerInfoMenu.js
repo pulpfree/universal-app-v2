@@ -29,6 +29,15 @@ function CustomerInfoMenu({ navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {
+            navigation.navigate('CustomerNotes', { customer })
+          }}
+          >
+            <View style={styles.menuRow}>
+              <Text style={styles.menuText}>Customer Notes</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => {
             navigation.navigate('CustomerToggleActive', { customer })
           }}
           >

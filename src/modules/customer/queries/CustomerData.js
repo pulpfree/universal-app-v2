@@ -24,6 +24,7 @@ export default gql`
         last
         spouse
       }
+      notes
       phones {
         _id
         countryCode

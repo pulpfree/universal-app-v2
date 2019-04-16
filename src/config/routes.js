@@ -7,6 +7,7 @@ import CustomerInfo from '../modules/customer/screens/CustomerInfo'
 import { CustomerInfoMenu } from '../modules/customer/components/CustomerInfoMenu'
 import { DeleteCustomer } from '../modules/customer/components/DeleteCustomer'
 import { ToggleActive as CustomerToggleActive } from '../modules/customer/components/ToggleActive'
+import { Notes as CustomerNotes } from '../modules/customer/components/Notes'
 
 import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../modules/jobsheet/screens/JobSheet'
@@ -154,6 +155,7 @@ const RootStack = createStackNavigator(
     DeleteCustomer,
     DeleteInvoice,
     InvoiceOptions,
+    CustomerNotes,
     SelectFeatures,
     SelectRooms,
     SelectWindowOptions,

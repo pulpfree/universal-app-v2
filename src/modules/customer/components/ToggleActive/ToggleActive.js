@@ -64,7 +64,9 @@ function ToggleActive({ navigation }) {
                   <Button
                     buttonStyle={styles.button}
                     disabled={loading || errorMsg !== ''}
-                    onPress={() => customerToggleActive({ variables: { id: customer._id } })}
+                    onPress={() => customerToggleActive(
+                      { variables: { id: customer._id } }
+                    )}
                     title={loading ? 'Loading...' : `Yes ${toggleLabel} Customer`}
                     titleStyle={styles.buttonTitle}
                     type="solid"
