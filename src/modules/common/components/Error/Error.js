@@ -16,7 +16,7 @@ export default function Error({ error }) {
     bugsnag.notify(error)
   } else {
     errorMsg = error
-    bugsnag.notify(new Error(error))
+    // bugsnag.notify(new Error(error))
   }
 
   return (

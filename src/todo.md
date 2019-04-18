@@ -1,5 +1,5 @@
 # To Do
 
-1. Delete group window
+1. 
 
 ## Completed

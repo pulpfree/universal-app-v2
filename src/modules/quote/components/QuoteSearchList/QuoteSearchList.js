@@ -66,6 +66,7 @@ Totals.defaultProps = {
 class QuoteSearchList extends React.Component {
   _renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => this._onPressItem(item.customerID._id)}>
+    {/* <TouchableOpacity onPress={() => this._onPressItem(item)}> */}
       <ListItem item={item} />
     </TouchableOpacity>
   )
@@ -73,6 +74,26 @@ class QuoteSearchList extends React.Component {
   _onPressItem = (customerID) => {
     const { navigation } = this.props
     navigation.navigate('CustomerInfo', { customerID })
+  }
+
+  _onPressItem2 = (item) => {
+    console.log('item:', item)
+    // const { navigation, setQuoteFromRemote } = this.props
+    // const customerID = navigation.getParam('customerID')
+
+    /* if (item.invoiced) {
+      navigation.navigate('InvoiceOptions', { quote: item, customerID })
+      return
+    }
+    const jobSheetID = item.jobsheetID._id
+    const quoteID = item._id
+    const setRes = setQuoteFromRemote(jobSheetID, quoteID)
+    this.setState(() => ({ loading: true }))
+    // blocking navigate action so that the WindowForm component doesn't refresh unnecessarily
+    setRes.then(() => {
+      this.setState(() => ({ loading: false }))
+      navigation.navigate('QuoteEdit', { quoteID, jobSheetID })
+    }) */
   }
 
   _keyExtractor = item => item._id
@@ -113,10 +134,6 @@ QuoteSearchList.defaultProps = {
 }
 
 const SearchList = graphql(QUOTE_SEARCH, {
-  // fetchPolicy: 'network-only',
-  // fetchPolicy: 'cache-first',
-  // fetchPolicy: 'cache-and-network',
-
   options: (props) => {
     const variables = {
       invoiced: props.invoiced,

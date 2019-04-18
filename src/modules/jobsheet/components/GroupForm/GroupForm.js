@@ -27,6 +27,7 @@ import {
   SET_GROUP_WINDOW_FIELD,
   SET_WINDOW_FROM_GROUP,
   PERSIST_GROUP_WINDOW,
+  REMOVE_GROUP_WINDOW,
 } from '../../mutations/local'
 import { GROUP_QUERY, GROUP_WINDOW_QUERY } from '../../queries/local'
 import { JOBSHEET_DATA } from '../../queries'
@@ -225,6 +226,7 @@ function GroupForm({
             <Query query={GROUP_WINDOW_QUERY}>
               {({ error, data: { groupWindow } }) => { // eslint-disable-line no-shadow
                 if (error) return <Error error={error} />
+                {/* console.log('groupWindow: ', groupWindow) */}
                 return (
                   <View style={styles.formRow}>
                     <View style={styles.formCell}>
@@ -333,7 +335,6 @@ function GroupForm({
                               disabled={groupWindow.specs.sqft <= 0}
                               onPress={() => {
                                 persistGroupWindow()
-                                // navigation.goBack()
                               }}
                               title="Save"
                               buttonStyle={styles.submitButton}
@@ -358,18 +359,24 @@ function GroupForm({
                             color: 'white',
                           }}
                         />
-                        <Button
-                          disabled={groupWindow.specs.sqft <= 0}
-                          // onPress={() => _handleRemove(jobSheetRemoveWindow, window.windowID)}
-                          title="Delete"
-                          buttonStyle={styles.submitButtonSecondary}
-                          style={{ width: 110 }}
-                          icon={{
-                            name: 'ios-trash',
-                            type: 'ionicon',
-                            color: 'white',
-                          }}
-                        />
+                        <Mutation mutation={REMOVE_GROUP_WINDOW}>
+                          {removeGroupWindow => (
+                            <Button
+                              disabled={groupWindow.specs.sqft <= 0}
+                              onPress={() => removeGroupWindow(
+                                { variables: { windowID: groupWindow.windowID } }
+                              )}
+                              title="Delete"
+                              buttonStyle={styles.submitButtonSecondary}
+                              style={{ width: 110 }}
+                              icon={{
+                                name: 'ios-trash',
+                                type: 'ionicon',
+                                color: 'white',
+                              }}
+                            />
+                          )}
+                        </Mutation>
                       </React.Fragment>
                     </View>
                   </View>

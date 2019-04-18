@@ -29,9 +29,9 @@ function InvoiceOptions({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Payments')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Payments', { quote, customerID })}>
             <View style={styles.optRow}>
-              <Text style={styles.optText}>Record Payments</Text>
+              <Text style={styles.optText}>View/Record Payments</Text>
             </View>
           </TouchableOpacity>
 
@@ -41,7 +41,7 @@ function InvoiceOptions({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('DeleteInvoice')}>
+          <TouchableOpacity onPress={() => navigation.navigate('DeleteInvoice', { quote, customerID })}>
             <View style={styles.optRow}>
               <Text style={styles.optText}>Delete Invoice</Text>
             </View>

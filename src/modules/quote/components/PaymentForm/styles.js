@@ -19,9 +19,7 @@ export default StyleSheet.create({
     color: clr.white,
   },
   container: {
-    padding: 25,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
   },
   cell: {
     flex: 1,
@@ -29,6 +27,11 @@ export default StyleSheet.create({
   },
   cellLabel: {
     ...StyleSheet.flatten(formStyles.cellLabel),
+  },
+  formCont: {
+    padding: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   formCell: {
     flexDirection: 'column',
@@ -59,8 +62,10 @@ export default StyleSheet.create({
     borderBottomColor: clr.dkGray,
     borderBottomWidth: 0.5,
     flexDirection: 'row',
-    paddingBottom: 10,
-    paddingTop: 10,
+    padding: 10,
+  },
+  paymentRowHiLite: {
+    backgroundColor: clr.hiLite,
   },
   textInput: {
     ...StyleSheet.flatten(formStyles.textInput),

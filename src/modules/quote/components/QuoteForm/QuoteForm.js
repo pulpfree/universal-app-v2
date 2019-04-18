@@ -207,18 +207,17 @@ const QuoteForm = ({ isNew, navigation }) => {
                   {(createInvoice, { error, loading }) => (
                     <View style={{ flexDirection: 'column' }}>
                       <Button
-                        disabled={quote.version <= 0}
+                        disabled={quote.version <= 0 || loading}
                         onPress={() => createInvoice({
                           variables: { id: quote.quoteID },
                         })}
-                        title="Create Invoice"
+                        title={loading ? 'Stand by...' : 'Create Invoice'}
                         raised
                         color={clr.primary}
                         buttonStyle={styles.submitButton}
                         containerStyle={styles.submitButtonCont}
                       />
                       {error && <Error error={error} />}
-                      {loading && <Loader />}
                     </View>
                   )}
                 </Mutation>

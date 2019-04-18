@@ -621,6 +621,34 @@ export const resolvers = {
       resolvers.Mutation.clearGroupWindow(_, null, { cache })
       return null
     },
+    removeGroupWindow: (_, { windowID }, { cache }) => {
+      const groupID = GROUP_ID_KEY
+      const grpRes = cache.readQuery({ query: GROUP_QUERY, id: groupID })
+      const { group } = grpRes
+
+      // find and remove window from items
+      const itemIdx = ramda.findIndex(ramda.propEq('_id', windowID))(group.items)
+      group.items.splice(itemIdx, 1)
+
+      // calculate costs
+      const costs = calcGroupCosts(group)
+      group.costs = {
+        __typename: 'JobSheetGroupCosts',
+        ...costs,
+      }
+
+      // update total sqft
+      group.specs.sqft = group.items.reduce(
+        (accumulator, curVal) => accumulator + curVal.specs.extendSqft,
+        0
+      )
+
+      // save everything
+      cache.writeData({ data: group, id: groupID })
+      resolvers.Mutation.clearGroupWindow(_, null, { cache })
+
+      return null
+    },
     setGroupDuplicate: (_, args, { cache }) => {
       const id = GROUP_ID_KEY
       const fragment = gql`
@@ -655,6 +683,7 @@ export const resolvers = {
         groupRet = await client.query({
           query: JOBSHEET_GROUP,
           variables: { groupID },
+          fetchPolicy: 'network-only',
         })
       } catch (e) {
         console.error(e) // eslint-disable-line no-console

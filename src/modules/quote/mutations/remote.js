@@ -1,5 +1,21 @@
 import gql from 'graphql-tag'
 
+const PERSIST_PAYMENT = gql`
+mutation PaymentPersist($input: PaymentInput!) {
+  paymentPersist(input: $input) {
+    _id
+    amount
+  }
+}`
+
+const REMOVE_PAYMENT = gql`
+mutation PaymentRemove($id: ID!) {
+  paymentRemove(id: $id) {
+    n
+    ok
+  }
+}`
+
 const PERSIST_QUOTE = gql`
 mutation quotePersist($input: QuoteInput!) {
   quotePersist(input: $input) {
@@ -31,7 +47,9 @@ mutation createInvoice($id: ID!) {
 
 export {
   CREATE_INVOICE,
+  PERSIST_PAYMENT,
   PERSIST_QUOTE,
   PERSIST_QUOTE_DISCOUNT,
+  REMOVE_PAYMENT,
   REMOVE_QUOTE,
 }

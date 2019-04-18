@@ -10,6 +10,7 @@ export default StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 15,
+    paddingBottom: 5,
     justifyContent: 'space-evenly',
     borderBottomWidth: 1,
     borderBottomColor: clr.dkGray,

@@ -25,10 +25,7 @@ const JobSheet = ({ navigation, setProducts }) => {
   const jobSheetID = navigation.getParam('jobSheetID')
 
   useEffect(() => {
-    const pRet = setProducts()
-    pRet.then((data) => {
-      console.log('data:', data)
-    })
+    setProducts()
   }, [])
 
   return (

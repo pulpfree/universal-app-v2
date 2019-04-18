@@ -87,6 +87,11 @@ mutation persistGroupWindow {
   persistGroupWindow @client
 }`
 
+const REMOVE_GROUP_WINDOW = gql`
+mutation removeGroupWindow($windowID: ID!) {
+  removeGroupWindow(windowID: $windowID) @client
+}`
+
 const SET_WINDOW_FROM_GROUP = gql`
 mutation setWindowFromGroup($windowID: ID!) {
   setWindowFromGroup(windowID: $windowID) @client
@@ -130,6 +135,7 @@ export {
   DUPLICATE_GROUP,
   DUPLICATE_WINDOW,
   PERSIST_GROUP_WINDOW,
+  REMOVE_GROUP_WINDOW,
   SET_FIELD,
   SET_GROUP,
   SET_GROUP_FIELD,

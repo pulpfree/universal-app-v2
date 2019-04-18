@@ -87,7 +87,8 @@ class AppWithAuth extends React.Component {
     // Auth.authState('confirmSignIn')
     const user = await Auth.currentAuthenticatedUser()
     if (user) {
-      console.log('fetching user from Auth', user) // eslint-disable-line
+      // console.log('fetching user from Auth', user) // eslint-disable-line
+      console.log('accessToken', user.signInUserSession.accessToken) // eslint-disable-line
       const { email, name } = user.attributes
       const { username } = user
       bugsnag.setUser(username, name, email)
