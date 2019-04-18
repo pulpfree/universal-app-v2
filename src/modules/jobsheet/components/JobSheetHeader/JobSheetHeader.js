@@ -139,4 +139,5 @@ const MenuG = graphql(SET_QUOTE, {
     setQuoteFromRemote: (jobSheetID, quoteID) => mutate({ variables: { jobSheetID, quoteID } }),
   }),
 })(Menu)
+
 export { Header, MenuG as Menu }

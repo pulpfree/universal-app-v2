@@ -11,13 +11,14 @@ import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
 
 import { QUOTE_SEARCH } from '../../queries/remote'
+import { SET_QUOTE } from '../../mutations/local'
 
-import { QuoteListHeader } from '../QuoteListHeader'
 import styles from './styles'
-import { fmtMoney } from '../../../../util/fmt'
-import { withSearch } from '../SearchContext'
 import { Error } from '../../../common/components/Error'
 import { Loader } from '../../../common/components/Loader'
+import { QuoteListHeader } from '../QuoteListHeader'
+import { fmtMoney } from '../../../../util/fmt'
+import { withSearch } from '../SearchContext'
 
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
@@ -64,36 +65,34 @@ Totals.defaultProps = {
 }
 
 class QuoteSearchList extends React.Component {
+  state = {
+    qteLoading: false,
+  }
+
   _renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this._onPressItem(item.customerID._id)}>
-    {/* <TouchableOpacity onPress={() => this._onPressItem(item)}> */}
+    <TouchableOpacity onPress={() => this._onPressItem(item)}>
       <ListItem item={item} />
     </TouchableOpacity>
   )
 
-  _onPressItem = (customerID) => {
-    const { navigation } = this.props
-    navigation.navigate('CustomerInfo', { customerID })
-  }
+  _onPressItem = (item) => {
+    const { invoiced } = this.props
+    const { navigation, setQuoteFromRemote } = this.props
+    const customerID = item.customerID._id
+    const jobSheetID = item.jobsheetID._id
+    const quoteID = item._id
 
-  _onPressItem2 = (item) => {
-    console.log('item:', item)
-    // const { navigation, setQuoteFromRemote } = this.props
-    // const customerID = navigation.getParam('customerID')
-
-    /* if (item.invoiced) {
+    if (invoiced) {
       navigation.navigate('InvoiceOptions', { quote: item, customerID })
       return
     }
-    const jobSheetID = item.jobsheetID._id
-    const quoteID = item._id
     const setRes = setQuoteFromRemote(jobSheetID, quoteID)
-    this.setState(() => ({ loading: true }))
+    this.setState(() => ({ qteLoading: true }))
     // blocking navigate action so that the WindowForm component doesn't refresh unnecessarily
     setRes.then(() => {
-      this.setState(() => ({ loading: false }))
+      this.setState(() => ({ qteLoading: false }))
       navigation.navigate('QuoteEdit', { quoteID, jobSheetID })
-    }) */
+    })
   }
 
   _keyExtractor = item => item._id
@@ -101,8 +100,9 @@ class QuoteSearchList extends React.Component {
   render() {
     const { data } = this.props
     const { error, loading } = data
+    const { qteLoading } = this.state
 
-    if (loading) return <Loader />
+    if (loading || qteLoading) return <Loader />
     if (error) return <Error error={error} />
 
     const { searchQuotes } = data
@@ -127,7 +127,9 @@ class QuoteSearchList extends React.Component {
 }
 QuoteSearchList.propTypes = {
   data: PropTypes.instanceOf(Object),
+  invoiced: PropTypes.bool.isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  setQuoteFromRemote: PropTypes.func.isRequired,
 }
 QuoteSearchList.defaultProps = {
   data: null,
@@ -151,8 +153,15 @@ const SearchList = graphql(QUOTE_SEARCH, {
   },
 })
 
+const QuoteFromRemote = graphql(SET_QUOTE, {
+  props: ({ mutate }) => ({
+    setQuoteFromRemote: (jobSheetID, quoteID) => mutate({ variables: { jobSheetID, quoteID } }),
+  }),
+})
+
 export default compose(
   withSearch,
   withNavigation,
+  QuoteFromRemote,
   SearchList,
 )(QuoteSearchList)
