@@ -25,7 +25,7 @@ const JobSheet = ({ navigation, setProducts }) => {
   const jobSheetID = navigation.getParam('jobSheetID')
 
   useEffect(() => {
-    setProducts()
+    // setProducts()
   }, [])
 
   return (

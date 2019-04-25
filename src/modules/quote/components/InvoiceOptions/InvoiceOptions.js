@@ -41,6 +41,12 @@ function InvoiceOptions({ navigation }) {
             </View>
           </TouchableOpacity>
 
+          <TouchableOpacity>
+            <View style={styles.optRow}>
+              <Text style={styles.optText}>View Worksheet</Text>
+            </View>
+          </TouchableOpacity>
+
           <TouchableOpacity onPress={() => navigation.navigate('DeleteInvoice', { quote, customerID })}>
             <View style={styles.optRow}>
               <Text style={styles.optText}>Delete Invoice</Text>

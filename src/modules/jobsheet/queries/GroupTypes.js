@@ -6,7 +6,7 @@ query GroupTypes {
     _id
     name
   }
-  products @client {
+  products {
     _id
     name
   }

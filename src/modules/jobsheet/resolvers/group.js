@@ -22,7 +22,7 @@ const GROUP_WINDOW_ID_KEY = 'JobSheetGroupItem:1'
 export const defaults = {
   group: {
     __typename: 'JobSheetGroup',
-    _id: GROUP_ID,
+    id: GROUP_ID,
     groupID: null,
     jobsheetID: '',
     costs: {
@@ -318,9 +318,9 @@ export const resolvers = {
     },
     setWindowFromGroup: (_, { windowID }, { cache }) => {
       const id = GROUP_WINDOW_ID_KEY
-      const res = cache.readQuery({ query: GROUP_QUERY, id })
+      const res = cache.readQuery({ query: GROUP_QUERY, id: GROUP_ID_KEY })
       const { group: { items } } = res
-      const window = items.find(item => (item._id === windowID))
+      const window = items.find(item => (item._id.toString() === windowID))
       const {
         costs,
         dims,
@@ -350,7 +350,7 @@ export const resolvers = {
               ...dims.width,
             },
           },
-          productID,
+          productID: productID.toString(),
           product: {
             __typename: 'Product',
             name: product.name,
@@ -362,7 +362,6 @@ export const resolvers = {
           },
         },
       }
-
       cache.writeData({ data, id })
       return null
     },
@@ -421,6 +420,7 @@ export const resolvers = {
         default:
           data = { ...res, [field]: value }
       }
+
       cache.writeFragment({ fragment, id, data })
       if (isSetSize) {
         resolvers.Mutation.setGroupWindowDetails(_, null, { cache })
@@ -629,7 +629,6 @@ export const resolvers = {
       // find and remove window from items
       const itemIdx = ramda.findIndex(ramda.propEq('_id', windowID))(group.items)
       group.items.splice(itemIdx, 1)
-
       // calculate costs
       const costs = calcGroupCosts(group)
       group.costs = {
@@ -718,7 +717,6 @@ export const resolvers = {
           },
         },
       }
-
       cache.writeData({ data, id })
       return data
     },

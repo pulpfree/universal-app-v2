@@ -56,7 +56,7 @@ const WINDOW_QUERY = gql`{
 
 const GROUP_QUERY = gql`{
   group @client {
-    _id
+    id
     groupID
     jobsheetID
     costs {
@@ -125,7 +125,6 @@ const GROUP_QUERY = gql`{
       groupID
       groupType {
         _id
-        # name
       }
       installType
       options
@@ -142,7 +141,7 @@ const GROUP_QUERY = gql`{
 
 const GROUP_WINDOW_QUERY = gql`{
   groupWindow @client {
-    # _id
+    _id
     windowID
     costs {
       extendUnit

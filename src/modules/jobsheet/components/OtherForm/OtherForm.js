@@ -64,7 +64,6 @@ function OtherForm({
     <Query query={OTHER_QUERY}>
       {({ error, data: { other } }) => {
         if (error) return <Error error={error} />
-        console.log('data.other in Query: ', other)
         return (
           <KeyboardAwareScrollView style={styles.formCont}>
             <FormHeader label="Details" />

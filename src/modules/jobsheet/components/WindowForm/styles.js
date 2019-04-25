@@ -69,7 +69,7 @@ export default StyleSheet.create({
     height: 35,
     paddingLeft: 6,
     paddingRight: 4,
-    width: 50,
+    width: 55,
   },
   cellLabel: {
     color: clr.dkGray,

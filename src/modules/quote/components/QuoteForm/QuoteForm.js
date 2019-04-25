@@ -4,6 +4,7 @@ import {
   AlertIOS,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native'
 import { Button } from 'react-native-elements'
@@ -59,13 +60,16 @@ const QuoteForm = ({ isNew, navigation }) => {
     <Query query={QUOTE_JOBSHEET}>
       {({ data: { jobSheet, quote } }) => {
         const { groups, other, windows } = jobSheet
+        const customerID = quote.customerID._id
 
         return (
           <View style={styles.container}>
             <View style={styles.titleHeader}>
-              <Text style={styles.titleText}>
-                {`${quote.customerID.name.first} ${quote.customerID.name.last} - ${quote.jobsheetID.addressID.street1}, ${quote.jobsheetID.addressID.city} - ${quote.number}/${quote.version}`}
-              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('CustomerInfo', { customerID })}>
+                <Text style={styles.titleText}>
+                  {`${quote.customerID.name.first} ${quote.customerID.name.last} - ${quote.jobsheetID.addressID.street1}, ${quote.jobsheetID.addressID.city} - ${quote.number}/${quote.version}`}
+                </Text>
+              </TouchableOpacity>
             </View>
             <ScrollView style={styles.scrollContainer}>
               <View style={styles.navBar}>

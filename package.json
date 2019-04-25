@@ -6,6 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "run-ios": "react-native run-ios --simulator='iPad Air 2 (12.2)'",
+    "devtools": "react-devtools",
     "storybook": "storybook start"
   },
   "dependencies": {
@@ -25,7 +26,7 @@
     "mongoose": "5.4.20",
     "ramda": "0.26.1",
     "react": "16.8.3",
-    "react-apollo": "2.5.3",
+    "react-apollo": "2.5.4",
     "react-native": "0.59.3",
     "react-native-elements": "1.1.0",
     "react-native-exception-handler": "2.10.7",

@@ -25,6 +25,7 @@ import { SearchProvider } from '../../src/modules/customer/components/SearchCont
 
 import JobSheetNew from '../../src/modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../../src/modules/jobsheet/screens/JobSheet'
+import WorkSheet from '../../src/modules/jobsheet/screens/WorkSheet'
 import { JobSheetList } from '../../src/modules/jobsheet/components/JobSheetList'
 import { GroupList } from '../../src/modules/jobsheet/components/GroupList'
 import { OtherList } from '../../src/modules/jobsheet/components/OtherList'
@@ -36,7 +37,7 @@ import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeat
 // import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
 import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
 // import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
-import { Notes } from '../../src/modules/jobsheet/components/Notes'
+import { Notes } from '../../src/modules/customer/components/Notes'
 
 import Payments from '../../src/modules/quote/screens/Payments'
 import QuotePreview from '../../src/modules/quote/screens/QuotePreview'
@@ -221,6 +222,9 @@ storiesOf('JobSheets', module)
   ))
   .add('select job features modal', () => (
     <SelectFeatures />
+  ))
+  .add('work sheet screen', () => (
+    <WorkSheet />
   ))
 
 /*

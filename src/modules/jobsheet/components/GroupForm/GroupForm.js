@@ -49,7 +49,9 @@ const Window = ({ item }) => {
   return (
     <Mutation mutation={SET_WINDOW_FROM_GROUP}>
       {setWindowFromGroup => (
-        <TouchableOpacity onPress={() => setWindowFromGroup({ variables: { windowID: item._id } })}>
+        <TouchableOpacity
+          onPress={() => setWindowFromGroup({ variables: { windowID: item._id.toString() } })}
+        >
           <View style={styles.windowRow}>
             <Text style={[styles.windowCell, { flex: 0.5 }]}>{item.qty}</Text>
             <Text style={[styles.windowCell, { flex: 2 }]}>{item.product.name}</Text>
@@ -107,11 +109,16 @@ function GroupForm({
     setDuplicate(true)
     func()
   }
-
   return (
-    <Query query={GROUP_QUERY}>
+    <Query
+      query={GROUP_QUERY}
+      // fetchPolicy="network-only"
+      // fetchPolicy="cache-and-network"
+      // fetchPolicy="cache-first"
+    >
       {({ error, data: { group } }) => {
         if (error) return <Error error={error} />
+        console.log('group: ', group)
         return (
           <KeyboardAwareScrollView style={styles.formCont}>
             {isDuplicate && (
@@ -226,7 +233,7 @@ function GroupForm({
             <Query query={GROUP_WINDOW_QUERY}>
               {({ error, data: { groupWindow } }) => { // eslint-disable-line no-shadow
                 if (error) return <Error error={error} />
-                {/* console.log('groupWindow: ', groupWindow) */}
+                console.log('groupWindow: ', groupWindow)
                 return (
                   <View style={styles.formRow}>
                     <View style={styles.formCell}>
@@ -253,7 +260,7 @@ function GroupForm({
                         itemStyle={styles.pickerItem}
                         onValueChange={value => setGroupWindowField('productID', value)}
                         selectedValue={groupWindow.productID}
-                        style={styles.picker}
+                        style={[styles.picker, { width: 170 }]}
                       >
                         <Picker.Item label="Select" value="" />
                         {products.map(p => (
@@ -393,7 +400,7 @@ function GroupForm({
               <Text style={styles.windowCostCell}>Unit</Text>
               <Text style={styles.windowCostCell}>Extend Unit</Text>
             </View>
-            {group.items.length && group.items.map(item => (
+            {group.items.length > 0 && group.items.map(item => (
               <Window item={item} key={item._id} />
             ))}
 

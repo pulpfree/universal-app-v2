@@ -284,6 +284,7 @@ export const prepareGroupDoc = (group) => {
   const doc = { ...group }
 
   delete doc.__typename
+  delete doc.id
   delete doc.costs.__typename
   delete doc.dims.__typename
   delete doc.dims.height.__typename
