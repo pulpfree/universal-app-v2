@@ -15,6 +15,7 @@ export default function PDF({ filePath }) {
       //   console.log(`filePath: ${fPath}`)
       // }}
       onError={(err) => {
+        console.error('error uri: ', filePath) // eslint-disable-line no-console
         console.error('error: ', err) // eslint-disable-line no-console
       }}
       style={styles.pdfCont}

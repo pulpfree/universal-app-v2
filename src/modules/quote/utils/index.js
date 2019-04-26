@@ -33,6 +33,13 @@ export const pdfPreviewArgs = quote => (
   }
 )
 
+export const workSheetArgs = quote => (
+  {
+    number: quote.number,
+    type: 'worksheet',
+  }
+)
+
 export const calculateDiscount = (quote, discount, description) => {
   const taxMultiplier = parseFloat(constants.HST / 100)
   const taxDivisor = parseFloat(1 + taxMultiplier)

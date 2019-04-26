@@ -3,19 +3,16 @@ import PropTypes from 'prop-types'
 import { View } from 'react-native'
 import { withNavigation } from 'react-navigation'
 
-import {
-  fetchApi,
-  Menu,
-  PDF,
-  styles,
-} from '../components/QuotePreview'
+import { Menu, styles } from '../components/QuotePreview'
+import { PDF } from '../../common/components/PDFViewer'
+import signedUrlApi from '../../common/apis/signedUrlApi'
 import { Error } from '../../common/components/Error'
 import { Loader } from '../../common/components/Loader'
 
 function QuotePreview({ navigation }) {
   const previewArgs = navigation.getParam('previewArgs')
   const customerID = navigation.getParam('customerID')
-  const { data, isLoading, isError } = fetchApi(previewArgs)
+  const { data, isLoading, isError } = signedUrlApi(previewArgs)
   const { filePath, signedURL } = data
   const haveFile = filePath !== ''
 

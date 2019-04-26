@@ -4,9 +4,9 @@ import {
 } from 'react'
 import RNFetchBlob from 'rn-fetch-blob'
 
-import { PDF_SIGNED_URL } from '../../queries/remote'
+import { PDF_SIGNED_URL } from '../queries/remote'
 
-import client from '../../../../apollo'
+import client from '../../../apollo'
 
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
@@ -35,7 +35,7 @@ const dataFetchReducer = (state, action) => {
   }
 }
 
-const fetchApi = (args) => {
+const signedUrlApi = (args) => {
   const [state, dispatch] = useReducer(dataFetchReducer, {
     isLoading: false,
     isError: false,
@@ -87,7 +87,7 @@ const fetchApi = (args) => {
     return () => {
       didCancel = true
       RNFetchBlob.fs.unlink(filePath).then(() => {
-        console.log('filePath unlinked in fetchApi') // eslint-disable-line no-console
+        console.log('filePath unlinked in signedUrlApi') // eslint-disable-line no-console
       })
     }
   }, [args])
@@ -95,4 +95,4 @@ const fetchApi = (args) => {
   return { ...state }
 }
 
-export default fetchApi
+export default signedUrlApi

@@ -6,6 +6,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
+    minHeight: 250,
   },
   text: {
     backgroundColor: clr.alert,

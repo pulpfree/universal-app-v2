@@ -1,8 +1,9 @@
 # To Do
 
-1. 
+1. Display customer notes in customer info
+1. Invoice # 9018 PDF not displaying. Appears that the file is corrupted when saving locally, size is a fractions of what it should be: 292 bytes??
 
 ## Completed
 
-- added link to Customer Info from Quote Preview
-- fixed issue where last payment is not removed from quotePrice values
+- display customer notes in customer info
+- integrated worksheet pdf

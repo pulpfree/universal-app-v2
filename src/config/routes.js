@@ -11,6 +11,7 @@ import { Notes as CustomerNotes } from '../modules/customer/components/Notes'
 
 import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../modules/jobsheet/screens/JobSheet'
+import WorkSheet from '../modules/jobsheet/screens/WorkSheet'
 import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
 import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
 import { SelectTrim } from '../modules/jobsheet/components/SelectTrim'
@@ -126,6 +127,12 @@ const HomeStack = createStackNavigator(
       screen: Payments,
       navigationOptions: {
         title: 'Invoice Payments',
+      },
+    },
+    WorkSheet: {
+      screen: WorkSheet,
+      navigationOptions: {
+        title: 'WorkSheet PDF',
       },
     },
   },

@@ -8,5 +8,3 @@ export const PaymentTypes = [
   { key: 'creditCard', label: 'Credit Card' },
   { key: 'eTransfer', label: 'E-Transfer' },
 ]
-
-export const AdminEmail = 'Joe DiMarco <joe@universalwindows.ca>'

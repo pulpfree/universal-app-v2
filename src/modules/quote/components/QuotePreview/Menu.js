@@ -13,7 +13,7 @@ import { Error } from '../../../common/components/Error'
 import { capitalize } from '../../../../util/fmt'
 import { getMobilePhone, stripPhoneDigits } from '../../../../util/utils'
 import { styles } from './index'
-import { AdminEmail } from '../../config/constants'
+import { AdminEmail } from '../../../../config/constants'
 
 const setFileParams = file => (
   {

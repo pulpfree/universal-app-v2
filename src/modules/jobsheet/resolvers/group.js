@@ -722,7 +722,11 @@ export const resolvers = {
     },
   },
   Query: {
-
+    group: (_, _args, { cache }) => {
+      const res = cache.readQuery({ query: GROUP_QUERY, id: GROUP_ID_KEY })
+      // console.log('res.group:', res.group)
+      return res.group
+    },
   },
 }
 export const typeDefs = `

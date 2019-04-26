@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   Picker,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -88,9 +89,10 @@ function GroupForm({
   const [isDuplicate, setDuplicate] = useState(false)
 
   const costsInstall = useRef(null)
+  const scrollTop = useRef(null)
 
   const _handleRemove = (func, groupID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Group',
       'Are you sure you want to delete this item?',
       [
@@ -108,6 +110,7 @@ function GroupForm({
   const _handleDuplicate = (func) => {
     setDuplicate(true)
     func()
+    scrollTop.current.scrollTo({ x: 0, y: 0, animated: true })
   }
   return (
     <Query
@@ -118,9 +121,11 @@ function GroupForm({
     >
       {({ error, data: { group } }) => {
         if (error) return <Error error={error} />
-        console.log('group: ', group)
+        // console.log('group: ', group)
+        //console.log('data.group: ', data.group)
+        // const { group } = data
         return (
-          <KeyboardAwareScrollView style={styles.formCont}>
+          <KeyboardAwareScrollView style={styles.formCont} ref={scrollTop}>
             {isDuplicate && (
               <Duplicate />
             )}
@@ -233,7 +238,7 @@ function GroupForm({
             <Query query={GROUP_WINDOW_QUERY}>
               {({ error, data: { groupWindow } }) => { // eslint-disable-line no-shadow
                 if (error) return <Error error={error} />
-                console.log('groupWindow: ', groupWindow)
+                // console.log('groupWindow: ', groupWindow)
                 return (
                   <View style={styles.formRow}>
                     <View style={styles.formCell}>

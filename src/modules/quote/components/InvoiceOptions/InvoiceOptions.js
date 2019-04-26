@@ -5,7 +5,7 @@ import { withNavigation } from 'react-navigation'
 
 import { ModalHeader } from '../../../common/components/ModalHeader'
 import styles from './styles'
-import { pdfPreviewArgs } from '../../utils'
+import { pdfPreviewArgs, workSheetArgs } from '../../utils'
 
 function InvoiceOptions({ navigation }) {
   const quote = navigation.getParam('quote')
@@ -41,7 +41,13 @@ function InvoiceOptions({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate(
+              'WorkSheet',
+              { fileArgs: workSheetArgs(quote) }
+            )
+          }}
+          >
             <View style={styles.optRow}>
               <Text style={styles.optText}>View Worksheet</Text>
             </View>

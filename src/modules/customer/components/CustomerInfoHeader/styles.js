@@ -7,6 +7,9 @@ export default StyleSheet.create({
     width: 140,
   },
   container: {
+    flexDirection: 'column',
+  },
+  infoCont: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,
@@ -24,8 +27,18 @@ export default StyleSheet.create({
     color: clr.dkGray,
     fontWeight: '600',
   },
-  value: {
+  notesCont: {
+    backgroundColor: clr.ltGray,
+    borderTopColor: clr.mdGray,
+    borderTopWidth: 0.5,
+    padding: 5,
+    paddingLeft: 10,
+    flexDirection: 'row',
   },
+  notesText: {
+    fontStyle: 'italic',
+  },
+  value: {},
   spacer: {
     height: 15,
   },
