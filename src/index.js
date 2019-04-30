@@ -9,8 +9,6 @@ import { withAuthenticator } from 'aws-amplify-react-native'
 import { setJSExceptionHandler, setNativeExceptionHandler } from 'react-native-exception-handler'
 import { Client } from 'bugsnag-react-native'
 
-// import { Logger } from 'aws-amplify'
-
 import appSyncConfig from './aws-exports'
 import client from './apollo'
 
@@ -25,9 +23,8 @@ import { RequireNewPassword } from './modules/auth/components/RequireNewPassword
 import { BugsnagAPIKey } from './config/constants'
 
 
+// use for debugging
 // Amplify.Logger.LOG_LEVEL = 'DEBUG'
-// const logger = new Logger('foo', 'INFO')
-
 
 const awsExports = {
   Auth: {
@@ -89,8 +86,6 @@ const App = () => (
 
 class AppWithAuth extends React.Component {
   async componentWillMount() {
-    // await client.resetStore()
-    // Auth.authState('confirmSignIn')
     const user = await Auth.currentAuthenticatedUser()
     if (user) {
       // console.log('fetching user from Auth', user) // eslint-disable-line
@@ -109,11 +104,9 @@ class AppWithAuth extends React.Component {
   }
 
   render() {
-    console.log('this.props.authState:', this.props.authState)
-    // logger.debug('callback data')
+    // console.log('authState in AppWithAuth:', this.props.authState)
     return (
-      // <App onStateChange={this.handleAuthStateChange} />
-      <App />
+      <App onStateChange={this.handleAuthStateChange} />
     )
   }
 }

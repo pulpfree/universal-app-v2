@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Auth } from 'aws-amplify'
 import { View, Text } from 'react-native'
 
-
 import { styles } from './index'
-
 
 const Welcome = () => {
   const [user, setUser] = useState(null)
@@ -17,9 +15,6 @@ const Welcome = () => {
     fetchUser()
   }, [])
 
-  // We query here for products as a means to 'warm' the lambda, and
-  // to speed up 'products' calls later on.
-  // Using 'network-only' as fetchPolicy to ensure we are indeed making a hit on lambda
   return (
     <View style={styles.view}>
       {user && (
