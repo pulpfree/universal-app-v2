@@ -11,6 +11,7 @@ query($year: String, $invoiced: Boolean, $closed: Boolean) {
       number
       version
       closed
+      invoiced
       customerID {
         _id
         name {

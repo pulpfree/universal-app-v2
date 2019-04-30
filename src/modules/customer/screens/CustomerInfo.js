@@ -25,7 +25,7 @@ export default function CustomerInfo({ navigation }) {
       query={CUSTOMER_DATA}
       skip={!customerID}
       variables={{ customerID }}
-      // fetchPolicy="cache-and-network"
+      fetchPolicy="cache-and-network"
       // fetchPolicy="network-only"
     >
       {({

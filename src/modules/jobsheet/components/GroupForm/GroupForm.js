@@ -589,23 +589,23 @@ function GroupForm({
                 ]}
                 onCompleted={() => navigation.goBack()}
               >
-                {(persistGroup, { error, loading }) => ( // eslint-disable-line no-shadow
+                {(persistGroup, { error: grpError, loading }) => (
                   <React.Fragment>
                     <Button
-                      disabled={loading || !group.costs.extendTotal}
-                      onPress={() => {
-                        persistGroup({ variables: { input: prepareGroupDoc(group) } })
-                      }}
-                      title="Save Group"
                       buttonStyle={styles.submitButton}
-                      style={{ width: 200 }}
+                      disabled={loading || !group.costs.extendTotal}
                       icon={{
                         name: 'ios-send',
                         type: 'ionicon',
                         color: 'white',
                       }}
+                      onPress={() => {
+                        persistGroup({ variables: { input: prepareGroupDoc(group) } })
+                      }}
+                      style={{ width: 200 }}
+                      title={loading ? 'Stand by...' : 'Save Group'}
                     />
-                    {error && <Error error={error} />}
+                    {grpError && <Error error={grpError} />}
                   </React.Fragment>
                 )}
               </Mutation>

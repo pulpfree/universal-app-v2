@@ -114,6 +114,24 @@ Regards, Universal Windows ${signedURL}`
   return true
 }
 
+const handleAdminSMS = (customer, file, signedURL) => {
+  const customerName = `${customer.name.first} ${customer.name.last}`
+  const fileParams = setFileParams(file)
+  const body = `Hello Administrator,
+Please find below a link to the ${fileParams.type}: #${fileParams.number} for customer ${customerName}.
+Regards, Universal Windows ${signedURL}`
+
+  SendSMS.send({
+    body,
+    recipients: [],
+    successTypes: ['sent', 'queued'],
+    // allowAndroidSendWithoutReadPermission: true
+  }, (completed, cancelled, error) => {
+    console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + ' error: ' + error) // eslint-disable-line
+  })
+  return true
+}
+
 export default function Menu({
   customerID,
   fileArgs,
@@ -140,14 +158,14 @@ export default function Menu({
               buttonStyle={styles.button}
               disabled={!filePath || loading || !customer.email}
               onPress={() => handleEmail(customer, file)}
-              title="Email PDF"
+              title="Email Customer"
               titleStyle={styles.buttonCont}
             />
             <Button
               buttonStyle={styles.button}
               disabled={!filePath || loading || !getMobilePhone(customer.phones)}
               onPress={() => handleSMS(customer, file, signedURL)}
-              title="Message PDF"
+              title="Message Customer"
               titleStyle={styles.buttonCont}
             />
             <Button
@@ -155,6 +173,13 @@ export default function Menu({
               disabled={!filePath || loading}
               onPress={() => handleAdminEmail(customer, file)}
               title="Email Admin"
+              titleStyle={styles.buttonCont}
+            />
+            <Button
+              buttonStyle={styles.buttonSecondary}
+              disabled={!filePath || loading}
+              onPress={() => handleAdminSMS(customer, file, signedURL)}
+              title="Message Admin"
               titleStyle={styles.buttonCont}
             />
             {error && <Error error={error} />}

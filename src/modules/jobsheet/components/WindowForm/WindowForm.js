@@ -124,8 +124,8 @@ function WindowForm({
                 <View style={styles.dimCell}>
                   <TextInput
                     keyboardType="numeric"
-                    style={styles.dimInput}
                     onChangeText={text => setField('dims.width.inch', text)}
+                    style={styles.dimInput}
                     value={window.dims.width.inch.toString()}
                   />
                   <Picker
@@ -149,8 +149,9 @@ function WindowForm({
                 <Text style={styles.cellLabel}>Height</Text>
                 <View style={styles.dimCell}>
                   <TextInput
-                    style={styles.dimInput}
+                    keyboardType="numeric"
                     onChangeText={text => setField('dims.height.inch', text)}
+                    style={styles.dimInput}
                     value={window.dims.height.inch.toString()}
                   />
                   <Picker
@@ -379,15 +380,14 @@ function WindowForm({
                 ]}
                 onCompleted={() => navigation.goBack()}
               >
-                {(persistWindow, { error }) => ( // eslint-disable-line no-shadow
+                {(persistWindow, { error: winError, loading }) => (
                   <React.Fragment>
                     <Button
-                      disabled={window.costs.extendTotal <= 0}
+                      disabled={window.costs.extendTotal <= 0 || loading}
                       onPress={() => {
                         persistWindow({ variables: { input: prepareDoc(window) } })
-                        navigation.goBack()
                       }}
-                      title="Submit"
+                      title={loading ? 'Stand by...' : 'Save Window'}
                       buttonStyle={styles.submitButton}
                       style={{ width: 200 }}
                       icon={{
@@ -396,7 +396,7 @@ function WindowForm({
                         color: 'white',
                       }}
                     />
-                    {error && <Error error={error} />}
+                    {winError && <Error error={winError} />}
                   </React.Fragment>
                 )}
               </Mutation>

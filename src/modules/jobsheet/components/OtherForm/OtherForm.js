@@ -181,24 +181,23 @@ function OtherForm({
                 ]}
                 onCompleted={() => navigation.goBack()}
               >
-                {(persistOther, { error, loading }) => ( // eslint-disable-line no-shadow
+                {(persistOther, { itemError, loading }) => (
                   <React.Fragment>
                     <Button
-                      disabled={loading || !other.costs.extendTotal}
-                      onPress={() => {
-                        persistOther({ variables: { input: prepareOtherDoc(other) } })
-                        navigation.goBack()
-                      }}
-                      title="Submit"
                       buttonStyle={styles.submitButton}
-                      style={{ width: 200 }}
+                      disabled={loading || !other.costs.extendTotal}
                       icon={{
                         name: 'ios-send',
                         type: 'ionicon',
                         color: 'white',
                       }}
+                      onPress={() => {
+                        persistOther({ variables: { input: prepareOtherDoc(other) } })
+                      }}
+                      style={{ width: 200 }}
+                      title={loading ? 'Stand by...' : 'Save Item'}
                     />
-                    {error && <Error error={error} />}
+                    {itemError && <Error error={itemError} />}
                   </React.Fragment>
                 )}
               </Mutation>

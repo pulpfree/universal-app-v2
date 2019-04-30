@@ -1,19 +1,49 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
+  Alert,
   Text,
   View,
 } from 'react-native'
+import Mailer from 'react-native-mail'
+import SendSMS from 'react-native-sms'
 import { Icon } from 'react-native-elements'
 
 import styles from './styles'
 import clr from '../../../../config/colors'
-import { linkEmail, linkCall, linkMessage } from '../../../../util/links'
+import { linkCall, linkMessage } from '../../../../util/links'
+
+const handleEmail = (customer) => {
+  const params = {
+    recipients: [customer.email],
+  }
+  Mailer.mail(params, (error, event) => {
+    Alert.alert(
+      error,
+      event,
+      [
+        { text: 'Ok' },
+      ],
+      { cancelable: true }
+    )
+  })
+}
+
+const handleSMS = (mobile) => {
+  SendSMS.send({
+    recipients: [mobile],
+    successTypes: ['sent', 'queued'],
+  }, (completed, cancelled, error) => {
+    console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + ' error: ' + error) // eslint-disable-line
+  })
+  return true
+}
 
 export default function ContactSheet({ navigation }) {
-  const data = navigation.getParam('customer')
-  const mobile = data.phones.find(ph => (ph._id === 'mobile'))
-  const home = data.phones.find(ph => (ph._id === 'home'))
+  const customer = navigation.getParam('customer')
+  const { email } = customer
+  const mobile = customer.phones.find(ph => (ph._id === 'mobile'))
+  const home = customer.phones.find(ph => (ph._id === 'home'))
 
   return (
     <View style={styles.container}>
@@ -32,23 +62,23 @@ export default function ContactSheet({ navigation }) {
 
         <View style={styles.infoCont}>
           <Text style={styles.name}>
-            {`${data.name.first} ${data.name.last}`}
+            {`${customer.name.first} ${customer.name.last}`}
           </Text>
 
-          <View style={styles.row}>
-            <Text style={styles.label}>Email</Text>
-            <Text style={styles.value}>{data.email}</Text>
-            {data.email && (
+          {email && (
+            <View style={styles.row}>
+              <Text style={styles.label}>Email</Text>
+              <Text style={styles.value}>{customer.email}</Text>
               <Icon
                 color={clr.primary}
                 containerStyle={styles.button}
                 name="ios-mail"
-                onPress={() => linkEmail(data.email)}
+                onPress={() => handleEmail(customer)}
                 size={30}
                 type="ionicon"
               />
-            )}
-          </View>
+            </View>
+          )}
 
           {mobile && (
             <View style={styles.row}>
@@ -58,7 +88,7 @@ export default function ContactSheet({ navigation }) {
                 color={clr.primary}
                 containerStyle={styles.button}
                 name="ios-text"
-                onPress={() => linkMessage(mobile.number)}
+                onPress={() => handleSMS(mobile.number)}
                 size={30}
                 type="ionicon"
               />
@@ -90,7 +120,7 @@ export default function ContactSheet({ navigation }) {
 
           <View style={styles.row}>
             <Text style={styles.label}>Address</Text>
-            <Text style={styles.value}>{`${data.address.street1}, ${data.address.city}`}</Text>
+            <Text style={styles.value}>{`${customer.address.street1}, ${customer.address.city}`}</Text>
             <Icon
               name="map"
               type="font-awesome"

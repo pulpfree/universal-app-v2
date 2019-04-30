@@ -7,6 +7,8 @@ import { LogoutButton } from '../LogoutButton'
 import clr from '../../../../config/colors'
 import styles from './styles'
 
+import { Logout } from '../../../auth/components/Logout'
+
 export default function Menu({ navigation }) {
   return (
     <React.Fragment>

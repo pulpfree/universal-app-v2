@@ -3,12 +3,16 @@ import * as Yup from 'yup'
 import { withFormik } from 'formik'
 import { withNavigation } from 'react-navigation'
 import { compose, graphql } from 'react-apollo'
+import { Client } from 'bugsnag-react-native'
 
 import { PERSIST_CUSTOMER } from '../../mutations/remote'
 import { CUSTOMER } from '../../queries'
 
 import CustomerForm from './CustomerForm'
 import { extractPhones, phonesArToObj } from '../../../../util/utils'
+import { BugsnagAPIKey } from '../../../../config/constants'
+
+const bugsnag = new Client(BugsnagAPIKey)
 
 const CustomerSchema = Yup.object().shape({
   name: Yup.object().shape({
@@ -98,15 +102,22 @@ const Form = withFormik({
       variables.customerInput._id = values._id
       variables.addressInput._id = address._id
     }
+    if (variables.customerInput.email === '') {
+      delete variables.customerInput.email
+    }
     let graphqlReturn
     try {
       graphqlReturn = await customerPersist(variables)
       if (graphqlReturn && graphqlReturn.errors) {
         console.log('graphqlReturn.errors:', graphqlReturn.errors) // eslint-disable-line no-console
-        return false
+        const error = new Error(graphqlReturn.errors[0].message)
+        bugsnag.notify(error)
+        throw new Error(error)
       }
     } catch (error) {
       console.log('error:', error) // eslint-disable-line no-console
+      bugsnag.notify(error)
+      throw new Error(error)
     }
     return true
   },

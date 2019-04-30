@@ -44,7 +44,7 @@ export default function CustomerInfo({ customer, navigation }) {
         </View>
 
         <View style={styles.column}>
-          {customer.email !== '' && (
+          {customer.email && customer.email !== '' && (
             <View style={styles.row}>
               <Text style={styles.label}>Email</Text>
               <Text style={styles.value}>{customer.email}</Text>
