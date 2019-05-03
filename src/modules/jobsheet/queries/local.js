@@ -56,6 +56,7 @@ const WINDOW_QUERY = gql`{
 
 const GROUP_QUERY = gql`{
   group @client(always: true) {
+  # group @client {
     id
     groupID
     jobsheetID
@@ -125,6 +126,7 @@ const GROUP_QUERY = gql`{
       groupID
       groupType {
         _id
+      # __typename
       }
       installType
       options
@@ -133,10 +135,6 @@ const GROUP_QUERY = gql`{
       trim
     }
   }
-  # products @client {
-  #   _id
-  #   name
-  # }
 }`
 
 const GROUP_WINDOW_QUERY = gql`{

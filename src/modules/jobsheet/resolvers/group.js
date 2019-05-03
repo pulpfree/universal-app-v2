@@ -105,7 +105,7 @@ export const defaults = {
       groupType: {
         __typename: 'JobSheetGroupType',
         _id: '',
-        name: '',
+        // name: '',
       },
       installType: '',
       options: '',
@@ -616,6 +616,8 @@ export const resolvers = {
         0
       )
 
+      console.log('data in persistGroupWindow:', group)
+      console.log('id in persistGropuWindow:', groupID)
       cache.writeData({ data: group, id: groupID })
       resolvers.Mutation.clearGroupWindow(_, null, { cache })
       return null
@@ -675,6 +677,7 @@ export const resolvers = {
       return null
     },
     setGroupFromRemote: async (_, { groupID }, { cache }) => {
+      console.log('groupID in setGroupFromRemote:', groupID)
       const id = GROUP_ID_KEY
       let groupRet
       try {
@@ -716,13 +719,17 @@ export const resolvers = {
           },
         },
       }
+      console.log('data written to cache in setGroupFromRemote:', data.group)
+      // client.writeData({ data, id })
       cache.writeData({ data, id })
       return data
     },
   },
   Query: {
     group: (_, _args, { cache }) => {
+      console.log('group query called with id: ', GROUP_ID_KEY)
       const res = cache.readQuery({ query: GROUP_QUERY, id: GROUP_ID_KEY })
+      // res.group.items = []
       console.log('res.group in group query:', res.group)
       return res.group
     },
