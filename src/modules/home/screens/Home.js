@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 import { Query } from 'react-apollo'
 import { withAuthenticator } from 'aws-amplify-react-native'
 
-import { PRODUCTS } from '../../jobsheet/queries'
+import { GROUP_TYPES } from '../../jobsheet/queries'
 
 import { Menu } from '../components/Menu'
 import { Welcome } from '../components/Welcome'
@@ -26,7 +26,7 @@ const Home = ({ authState, navigation }) => {
   return (
     <View style={styles.container}>
       <Query
-        query={PRODUCTS}
+        query={GROUP_TYPES}
         fetchPolicy="network-only"
       >
         {({ loading, error }) => {

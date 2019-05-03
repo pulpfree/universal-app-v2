@@ -7,7 +7,17 @@ query GroupTypes {
     name
   }
   products {
+    __typename
     _id
+    maxHeight
+    maxWidth
+    minHeight
+    minWidth
     name
+    premium {
+      cost
+      oversizeLimit
+    }
+    sizeCost
   }
 }`

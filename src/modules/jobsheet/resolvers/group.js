@@ -527,7 +527,7 @@ export const resolvers = {
       const id = GROUP_ID_KEY
       const COSTS_QUERY = gql` {
         group @client {
-          _id
+          id
           groupID
           jobsheetID
           costs {
@@ -551,7 +551,6 @@ export const resolvers = {
       }`
       const res = cache.readQuery({ query: COSTS_QUERY, id })
       const { group } = res
-      // console.log('group in setGroupCosts:', group)
       const costs = calcGroupCosts(group)
 
       const fragment = gql`
@@ -572,7 +571,7 @@ export const resolvers = {
 
       const data = {
         __typename: 'JobSheetGroup',
-        _id: GROUP_ID,
+        id: GROUP_ID,
         costs: {
           __typename: 'Costs',
           ...costs,
@@ -724,7 +723,7 @@ export const resolvers = {
   Query: {
     group: (_, _args, { cache }) => {
       const res = cache.readQuery({ query: GROUP_QUERY, id: GROUP_ID_KEY })
-      // console.log('res.group:', res.group)
+      console.log('res.group in group query:', res.group)
       return res.group
     },
   },

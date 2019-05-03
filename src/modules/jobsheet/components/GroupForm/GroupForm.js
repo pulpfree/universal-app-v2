@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {
   Alert,
   Picker,
-  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -115,15 +114,11 @@ function GroupForm({
   return (
     <Query
       query={GROUP_QUERY}
-      // fetchPolicy="network-only"
       // fetchPolicy="cache-and-network"
-      // fetchPolicy="cache-first"
     >
       {({ error, data: { group } }) => {
         if (error) return <Error error={error} />
-        // console.log('group: ', group)
-        //console.log('data.group: ', data.group)
-        // const { group } = data
+        console.log('group: ', group)
         return (
           <KeyboardAwareScrollView style={styles.formCont} ref={scrollTop}>
             {isDuplicate && (
@@ -238,7 +233,6 @@ function GroupForm({
             <Query query={GROUP_WINDOW_QUERY}>
               {({ error, data: { groupWindow } }) => { // eslint-disable-line no-shadow
                 if (error) return <Error error={error} />
-                // console.log('groupWindow: ', groupWindow)
                 return (
                   <View style={styles.formRow}>
                     <View style={styles.formCell}>
