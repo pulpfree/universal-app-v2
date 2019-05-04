@@ -55,8 +55,8 @@ const WINDOW_QUERY = gql`{
 }`
 
 const GROUP_QUERY = gql`{
-  group @client(always: true) {
-  # group @client {
+  # group @client(always: true) {
+  group @client {
     id
     groupID
     jobsheetID

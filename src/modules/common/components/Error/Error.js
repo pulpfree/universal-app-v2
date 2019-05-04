@@ -18,6 +18,7 @@ export default function Error({ error }) {
     errorMsg = error
     // bugsnag.notify(new Error(error))
   }
+  console.error(error) // eslint-disable-line no-console
 
   return (
     <View style={styles.container}>

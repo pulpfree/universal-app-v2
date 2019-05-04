@@ -162,24 +162,24 @@ export const calcCosts = (window, product) => {
 }
 
 export const prepareDoc = (window) => {
-  const newWin = { ...window }
+  const doc = ramda.clone(window)
 
-  delete newWin.__typename
-  delete newWin.costs.__typename
-  delete newWin.dims.__typename
-  delete newWin.dims.height.__typename
-  delete newWin.dims.width.__typename
-  delete newWin.specs.__typename
-  newWin.productID = Types.ObjectId(window.productID._id)
-  newWin.jobsheetID = Types.ObjectId(window.jobsheetID)
+  delete doc.__typename
+  delete doc.costs.__typename
+  delete doc.dims.__typename
+  delete doc.dims.height.__typename
+  delete doc.dims.width.__typename
+  delete doc.specs.__typename
+  doc.productID = Types.ObjectId(window.productID._id)
+  doc.jobsheetID = Types.ObjectId(window.jobsheetID)
   if (window.windowID) {
-    newWin._id = Types.ObjectId(newWin.windowID)
+    doc._id = Types.ObjectId(doc.windowID)
   } else {
-    delete newWin._id
+    delete doc._id
   }
-  delete newWin.windowID
+  delete doc.windowID
 
-  return newWin
+  return doc
 }
 
 /*
@@ -281,7 +281,7 @@ export const calcGroupSizes = (dims) => {
 }
 
 export const prepareGroupDoc = (group) => {
-  const doc = { ...group }
+  const doc = ramda.clone(group)
 
   delete doc.__typename
   delete doc.id
@@ -321,7 +321,7 @@ export const prepareGroupDoc = (group) => {
  */
 
 export const prepareOtherDoc = (other) => {
-  const doc = { ...other }
+  const doc = ramda.clone(other)
 
   delete doc.__typename
   delete doc.costs.__typename

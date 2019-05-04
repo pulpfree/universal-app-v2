@@ -8,6 +8,7 @@
 1. add maps to contact sheet? - check with Joe
 1. module for custom group types
 1. remove requirement for group opening sizes
+1. add numbering to worksheets
 
 Group error, not saving when group item was "2 Casements"
 
@@ -19,4 +20,3 @@ needs utility to upload custom group types
 check where the group sheets spreadsheet
 
 ## Completed
-

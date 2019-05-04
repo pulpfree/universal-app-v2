@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -21,17 +21,14 @@ import { OtherList } from '../components/OtherList'
 import { WindowList } from '../components/WindowList'
 
 
-const JobSheet = ({ navigation, setProducts }) => {
+const JobSheet = ({ navigation }) => {
   const jobSheetID = navigation.getParam('jobSheetID')
-
-  useEffect(() => {
-    // setProducts()
-  }, [])
 
   return (
     <Query
       query={JOBSHEET_DATA}
       variables={{ jobSheetID }}
+      fetchPolicy="cache-and-network"
     >
       {({ loading, error, data }) => {
         if (error) return <Error error={error} />
@@ -61,7 +58,6 @@ const JobSheet = ({ navigation, setProducts }) => {
 }
 JobSheet.propTypes = {
   navigation: PropTypes.instanceOf(Object).isRequired,
-  setProducts: PropTypes.func.isRequired,
 }
 
 const SetProducts = graphql(SET_PRODUCTS, {

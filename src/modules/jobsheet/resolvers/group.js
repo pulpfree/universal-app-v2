@@ -599,7 +599,6 @@ export const resolvers = {
         group.items[itemIdx] = groupWindow
       } else {
         groupWindow._id = Types.ObjectId().toHexString()
-        delete groupWindow.windowID
         group.items.push(groupWindow)
       }
 
@@ -616,8 +615,9 @@ export const resolvers = {
         0
       )
 
-      console.log('data in persistGroupWindow:', group)
-      console.log('id in persistGropuWindow:', groupID)
+      // this was required before I did a deep clone on on the group in utils.prepareGroupDoc()
+      // group.specs.groupType.__typename = 'JobSheetGroupType'
+
       cache.writeData({ data: group, id: groupID })
       resolvers.Mutation.clearGroupWindow(_, null, { cache })
       return null
@@ -677,7 +677,6 @@ export const resolvers = {
       return null
     },
     setGroupFromRemote: async (_, { groupID }, { cache }) => {
-      console.log('groupID in setGroupFromRemote:', groupID)
       const id = GROUP_ID_KEY
       let groupRet
       try {
@@ -719,7 +718,7 @@ export const resolvers = {
           },
         },
       }
-      console.log('data written to cache in setGroupFromRemote:', data.group)
+      // console.log('data written to cache in setGroupFromRemote:', data.group)
       // client.writeData({ data, id })
       cache.writeData({ data, id })
       return data
@@ -727,7 +726,6 @@ export const resolvers = {
   },
   Query: {
     group: (_, _args, { cache }) => {
-      console.log('group query called with id: ', GROUP_ID_KEY)
       const res = cache.readQuery({ query: GROUP_QUERY, id: GROUP_ID_KEY })
       // res.group.items = []
       console.log('res.group in group query:', res.group)

@@ -114,18 +114,11 @@ function GroupForm({
   return (
     <Query
       query={GROUP_QUERY}
-      // fetchPolicy="cache-and-network"
-      // fetchPolicy="cache"
-      // fetchPolicy="network-only"
+      fetchPolicy="cache-and-network"
     >
-      {({ error, data }) => {
-        console.log('data: ', data)
-        if (error) {
-          console.log('error: ', error)
-        }
+      {({ error, data: { group } }) => {
         if (error) return <Error style={{ height: '100%' }} error={error} />
-        {/* console.log('group: ', group) */}
-        // console.table(group.items)
+        // console.log('group: ', group)
         return (
           <KeyboardAwareScrollView style={styles.formCont} ref={scrollTop}>
             {isDuplicate && (
