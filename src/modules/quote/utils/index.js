@@ -1,8 +1,9 @@
+import ramda from 'ramda'
 import { Types } from 'mongoose'
 import constants from '../config/constants'
 
 export const prepareQuote = (quote) => {
-  const newQuote = { ...quote }
+  const newQuote = ramda.clone(quote)
 
   newQuote._id = newQuote.quoteID
   newQuote.version += 1

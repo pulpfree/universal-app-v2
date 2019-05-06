@@ -51,7 +51,6 @@ const handleEmail = (customer, file) => {
       event,
       [
         { text: 'Ok' },
-        // { text: 'Ok', onPress: () => console.log('OK: Email Error Response') },
       ],
       { cancelable: false }
     )
@@ -125,7 +124,6 @@ Regards, Universal Windows ${signedURL}`
     body,
     recipients: [],
     successTypes: ['sent', 'queued'],
-    // allowAndroidSendWithoutReadPermission: true
   }, (completed, cancelled, error) => {
     console.log('SMS Callback: completed: ' + completed + ' cancelled: ' + cancelled + ' error: ' + error) // eslint-disable-line
   })

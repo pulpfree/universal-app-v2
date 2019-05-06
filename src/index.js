@@ -12,8 +12,8 @@ import { Client } from 'bugsnag-react-native'
 import appSyncConfig from './aws-exports'
 import client from './apollo'
 
-import Navigator from './config/routes'
-// import Navigator from './config/tabs'
+// import Navigator from './config/routes'
+import Navigator from './config/tabs'
 import theme from './config/paperTheme'
 
 import { SignIn } from './modules/auth/components/SignIn'
@@ -21,7 +21,6 @@ import { ConfirmSignIn } from './modules/auth/components/ConfirmSignIn'
 import { ForgotPassword } from './modules/auth/components/ForgotPassword'
 import { RequireNewPassword } from './modules/auth/components/RequireNewPassword'
 import { BugsnagAPIKey } from './config/constants'
-
 
 // use for debugging
 // Amplify.Logger.LOG_LEVEL = 'DEBUG'

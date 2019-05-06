@@ -21,6 +21,7 @@ import { CustomerSearchList } from '../../src/modules/customer/components/Custom
 import { CustomerForm } from '../../src/modules/customer/components/CustomerForm'
 import { ContactSheet } from '../../src/modules/customer/components/ContactSheet'
 import { SearchProvider } from '../../src/modules/customer/components/SearchContext'
+import { Notes } from '../../src/modules/customer/components/Notes'
 // import { DeleteCustomer } from '../../src/modules/customer/components/DeleteCustomer'
 
 import JobSheetNew from '../../src/modules/jobsheet/screens/JobSheetNew'
@@ -35,9 +36,10 @@ import { SelectWindowOptions } from '../../src/modules/jobsheet/components/Selec
 import { SelectTrim } from '../../src/modules/jobsheet/components/SelectTrim'
 import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeatures'
 // import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
-import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
+// import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
 // import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
-import { Notes } from '../../src/modules/customer/components/Notes'
+import { GroupTypeBuilder } from '../../src/modules/customer/components/GroupTypeBuilder'
+
 
 import Payments from '../../src/modules/quote/screens/Payments'
 import QuotePreview from '../../src/modules/quote/screens/QuotePreview'
@@ -226,6 +228,10 @@ storiesOf('JobSheets', module)
   .add('work sheet screen', () => (
     <WorkSheet />
   ))
+  .add('group type builder', () => (
+    <GroupTypeBuilder />
+  ))
+
 
 /*
 * ======================== Auth =====================================
