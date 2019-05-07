@@ -162,6 +162,10 @@ function GroupForm({
                     />
                   ))}
                 </Picker>
+                <View style={{ marginTop: 10 }} />
+                <TouchableOpacity onPress={() => navigation.navigate('GroupTypeBuilder', { rooms: group.specs })}>
+                  <Text style={styles.cellLabel}>Click for Group Type Test</Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.formCell}>

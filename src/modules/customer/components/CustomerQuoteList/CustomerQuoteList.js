@@ -51,7 +51,9 @@ const ListItem = ({ item }) => (
       <Text>{fmtDate(item.updatedAt)}</Text>
     </View>
     <View style={[styles.itemCell, { flex: 1.5 }]}>
-      <Text numberOfLines={1}>{item.jobsheetID.addressID.street1}</Text>
+      <Text numberOfLines={1}>
+        {`${item.jobsheetID.number} (${item.jobsheetID.addressID.street1})`}
+      </Text>
     </View>
     <ShowYes yesFlag={item.invoiced} />
     <ShowYes yesFlag={item.invoiced && item.quotePrice.outstanding === 0} />

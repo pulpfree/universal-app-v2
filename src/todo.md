@@ -2,7 +2,6 @@
 
 1. remove requirement for group opening sizes
 1. remove outstanding amount when deleting invoice
-1. add numbering to worksheets
 1. create group type builder UI component
 1. fix loader in customer info quotes listing
 1. discount message not showing in quote PDF, or when editing discount
@@ -13,4 +12,5 @@
 
 ## Completed
 
-- tweaks to saving jobsheet and quote
+- added jobsheet numbering
+- integrate group type description

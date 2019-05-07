@@ -28,6 +28,8 @@ const Header = ({ jobSheet }) => (
       {jobSheet.addressID.street1}
       ,&nbsp;
       {jobSheet.addressID.city}
+      &nbsp;&mdash;&nbsp;
+      {jobSheet.number}
     </Text>
   </View>
 )

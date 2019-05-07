@@ -80,8 +80,8 @@ query jobSheetGroup($groupID: ID!) {
       groupID
       groupType {
         _id
-        # name
       }
+      groupTypeDescription
       installType
       options
       sqft

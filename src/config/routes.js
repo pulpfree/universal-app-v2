@@ -16,6 +16,7 @@ import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
 import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
 import { SelectTrim } from '../modules/jobsheet/components/SelectTrim'
 import { SelectFeatures } from '../modules/jobsheet/components/SelectFeatures'
+import { GroupTypeBuilder } from '../modules/jobsheet/components/GroupTypeBuilder'
 
 import Payments from '../modules/quote/screens/Payments'
 import QuoteEdit from '../modules/quote/screens/QuoteEdit'
@@ -157,16 +158,17 @@ const RootStack = createStackNavigator(
     },
     ContactSheet,
     CustomerInfoMenu,
+    CustomerNotes,
     CustomerToggleActive,
-    DiscountForm,
     DeleteCustomer,
     DeleteInvoice,
+    DiscountForm,
+    GroupTypeBuilder,
     InvoiceOptions,
-    CustomerNotes,
     SelectFeatures,
     SelectRooms,
-    SelectWindowOptions,
     SelectTrim,
+    SelectWindowOptions,
   },
   {
     mode: 'modal',
