@@ -10,7 +10,6 @@ import {
 
 import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
-import { debounce } from 'lodash'
 
 import { SEARCH_CUSTOMER } from '../../queries'
 

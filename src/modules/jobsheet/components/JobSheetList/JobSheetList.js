@@ -22,7 +22,6 @@ const Header = ({ customer, navigation }) => (
       <Icon
         color={clr.ltGray}
         name="add-circle"
-        // onPress={() => navigation.navigate('JobSheetNew')}
         size={24}
       />
     </View>

@@ -112,24 +112,27 @@ class CustomerQuoteList extends React.Component {
         <TouchableOpacity onPress={() => refetch()}>
           <Header />
         </TouchableOpacity>
-        {loading && <Loader />}
-        <FlatList
-          ListHeaderComponent={CustomerQuoteListHeader}
-          data={data.quotes}
-          keyExtractor={this._keyExtractor}
-          onRefresh={() => refetch()}
-          refreshing={networkStatus === 4}
-          renderItem={this._renderItem}
-        />
+        {loading ? (
+          <Loader style={{ marginTop: 20 }} />
+        ) : (
+          <FlatList
+            ListHeaderComponent={CustomerQuoteListHeader}
+            data={data.quotes}
+            keyExtractor={this._keyExtractor}
+            onRefresh={() => refetch()}
+            refreshing={networkStatus === 4}
+            renderItem={this._renderItem}
+          />
+        )}
       </React.Fragment>
     )
   }
 }
 CustomerQuoteList.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
-  refetch: PropTypes.func.isRequired,
   networkStatus: PropTypes.number.isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  refetch: PropTypes.func.isRequired,
   setQuoteFromRemote: PropTypes.func.isRequired,
 }
 
