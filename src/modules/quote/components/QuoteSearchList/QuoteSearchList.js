@@ -147,7 +147,7 @@ const SearchList = graphql(QUOTE_SEARCH, {
     }
     return ({
       variables,
-      // fetchPolicy: 'no-cache',
+      fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
     })
   },

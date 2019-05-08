@@ -113,8 +113,6 @@ function GroupForm({
   return (
     <Query
       query={GROUP_QUERY}
-      // fetchPolicy="cache-and-network"
-      // fetchPolicy="network-only"
     >
       {({ error, data: { group } }) => {
         if (error) return <Error style={{ height: '100%' }} error={error} />
