@@ -198,14 +198,13 @@ const QuoteForm = ({ isNew, navigation }) => {
                         onPress={() => quotePersist({
                           variables: { input: prepareQuote(quote) },
                         })}
-                        title="Save Quote"
+                        title={loading ? 'Stand by...' : 'Save Quote'}
                         raised
                         color={clr.primary}
                         buttonStyle={styles.submitButton}
                         containerStyle={styles.submitButtonCont}
                       />
                       {error && <Error error={error} />}
-                      {loading && <Loader />}
                     </View>
                   )}
                 </Mutation>

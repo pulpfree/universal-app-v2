@@ -1,9 +1,18 @@
-quote pdf's not working:
-- 9012/4 -- Charissa Di Marco
+X customer(customerID: ID!): Customer
+X searchCustomer(field: String, value: String, search: String, active: Boolean): [Customer]
 
+quote(quoteID: ID!): Quote
+searchQuotes(year: String, invoiced: Boolean, closed: Boolean): Quotes
+X searchQuotesByCustomer(customerID: ID!): Quotes
+pdfSignedURL(input: SignedURLInput!): PDFSignedURL
 
-delete the windows
-- 2 Casements + fixed
-- 2 Casement L&R
+X jobSheetData(jobSheetID: ID!): JobSheetData
+jobSheetWindow(windowID: ID!): JobSheetWindow
+X jobSheetGroup(groupID: ID!): JobSheetGroup
+jobSheetOther(otherID: ID!): JobSheetOther
+X searchJobSheetsByCustomer(customerID: ID!): [JobSheet]
 
-Add email button for quote preview to admin (joe)
+payments(quoteID: ID!): [Payment]
+
+X products: [Product]
+X groupTypes: [GroupType]

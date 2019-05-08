@@ -4,6 +4,7 @@ import { withFormik } from 'formik'
 import { withNavigation } from 'react-navigation'
 import { compose, graphql } from 'react-apollo'
 import { Client } from 'bugsnag-react-native'
+import ramda from 'ramda'
 
 import { PERSIST_CUSTOMER } from '../../mutations/remote'
 import { CUSTOMER } from '../../queries'
@@ -61,7 +62,7 @@ const initialValuesTest = { // eslint-disable-line
   }, */
 }
 
-let initialValues = {
+const initialValues = {
   address: { provinceCode: 'ON', type: 'res' },
   email: '',
   name: {},
@@ -70,11 +71,17 @@ let initialValues = {
     mobile: { number: null },
   }, */
 }
+let profileVals = ramda.clone(initialValues)
 
 const Form = withFormik({
   enableReinitialize: true,
   displayName: 'ContactForm',
-  handleSubmit: async (values, { props, setSubmitting, setErrors }) => {
+  handleSubmit: async (values, {
+    props,
+    setSubmitting,
+    setErrors,
+    setValues,
+  }) => {
     if (!values.email && !values.phones.home && !values.phones.mobile) {
       setErrors({ email: 'Please enter either an email or phone number.' })
       setSubmitting(false)
@@ -97,6 +104,7 @@ const Form = withFormik({
         type: address.type,
       },
     }
+
     // Check if we're editing existing
     if (values._id) {
       variables.customerInput._id = values._id
@@ -119,6 +127,7 @@ const Form = withFormik({
       bugsnag.notify(error)
       throw new Error(error)
     }
+    setValues(initialValues)
     return true
   },
   mapPropsToValues: (props) => {
@@ -128,13 +137,15 @@ const Form = withFormik({
       delete customer.address.__typename
       delete customer.name.__typename
 
-      initialValues = Object.assign(
+      profileVals = Object.assign(
         {},
         props.customer,
         { phones: phonesArToObj(props.customer.phones) }
       )
+    } else {
+      profileVals = ramda.clone(initialValues)
     }
-    return initialValues
+    return profileVals
     // return initialValuesTest
   },
   validationSchema: CustomerSchema,

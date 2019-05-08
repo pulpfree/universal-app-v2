@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import {
   Picker,
   Text,
@@ -7,16 +7,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-// import { withNavigation } from 'react-navigation'
+import { withNavigation } from 'react-navigation'
 import { Button } from 'react-native-elements'
+import { Mutation } from 'react-apollo'
+
+import { SET_GROUP_FIELD } from '../../mutations/local'
 
 import styles from './styles'
 import { GroupTypeParts, Qty } from '../../config/jobSheetConstants'
 import { ModalHeader } from '../../../common/components/ModalHeader'
 
-function GroupTypeBuilder() {
+function GroupTypeBuilder({ navigation }) {
+  const groupType = navigation.getParam('groupType', '')
   const [qty, setQty] = useState(0)
-  const [groupText, setGroupText] = useState('')
+  const [groupText, setGroupText] = useState(groupType)
   const groupTypeInput = useRef('')
 
   const setGroupTypeQty = (val) => {
@@ -110,20 +114,27 @@ function GroupTypeBuilder() {
                   color: 'white',
                 }}
               />
-              <Button
-                // disabled={!features.length || loading}
-                // onPress={() => jobSheetPersistFeatures({
-                  // variables: { id: jobSheet._id, features: features.join('\n') },
-                // })}
-                title="Save"
-                buttonStyle={styles.submitButton}
-                style={{ width: 130, marginLeft: 20 }}
-                icon={{
-                  name: 'ios-send',
-                  type: 'ionicon',
-                  color: 'white',
-                }}
-              />
+              <Mutation
+                mutation={SET_GROUP_FIELD}
+                onCompleted={() => navigation.goBack()}
+              >
+                {setGroupField => (
+                  <Button
+                    // disabled={!features.length || loading}
+                    onPress={() => setGroupField({
+                      variables: { field: 'specs.groupTypeDescription', value: groupText },
+                    })}
+                    title="Save"
+                    buttonStyle={styles.submitButton}
+                    style={{ width: 130, marginLeft: 20 }}
+                    icon={{
+                      name: 'ios-send',
+                      type: 'ionicon',
+                      color: 'white',
+                    }}
+                  />
+                )}
+              </Mutation>
             </View>
           </View>
         </View>
@@ -132,5 +143,8 @@ function GroupTypeBuilder() {
     </View>
   )
 }
+GroupTypeBuilder.propTypes = {
+  navigation: PropTypes.instanceOf(Object).isRequired,
+}
 
-export default GroupTypeBuilder
+export default withNavigation(GroupTypeBuilder)

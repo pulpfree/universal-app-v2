@@ -65,10 +65,7 @@ query JobSheetData($jobSheetID: ID!) {
       qty
       rooms
       specs {
-        groupType {
-          _id
-          name
-        }
+        groupTypeDescription
       }
     }
     other {

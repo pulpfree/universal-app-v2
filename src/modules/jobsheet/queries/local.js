@@ -123,11 +123,7 @@ const GROUP_QUERY = gql`{
     qty
     rooms
     specs {
-      groupID
-      groupType {
-        _id
-      # __typename
-      }
+      groupTypeDescription
       installType
       options
       sqft
