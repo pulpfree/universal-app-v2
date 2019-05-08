@@ -69,6 +69,7 @@ const QuoteFormFooter = ({ discount, navigation, quote }) => {
 
   return (
     <View style={styles.container}>
+      {discount.description !== '' && <Text>{discount.description}</Text>}
       {haveDiscount && <TotalRow label="Total" value={totals.discountTotal} isDiscount />}
       <TouchableOpacity onPress={() => navigation.navigate('DiscountForm', { quote })}>
         <TotalRow label="Subtotal" isLinked value={totals.subTotal} />

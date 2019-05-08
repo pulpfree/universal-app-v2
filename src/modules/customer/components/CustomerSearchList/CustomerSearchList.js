@@ -10,7 +10,6 @@ import {
 
 import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
-import { debounce } from 'lodash'
 
 import { SEARCH_CUSTOMER } from '../../queries'
 
@@ -105,7 +104,8 @@ const SearchList = graphql(SEARCH_CUSTOMER, {
     if (props.isActive !== 'undefined') variables.active = props.isActive
     return {
       variables,
-      fetchPolicy: 'network-only',
+      // fetchPolicy: 'network-only',
+      fetchPolicy: 'cache-and-network',
     }
   },
 })

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 import clr from '../../../../config/colors'
+import { styles as listStyles } from '../../../common/components/List'
 
 export default StyleSheet.create({
   header: {
@@ -18,15 +19,10 @@ export default StyleSheet.create({
     fontWeight: '600',
   },
   itemRow: {
-    flexDirection: 'row',
-    padding: 8.5,
-    paddingLeft: 14,
-    paddingRight: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: clr.mdGray,
+    ...StyleSheet.flatten(listStyles.itemRow),
   },
   itemCell: {
-    flex: 1,
+    ...StyleSheet.flatten(listStyles.itemCell),
   },
   right: {
     textAlign: 'right',

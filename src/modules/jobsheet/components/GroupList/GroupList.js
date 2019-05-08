@@ -17,7 +17,6 @@ import { styles } from './index'
 
 const ListItem = ({ item }) => {
   const { costs, dims, specs } = item
-  const { name } = specs.groupType
   const rooms = item.rooms && item.rooms.length ? item.rooms.join(', ') : ''
   let dimStr = `${dims.width.inch}`
   if (dims.width.fraction) dimStr += ` ${dims.width.fraction}`
@@ -33,7 +32,7 @@ const ListItem = ({ item }) => {
         <Text>{rooms}</Text>
       </View>
       <View style={[styles.itemCell, { flex: 1.75 }]}>
-        <Text>{name}</Text>
+        <Text>{specs.groupTypeDescription}</Text>
       </View>
       <View style={[styles.itemCell, { flex: 0.75 }]}>
         <Text>{dimStr}</Text>

@@ -41,17 +41,17 @@ export const defaults = {
       __typename: 'JobSheetGroupDims',
       height: {
         __typename: 'GroupWindowDims',
-        decimal: '',
-        diff: '',
+        decimal: 0.0,
+        diff: 0.0,
         fraction: '',
-        inch: '',
+        inch: 0,
       },
       width: {
         __typename: 'GroupWindowDims',
-        decimal: '',
-        diff: '',
+        decimal: 0.0,
+        diff: 0.0,
         fraction: '',
-        inch: '',
+        inch: 0,
       },
     },
     items: {
@@ -101,12 +101,7 @@ export const defaults = {
     rooms: [],
     specs: {
       __typename: 'JobSheetGroupSpecs',
-      groupID: '',
-      groupType: {
-        __typename: 'JobSheetGroupType',
-        _id: '',
-        // name: '',
-      },
+      groupTypeDescription: '',
       installType: '',
       options: '',
       sqft: '',
@@ -229,27 +224,13 @@ export const resolvers = {
           }
           break
         case 'specs':
-          if (parts[1] === 'groupType') {
-            data = {
-              ...res,
-              specs: {
-                __typename: 'JobSheetGroupSpecs',
-                ...res.specs,
-                [parts[1]]: {
-                  __typename: 'JobSheetGroupType',
-                  _id: value,
-                },
-              },
-            }
-          } else {
-            data = {
-              ...res,
-              specs: {
-                __typename: 'JobSheetGroupSpecs',
-                ...res.specs,
-                [parts[1]]: value,
-              },
-            }
+          data = {
+            ...res,
+            specs: {
+              __typename: 'JobSheetGroupSpecs',
+              ...res.specs,
+              [parts[1]]: value,
+            },
           }
           break
         case 'costs':
@@ -615,9 +596,6 @@ export const resolvers = {
         0
       )
 
-      // this was required before I did a deep clone on on the group in utils.prepareGroupDoc()
-      // group.specs.groupType.__typename = 'JobSheetGroupType'
-
       cache.writeData({ data: group, id: groupID })
       resolvers.Mutation.clearGroupWindow(_, null, { cache })
       return null
@@ -718,17 +696,15 @@ export const resolvers = {
           },
         },
       }
-      // console.log('data written to cache in setGroupFromRemote:', data.group)
-      // client.writeData({ data, id })
       cache.writeData({ data, id })
+      // console.log('data written in setGroupFromRemote:', data)
       return data
     },
   },
   Query: {
     group: (_, _args, { cache }) => {
       const res = cache.readQuery({ query: GROUP_QUERY, id: GROUP_ID_KEY })
-      // res.group.items = []
-      console.log('res.group in group query:', res.group)
+      console.log('resolver group query:', res.group) // eslint-disable-line no-console
       return res.group
     },
   },

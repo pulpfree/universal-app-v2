@@ -67,7 +67,15 @@ const QuoteForm = ({ isNew, navigation }) => {
             <View style={styles.titleHeader}>
               <TouchableOpacity onPress={() => navigation.navigate('CustomerInfo', { customerID })}>
                 <Text style={styles.titleText}>
-                  {`${quote.customerID.name.first} ${quote.customerID.name.last} - ${quote.jobsheetID.addressID.street1}, ${quote.jobsheetID.addressID.city} - ${quote.number}/${quote.version}`}
+                  {quote.customerID.name.first}
+                  &nbsp;
+                  {quote.customerID.name.last}
+                  &nbsp;&mdash;&nbsp;
+                  {quote.jobsheetID.addressID.street1}
+                  ,&nbsp;
+                  {quote.jobsheetID.addressID.city}
+                  &nbsp;&mdash;&nbsp;
+                  {`${quote.number}/${quote.version}`}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -190,14 +198,13 @@ const QuoteForm = ({ isNew, navigation }) => {
                         onPress={() => quotePersist({
                           variables: { input: prepareQuote(quote) },
                         })}
-                        title="Save Quote"
+                        title={loading ? 'Stand by...' : 'Save Quote'}
                         raised
                         color={clr.primary}
                         buttonStyle={styles.submitButton}
                         containerStyle={styles.submitButtonCont}
                       />
                       {error && <Error error={error} />}
-                      {loading && <Loader />}
                     </View>
                   )}
                 </Mutation>

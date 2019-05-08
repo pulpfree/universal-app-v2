@@ -105,6 +105,7 @@ function PaymentForm({ navigation }) {
           if (error) return <Error error={errorMsg} />
           if (loading) return <Loader />
           const { payments } = data
+          console.log('payments: ', payments)
 
           return (
             <View style={styles.formCont}>

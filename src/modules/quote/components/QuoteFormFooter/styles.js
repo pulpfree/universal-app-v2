@@ -7,6 +7,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     padding: 16,
     paddingRight: 20,
+    paddingBottom: 0,
     flex: 1,
   },
   row: {

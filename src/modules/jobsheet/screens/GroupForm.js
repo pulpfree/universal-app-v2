@@ -6,12 +6,13 @@ import {
 
 import { graphql, Query } from 'react-apollo'
 
+import { PRODUCTS } from '../queries'
+import { SET_GROUP_JOBSHEET_ID } from '../mutations/local'
+
 import { Header } from '../components/JobSheetHeader'
 import { GroupForm as Form } from '../components/GroupForm'
-import { GROUP_TYPES } from '../queries'
 import { Error } from '../../common/components/Error'
 import { Loader } from '../../common/components/Loader'
-import { SET_GROUP_JOBSHEET_ID } from '../mutations/local'
 
 const GroupForm = ({ navigation, setGroupJobSheetID }) => {
   const jobSheet = navigation.getParam('jobSheet')
@@ -24,11 +25,11 @@ const GroupForm = ({ navigation, setGroupJobSheetID }) => {
   return (
     <View>
       <Header jobSheet={jobSheet} />
-      <Query query={GROUP_TYPES}>
-        {({ loading, error, data: { groupTypes, products } }) => {
+      <Query query={PRODUCTS}>
+        {({ loading, error, data: { products } }) => {
           if (error) return <Error error={error} />
           if (loading) return <Loader />
-          return <Form groupID={groupID} groupTypes={groupTypes} products={products} />
+          return <Form groupID={groupID} products={products} />
         }}
       </Query>
     </View>

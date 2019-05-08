@@ -33,5 +33,13 @@ const appSyncLink = createAppSyncLink(
 
 const link = ApolloLink.from([stateLink, appSyncLink])
 const client = new AWSAppSyncClient({}, { link })
+/* console.log('client:', client)
+client.cache.writeData({
+  data: {
+    group: {
+      id: '1',
+    },
+  },
+}) */
 
 export default client

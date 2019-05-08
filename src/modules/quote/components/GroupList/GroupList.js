@@ -16,8 +16,7 @@ import { fmtMoney } from '../../../../util/fmt'
 
 
 const ListItem = ({ item, quoteGroups }) => {
-  const { groupType: { name } } = item.specs
-  const { _id: itemID, qty } = item
+  const { _id: itemID, qty, specs } = item
   const { extendUnit, extendTotal } = item.costs
   const isSelected = quoteGroups.includes(itemID)
   const iconName = isSelected ? 'ios-checkbox' : 'ios-checkbox-outline'
@@ -34,7 +33,7 @@ const ListItem = ({ item, quoteGroups }) => {
       />
       <Text style={styles.smCell}>{qty}</Text>
       <Text style={styles.smCell}>{rms}</Text>
-      <Text style={styles.nameCell}>{name}</Text>
+      <Text style={styles.nameCell}>{specs.groupTypeDescription}</Text>
       <Text style={styles.moneyCell}>{fmtMoney(extendUnit, 2, true)}</Text>
       <Text style={styles.moneyCell}>{fmtMoney(extendTotal, 2, true)}</Text>
     </View>

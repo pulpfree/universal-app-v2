@@ -10,6 +10,9 @@ import styles from './styles'
 export default function JobSheetListHeader() {
   return (
     <View style={styles.header}>
+      <View style={[styles.cell, { flex: 0.25 }]}>
+        <Text allowFontScaling={false} style={styles.cellText}>No</Text>
+      </View>
       <View style={styles.cell}>
         <Text allowFontScaling={false} style={styles.cellText}>Street</Text>
       </View>

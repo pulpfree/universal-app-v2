@@ -51,7 +51,9 @@ const ListItem = ({ item }) => (
       <Text>{fmtDate(item.updatedAt)}</Text>
     </View>
     <View style={[styles.itemCell, { flex: 1.5 }]}>
-      <Text numberOfLines={1}>{item.jobsheetID.addressID.street1}</Text>
+      <Text numberOfLines={1}>
+        {`${item.jobsheetID.number} (${item.jobsheetID.addressID.street1})`}
+      </Text>
     </View>
     <ShowYes yesFlag={item.invoiced} />
     <ShowYes yesFlag={item.invoiced && item.quotePrice.outstanding === 0} />
@@ -110,24 +112,27 @@ class CustomerQuoteList extends React.Component {
         <TouchableOpacity onPress={() => refetch()}>
           <Header />
         </TouchableOpacity>
-        {loading && <Loader />}
-        <FlatList
-          ListHeaderComponent={CustomerQuoteListHeader}
-          data={data.quotes}
-          keyExtractor={this._keyExtractor}
-          onRefresh={() => refetch()}
-          refreshing={networkStatus === 4}
-          renderItem={this._renderItem}
-        />
+        {loading ? (
+          <Loader style={{ marginTop: 20 }} />
+        ) : (
+          <FlatList
+            ListHeaderComponent={CustomerQuoteListHeader}
+            data={data.quotes}
+            keyExtractor={this._keyExtractor}
+            onRefresh={() => refetch()}
+            refreshing={networkStatus === 4}
+            renderItem={this._renderItem}
+          />
+        )}
       </React.Fragment>
     )
   }
 }
 CustomerQuoteList.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
-  refetch: PropTypes.func.isRequired,
   networkStatus: PropTypes.number.isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  refetch: PropTypes.func.isRequired,
   setQuoteFromRemote: PropTypes.func.isRequired,
 }
 

@@ -29,10 +29,7 @@ query QuoteJobSheet($jobSheetID: ID!, $quoteID: ID!) {
       qty
       rooms
       specs {
-        groupType {
-          _id
-          name
-        }
+        groupTypeDescription
       }
     }
     other {

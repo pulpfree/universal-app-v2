@@ -87,11 +87,7 @@ export const defaults = {
       rooms: [],
       specs: {
         __typename: 'JobSheetGroupSpecs',
-        groupType: {
-          __typename: 'JobSheetGroupType',
-          _id: '',
-          name: '',
-        },
+        groupTypeDescription: '',
       },
     },
     other: {

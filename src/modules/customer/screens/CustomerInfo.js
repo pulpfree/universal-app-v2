@@ -26,7 +26,6 @@ export default function CustomerInfo({ navigation }) {
       skip={!customerID}
       variables={{ customerID }}
       fetchPolicy="cache-and-network"
-      // fetchPolicy="network-only"
     >
       {({
         loading,

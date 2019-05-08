@@ -73,7 +73,6 @@ Window.propTypes = {
 function GroupForm({
   clearGroup,
   clearGroupWindow,
-  groupTypes,
   navigation,
   products,
   setGroupField,
@@ -114,7 +113,6 @@ function GroupForm({
   return (
     <Query
       query={GROUP_QUERY}
-      fetchPolicy="cache-and-network"
     >
       {({ error, data: { group } }) => {
         if (error) return <Error style={{ height: '100%' }} error={error} />
@@ -146,22 +144,15 @@ function GroupForm({
               </View>
 
               <View style={styles.formCell}>
-                <Text style={styles.cellLabel}>Style</Text>
-                <Picker
-                  selectedValue={group.specs.groupType._id}
-                  style={[styles.picker, { width: 250 }]}
-                  itemStyle={styles.pickerItem}
-                  onValueChange={value => setGroupField('specs.groupType._id', value)}
-                >
-                  <Picker.Item label="Select" value="" />
-                  {groupTypes.map(p => (
-                    <Picker.Item
-                      key={p._id}
-                      label={p.name}
-                      value={p._id}
-                    />
-                  ))}
-                </Picker>
+                <TouchableOpacity onPress={() => navigation.navigate('GroupTypeBuilder', { groupType: group.specs.groupTypeDescription })}>
+                  <Text style={[styles.cellLabel, styles.modalLinkText]}>Group Type</Text>
+                </TouchableOpacity>
+                <TextInput
+                  allowFontScaling={false}
+                  editable={false}
+                  style={[styles.dimInput, { width: 250 }]}
+                  value={group.specs.groupTypeDescription}
+                />
               </View>
 
               <View style={styles.formCell}>
@@ -613,7 +604,6 @@ function GroupForm({
 GroupForm.propTypes = {
   clearGroup: PropTypes.func.isRequired,
   clearGroupWindow: PropTypes.func.isRequired,
-  groupTypes: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
   products: PropTypes.instanceOf(Object).isRequired,
   setGroupField: PropTypes.func.isRequired,

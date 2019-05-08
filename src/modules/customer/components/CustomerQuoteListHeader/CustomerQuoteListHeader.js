@@ -17,7 +17,7 @@ export default function JobSheetListHeader() {
         <Text allowFontScaling={false} style={styles.cellText}>Date</Text>
       </View>
       <View style={[styles.cell, { flex: 1.5 }]}>
-        <Text allowFontScaling={false} style={styles.cellText}>Street</Text>
+        <Text allowFontScaling={false} style={styles.cellText}>Jobsheet</Text>
       </View>
       <View style={[styles.cell, { flex: 0.5 }]}>
         <Text allowFontScaling={false} style={[styles.cellText, { textAlign: 'center' }]}>Invoiced</Text>

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import clr from '../../../../config/colors'
+// import clr from '../../../../config/colors'
 import { styles } from '../../../common/components/Modal'
 import { styles as menuStyles } from '../../../common/components/ListMenu'
 

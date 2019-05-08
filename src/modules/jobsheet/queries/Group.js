@@ -77,11 +77,7 @@ query jobSheetGroup($groupID: ID!) {
     qty
     rooms
     specs {
-      groupID
-      groupType {
-        _id
-        # name
-      }
+      groupTypeDescription
       installType
       options
       sqft

@@ -8,7 +8,7 @@ query JobSheetData($jobSheetID: ID!) {
       createdAt
       updatedAt
       features
-       addressID {
+      addressID {
         _id
         street1
         city
@@ -21,6 +21,7 @@ query JobSheetData($jobSheetID: ID!) {
           spouse
         }
       }
+      number
     }
     windows {
       _id
@@ -64,10 +65,7 @@ query JobSheetData($jobSheetID: ID!) {
       qty
       rooms
       specs {
-        groupType {
-          _id
-          name
-        }
+        groupTypeDescription
       }
     }
     other {

@@ -60,6 +60,7 @@ export default gql`
             street1
             city
           }
+          number
         }
         updatedAt
       }
@@ -71,6 +72,7 @@ export default gql`
         street1
         city
       }
+      number
       updatedAt
     }
   }

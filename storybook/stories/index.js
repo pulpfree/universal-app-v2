@@ -38,7 +38,7 @@ import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeat
 // import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
 // import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
 // import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
-import { GroupTypeBuilder } from '../../src/modules/customer/components/GroupTypeBuilder'
+import { GroupTypeBuilder } from '../../src/modules/jobsheet/components/GroupTypeBuilder'
 
 
 import Payments from '../../src/modules/quote/screens/Payments'

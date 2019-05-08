@@ -46,8 +46,8 @@ function CustomerForm({
     setFieldValue('address.postalCode', fmtPostalCode(value) || value)
   }
 
-  const _handleSubmit = (e) => {
-    handleSubmit(e)
+  const _handleSubmit = async (e) => {
+    await handleSubmit(e)
   }
 
   const city = useRef(null)

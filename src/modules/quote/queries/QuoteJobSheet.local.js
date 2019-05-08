@@ -30,10 +30,7 @@ export default gql`{
       qty
       rooms
       specs {
-        groupType {
-          _id
-          name
-        }
+        groupTypeDescription
       }
     }
     other {

@@ -290,7 +290,6 @@ export const prepareGroupDoc = (group) => {
   delete doc.dims.height.__typename
   delete doc.dims.width.__typename
   delete doc.specs.__typename
-  delete doc.specs.groupType.__typename
 
   for (let i = 0; i < doc.items.length; i += 1) {
     delete doc.items[i].__typename
@@ -312,7 +311,8 @@ export const prepareGroupDoc = (group) => {
   }
   delete doc.groupID
   doc.jobsheetID = Types.ObjectId(doc.jobsheetID)
-  doc.specs.groupType = Types.ObjectId(doc.specs.groupType._id)
+
+  console.log('doc in prepareGroupDoc:', doc)
   return doc
 }
 

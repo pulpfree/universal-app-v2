@@ -1,19 +1,15 @@
 import { StyleSheet } from 'react-native'
 
-import clr from '../../../../config/colors'
+import { styles as listStyles } from '../../../common/components/List'
 
 export default StyleSheet.create({
   header: {
-    backgroundColor: clr.ltGray,
-    borderBottomWidth: 1.25,
-    borderColor: clr.mdGray,
-    flexDirection: 'row',
-    padding: 5,
-    paddingLeft: 14,
-    paddingRight: 14,
+    ...StyleSheet.flatten(listStyles.header),
   },
-  cell: {},
+  cell: {
+    ...StyleSheet.flatten(listStyles.cell),
+  },
   cellText: {
-    color: clr.dkGray,
+    ...StyleSheet.flatten(listStyles.cellText),
   },
 })
