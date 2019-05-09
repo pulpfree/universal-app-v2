@@ -15,6 +15,9 @@ import { BugsnagAPIKey } from '../../../../config/constants'
 
 const bugsnag = new Client(BugsnagAPIKey)
 
+const testSpouse = 'Qwertyuiopasdfghjklzxcvbnm Qwertyuiopasdfghj'
+// console.log('testSpouse len:', testSpouse.length)
+
 const CustomerSchema = Yup.object().shape({
   name: Yup.object().shape({
     first: Yup.string()
@@ -50,11 +53,11 @@ const initialValuesTest = { // eslint-disable-line
     provinceCode: 'ON',
     type: 'res',
   },
-  email: '',
+  email: 'rond@webbtech.net',
   name: {
     first: 'Test',
     last: 'Dummy',
-    spouse: '',
+    spouse: testSpouse,
   },
   /* phones: {
     home: { number: null },
@@ -82,7 +85,9 @@ const Form = withFormik({
     setErrors,
     setValues,
   }) => {
-    if (!values.email && !values.phones.home && !values.phones.mobile) {
+    console.log('values:', values)
+    if (!values.email && !values.phones) {
+    // if (!values.email && !values.phones.home && !values.phones.mobile) {
       setErrors({ email: 'Please enter either an email or phone number.' })
       setSubmitting(false)
       return false
@@ -117,16 +122,26 @@ const Form = withFormik({
     try {
       graphqlReturn = await customerPersist(variables)
       if (graphqlReturn && graphqlReturn.errors) {
-        console.log('graphqlReturn.errors:', graphqlReturn.errors) // eslint-disable-line no-console
-        const error = new Error(graphqlReturn.errors[0].message)
-        bugsnag.notify(error)
-        throw new Error(error)
+        // console.log('graphqlReturn.errors:', graphqlReturn.errors) // eslint-disable-line no-console
+        const errMsg = graphqlReturn.errors[0].message
+        setSubmitting(false)
+        console.log('errMsg:', errMsg)
+        // const error = new Error(graphqlReturn.errors[0].message)
+        // bugsnag.notify(error)
+        setErrors({ process: errMsg })
+        return true
+        // throw new Error(error)
+        // return false
       }
     } catch (error) {
       console.log('error:', error) // eslint-disable-line no-console
-      bugsnag.notify(error)
-      throw new Error(error)
+      // bugsnag.notify(error)
+      setErrors({ process: error })
+      // throw new Error(error)
+      return true
+      // return false
     }
+    // setErrors({ process: 'test process error' })
     setValues(initialValues)
     return true
   },
@@ -145,8 +160,8 @@ const Form = withFormik({
     } else {
       profileVals = ramda.clone(initialValues)
     }
-    return profileVals
-    // return initialValuesTest
+    // return profileVals
+    return initialValuesTest
   },
   validationSchema: CustomerSchema,
   validateOnBlur: true,
@@ -157,18 +172,26 @@ const PersistCustomer = graphql(PERSIST_CUSTOMER, {
   props: ({ mutate }) => ({
     customerPersist: variables => mutate({
       variables: { ...variables },
-      errorPolicy: 'all',
+      // errorPolicy: 'all',
     }),
   }),
   options: props => ({
     onCompleted: (data) => {
-      props.navigation.navigate('CustomerInfo', { customerID: data.customerPersist._id })
+      // console.log('data in onCompleted:', data)
+      if (data.customerPersist) {
+        props.navigation.navigate('CustomerInfo', { customerID: data.customerPersist._id })
+      }
     },
-    refetchQueries: ({ data }) => ([
-      { query: CUSTOMER, variables: { customerID: data.customerPersist._id } },
-    ]),
+    refetchQueries: ({ data }) => {
+      if (data.customerPersist) {
+        return [
+          { query: CUSTOMER, variables: { customerID: data.customerPersist._id } },
+        ]
+      }
+      return false
+    },
   }),
-  errorPolicy: 'all',
+  // errorPolicy: 'all',
 })
 
 export default compose(

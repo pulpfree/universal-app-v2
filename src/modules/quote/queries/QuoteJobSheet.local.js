@@ -52,7 +52,6 @@ export default gql`{
     version
     invoiced
     closed
-    pdfCreated
     customerID {
       _id
       name {

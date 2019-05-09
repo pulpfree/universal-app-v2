@@ -9,7 +9,6 @@ query Data($quoteID: ID!) {
     version
     invoiced
     closed
-    pdfCreated
     customerID {
       _id
       name {

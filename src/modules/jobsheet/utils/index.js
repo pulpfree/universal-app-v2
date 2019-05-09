@@ -312,7 +312,6 @@ export const prepareGroupDoc = (group) => {
   delete doc.groupID
   doc.jobsheetID = Types.ObjectId(doc.jobsheetID)
 
-  console.log('doc in prepareGroupDoc:', doc)
   return doc
 }
 

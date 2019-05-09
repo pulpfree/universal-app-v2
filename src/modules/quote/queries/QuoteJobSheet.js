@@ -49,7 +49,6 @@ query QuoteJobSheet($jobSheetID: ID!, $quoteID: ID!) {
     version
     invoiced
     closed
-    pdfCreated
     customerID {
       _id
       name {

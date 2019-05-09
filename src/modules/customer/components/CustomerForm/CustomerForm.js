@@ -14,6 +14,7 @@ import styles from './styles'
 import clr from '../../../../config/colors'
 import { fmtPhone, fmtPostalCode } from '../../../../util/fmt'
 import { Header } from '../../../common/components/Header'
+import { Error } from '../../../common/components/Error'
 
 /*
  Note, onSubmitEditing callback is called after blur event.
@@ -59,9 +60,16 @@ function CustomerForm({
   const postalCode = useRef(null)
   const street1 = useRef(null)
 
+  // console.log('error in form:', errors)
+  const processErr = errors.process
+  if (processErr) {
+    console.log('processErr:', processErr)
+  }
+
   return (
     <KeyboardAwareScrollView style={styles.container}>
       <Header label="Name" padTop={false} />
+      {processErr && <Error error={processErr} />}
       <View style={styles.inputRow}>
         <View style={styles.input}>
           <TextInput

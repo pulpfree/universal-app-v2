@@ -16,7 +16,6 @@ export const prepareQuote = (quote) => {
   delete newQuote.id
   delete newQuote.invoiced
   delete newQuote.number
-  delete newQuote.pdfCreated
   delete newQuote.quoteID
   delete newQuote.discount.__typename
   delete newQuote.itemCosts.__typename

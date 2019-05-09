@@ -11,7 +11,7 @@ import { Icon } from 'react-native-elements'
 
 import styles from './styles'
 import clr from '../../../../config/colors'
-import { linkCall, linkMessage } from '../../../../util/links'
+import { linkCall } from '../../../../util/links'
 
 const handleEmail = (customer) => {
   const params = {
