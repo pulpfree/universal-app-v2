@@ -44,9 +44,10 @@ export function fmtPhone(value) {
 
 export function fmtPostalCode(code) {
   const postalCode = code.trim()
+  if (postalCode.length < 6) return postalCode
   const validPat = /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ] ?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
   const valid = validPat.test(postalCode)
-  if (!valid) return false
+  if (!valid) return ''
 
   // add space if missing
   if (postalCode.length === 6) {

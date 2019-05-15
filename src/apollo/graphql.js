@@ -1,5 +1,9 @@
-// import ramda from 'ramda'
 import { merge } from 'lodash'
+
+import {
+  defaults as customerDefaults,
+  resolvers as customerResolvers,
+} from '../modules/customer/resolvers/customer'
 
 import {
   defaults as windowDefaults,
@@ -31,6 +35,7 @@ import {
 
 const graphql = {
   defaults: merge(
+    customerDefaults,
     groupDefaults,
     jobSheetDefaults,
     otherDefaults,
@@ -38,6 +43,7 @@ const graphql = {
     windowDefaults,
   ),
   resolvers: merge(
+    customerResolvers,
     groupResolvers,
     jobSheetResolvers,
     otherResolvers,

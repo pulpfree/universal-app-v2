@@ -10,7 +10,7 @@ const CustomerProfile = ({ navigation }) => {
 
   return (
     <View style={{ marginTop: 20 }}>
-      <CustomerForm customer={customer} />
+      <CustomerForm customerData={customer} />
     </View>
   )
 }

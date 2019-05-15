@@ -709,6 +709,7 @@ export const resolvers = {
     },
   },
 }
+
 export const typeDefs = `
   type JobSheetGroup {
     _id: ID!
