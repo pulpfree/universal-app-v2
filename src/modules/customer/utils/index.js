@@ -33,9 +33,8 @@ export const prepareCustomer = (customer) => {
     variables.customerInput._id = doc.customerID
     variables.addressInput._id = address.addressID
   }
-  if (variables.customerInput.email === '') {
+  if (variables.customerInput.email === '' || variables.customerInput.email === null) {
     delete variables.customerInput.email
   }
-
   return variables
 }

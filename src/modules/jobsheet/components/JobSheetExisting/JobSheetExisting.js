@@ -57,7 +57,7 @@ function JobSheetExisting({ customer, navigation }) {
                     },
                   })
                 }}
-                title="Create"
+                title={loading ? 'Stand by...' : 'Create'}
                 buttonStyle={{
                   backgroundColor: clr.primary,
                 }}
@@ -69,7 +69,6 @@ function JobSheetExisting({ customer, navigation }) {
                 }}
               />
               {error && <Error error={error} />}
-              {loading && <Loader />}
             </React.Fragment>
           )}
         </Mutation>

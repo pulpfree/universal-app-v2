@@ -49,7 +49,6 @@ function AddressForm({
         <TextInput
           autoCapitalize="words"
           autoCorrect={false}
-          autoFocus
           blurOnSubmit={false}
           error={ramda.hasPath(['street1'], errors)}
           label="Street"
