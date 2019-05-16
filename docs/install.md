@@ -36,3 +36,4 @@ react-native link react-native-mail
 
 yarn add react-native-mail
 react-native link react-native-mail
+

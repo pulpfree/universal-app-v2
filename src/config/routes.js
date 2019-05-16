@@ -1,22 +1,23 @@
 import { createAppContainer, createStackNavigator } from 'react-navigation'
 
-import CustomerSearch from '../modules/customer/screens/CustomerSearch'
+import CustomerInfo from '../modules/customer/screens/CustomerInfo'
 import CustomerNew from '../modules/customer/screens/CustomerNew'
 import CustomerProfile from '../modules/customer/screens/CustomerProfile'
-import CustomerInfo from '../modules/customer/screens/CustomerInfo'
+import CustomerSearch from '../modules/customer/screens/CustomerSearch'
+import { AddressLookup } from '../modules/customer/components/AddressLookup'
 import { CustomerInfoMenu } from '../modules/customer/components/CustomerInfoMenu'
 import { DeleteCustomer } from '../modules/customer/components/DeleteCustomer'
-import { ToggleActive as CustomerToggleActive } from '../modules/customer/components/ToggleActive'
 import { Notes as CustomerNotes } from '../modules/customer/components/Notes'
+import { ToggleActive as CustomerToggleActive } from '../modules/customer/components/ToggleActive'
 
-import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../modules/jobsheet/screens/JobSheet'
+import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
 import WorkSheet from '../modules/jobsheet/screens/WorkSheet'
-import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
-import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
-import { SelectTrim } from '../modules/jobsheet/components/SelectTrim'
-import { SelectFeatures } from '../modules/jobsheet/components/SelectFeatures'
 import { GroupTypeBuilder } from '../modules/jobsheet/components/GroupTypeBuilder'
+import { SelectFeatures } from '../modules/jobsheet/components/SelectFeatures'
+import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
+import { SelectTrim } from '../modules/jobsheet/components/SelectTrim'
+import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
 
 import Payments from '../modules/quote/screens/Payments'
 import QuoteEdit from '../modules/quote/screens/QuoteEdit'
@@ -30,6 +31,7 @@ import { InvoiceOptions } from '../modules/quote/components/InvoiceOptions'
 import GroupForm from '../modules/jobsheet/screens/GroupForm'
 import OtherForm from '../modules/jobsheet/screens/OtherForm'
 import WindowForm from '../modules/jobsheet/screens/WindowForm'
+
 
 import Home from '../modules/home/screens/Home'
 
@@ -156,6 +158,7 @@ const RootStack = createStackNavigator(
     Main: {
       screen: HomeStack,
     },
+    AddressLookup,
     ContactSheet,
     CustomerInfoMenu,
     CustomerNotes,

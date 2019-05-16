@@ -7,7 +7,7 @@ import {
 
 import * as Yup from 'yup'
 import ramda from 'ramda'
-import { Button, CheckBox } from 'react-native-elements'
+import { Button, CheckBox, Icon } from 'react-native-elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { TextInput } from 'react-native-paper'
 import { withNavigation } from 'react-navigation'
@@ -88,12 +88,27 @@ function CustomerForm({
 }) {
   const [errors, setError] = useState(errorObj)
   const [haveCustomer, setHaveCustomer] = useState(false)
+  const [haveMapParams, setMapParams] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
-  useEffect(() => (
-    () => {
-      clearCustomer()
+  const mapParams = navigation.getParam('mapParams', false)
+  if (mapParams && mapParams.address_components && !haveMapParams) {
+    setMapParams(true)
+    console.log('mapParams:', mapParams)
+    const addr = ramda.clone(mapParams.address_components)
+    if (addr.length === 8) {
+      addr.splice(2, 1)
     }
+
+    setCustomerField('address.street1', `${addr[0].long_name} ${addr[1].short_name}`)
+    setCustomerField('address.city', addr[2].long_name)
+    if (addr.length === 7) {
+      setCustomerField('address.postalCode', addr[6].long_name)
+    }
+  }
+
+  useEffect(() => (
+    () => clearCustomer()
   ), [])
 
   // we need to use state to ensure this is only set once
@@ -142,12 +157,25 @@ function CustomerForm({
         if (error) return <Error error={error} />
         return (
           <KeyboardAwareScrollView style={styles.container}>
+            {/* <View style={styles.mapLink}>
+              <Icon
+                color={clr.primary}
+                name="map"
+                onPress={() => navigation.navigate('AddressLookup')}
+                raised
+                reverse
+                size={15}
+                type="font-awesome"
+                // iconStyle={{ width: 20 }}
+                // containerStyle={{ padding: 0, width: 50, height: 50 }}
+              />
+            </View> */}
             <Header label="Name" padTop={false} />
             <View style={styles.inputRow}>
               <View style={styles.input}>
                 <TextInput
                   autoCorrect={false}
-                  autoFocus={!haveCustomer}
+                  // autoFocus={!haveCustomer}
                   blurOnSubmit={false}
                   error={errors.name.first}
                   label="First"
