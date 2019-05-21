@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   Picker,
   Text,
   TextInput,
@@ -24,14 +24,15 @@ import {
   DUPLICATE_WINDOW,
   SET_FIELD,
 } from '../../mutations/local'
+import { PERSIST_WINDOW, REMOVE_WINDOW } from '../../mutations/remote'
+import { WINDOW_QUERY } from '../../queries/local'
+import { JOBSHEET_DATA } from '../../queries'
+
 import * as jsc from '../../config/jobSheetConstants'
 import styles from './styles'
 import { Duplicate } from '../../../common/components/Duplicate'
 import { Error } from '../../../common/components/Error'
 import { FormHeader } from '../FormHeader'
-import { JOBSHEET_DATA } from '../../queries'
-import { PERSIST_WINDOW, REMOVE_WINDOW } from '../../mutations/remote'
-import { WINDOW_QUERY } from '../../queries/local'
 import { prepareDoc } from '../../utils'
 
 
@@ -49,7 +50,7 @@ function WindowForm({
   const costsInstall = useRef(null)
 
   const _handleRemove = (func, windowID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Window',
       'Are you sure you want to delete this item?',
       [

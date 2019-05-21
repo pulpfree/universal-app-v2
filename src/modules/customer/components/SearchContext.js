@@ -9,6 +9,7 @@ class SearchProvider extends React.Component {
   state={
     isActive: true,
     lastName: true,
+    phoneNumber: false,
     streetName: false,
     searchVal: '',
   }
@@ -22,17 +23,22 @@ class SearchProvider extends React.Component {
   }
 
   _handleLastName = (flag) => {
-    this.setState({ lastName: flag, streetName: !flag })
+    this.setState({ lastName: flag, streetName: !flag, phoneNumber: !flag })
   }
 
   _handleStreetName = (flag) => {
-    this.setState({ streetName: flag, lastName: !flag })
+    this.setState({ streetName: flag, lastName: !flag, phoneNumber: !flag })
+  }
+
+  _handlePhoneNumber = (flag) => {
+    this.setState({ phoneNumber: flag, lastName: !flag, streetName: !flag })
   }
 
   render() {
     const {
       isActive,
       lastName,
+      phoneNumber,
       searchVal,
       streetName,
     } = this.state
@@ -43,9 +49,11 @@ class SearchProvider extends React.Component {
         value={{
           isActive,
           lastName,
+          phoneNumber,
           searchVal,
           streetName,
           setActive: this._handleActive,
+          setPhoneNumber: this._handlePhoneNumber,
           setSearchVal: this._handleSearchVal,
           setLastName: this._handleLastName,
           setStreetName: this._handleStreetName,
@@ -70,6 +78,7 @@ function withSearch(Component) {
         {({
           isActive,
           lastName,
+          phoneNumber,
           searchVal,
           streetName,
         }) => (
@@ -78,6 +87,7 @@ function withSearch(Component) {
             isActive={isActive}
             searchVal={searchVal}
             lastName={lastName}
+            phoneNumber={phoneNumber}
             streetName={streetName}
           />
         )}

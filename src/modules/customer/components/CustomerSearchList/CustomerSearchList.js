@@ -100,6 +100,10 @@ const SearchList = graphql(SEARCH_CUSTOMER, {
       variables.field = 'name.last'
       variables.value = props.searchVal
     }
+    if (props.phoneNumber) {
+      variables.field = 'phones.number'
+      variables.value = props.searchVal
+    }
     if (props.streetName) variables.search = props.searchVal
     if (props.isActive !== 'undefined') variables.active = props.isActive
     return {

@@ -90,10 +90,28 @@ function CustomerForm({
   const [haveCustomer, setHaveCustomer] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
-  useEffect(() => (
-    () => {
-      clearCustomer()
+  const mapParams = navigation.getParam('mapParams', false)
+  if (mapParams && mapParams.address_components) {
+    const location = {
+      type: 'Point',
+      coordinates: [mapParams.geometry.location.lng, mapParams.geometry.location.lat],
     }
+    // console.log('mapParams:', mapParams)
+    setCustomerField('address.location', location)
+    const addr = ramda.clone(mapParams.address_components)
+    if (addr.length === 8) {
+      addr.splice(2, 1)
+    }
+
+    setCustomerField('address.street1', `${addr[0].long_name} ${addr[1].short_name}`)
+    setCustomerField('address.city', addr[2].long_name)
+    if (addr.length === 7) {
+      setCustomerField('address.postalCode', addr[6].long_name)
+    }
+  }
+
+  useEffect(() => (
+    () => clearCustomer()
   ), [])
 
   // we need to use state to ensure this is only set once
@@ -147,7 +165,7 @@ function CustomerForm({
               <View style={styles.input}>
                 <TextInput
                   autoCorrect={false}
-                  autoFocus={!haveCustomer}
+                  // autoFocus={!haveCustomer}
                   blurOnSubmit={false}
                   error={errors.name.first}
                   label="First"
@@ -380,6 +398,7 @@ function CustomerForm({
                 }}
               </Mutation>
             </View>
+
             <View style={{ marginTop: 10, flex: 1 }}>
               {errorMsg !== '' && <Error error={errorMsg} />}
             </View>

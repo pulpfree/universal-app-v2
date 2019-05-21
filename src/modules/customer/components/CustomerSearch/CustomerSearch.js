@@ -21,7 +21,9 @@ export default function CustomerSearchHeader() {
         isActive,
         setActive,
         lastName,
+        phoneNumber,
         streetName,
+        setPhoneNumber,
         setSearchVal,
         setStreetName,
         setLastName,
@@ -42,32 +44,43 @@ export default function CustomerSearchHeader() {
             placeholder="Search Customer"
             value={sVal}
           />
-          <CheckBox
-            checked={lastName}
-            checkedColor={clr.black}
-            checkedIcon="dot-circle-o"
-            containerStyle={styles.checkbox}
-            onPress={() => setLastName(!lastName)}
-            title="Last Name"
-            uncheckedIcon="circle-o"
-          />
-          <CheckBox
-            checked={streetName}
-            checkedColor={clr.black}
-            checkedIcon="dot-circle-o"
-            containerStyle={styles.checkbox}
-            onPress={() => setStreetName(!streetName)}
-            title="Street Name"
-            uncheckedIcon="circle-o"
-          />
-          <View style={styles.switch}>
-            <Text style={styles.switchLabel}>Active</Text>
-            <Switch
-              onValueChange={() => setActive(!isActive)}
-              thumbColor={clr.black}
-              trackColor={{ false: clr.mdGray, true: clr.mdGray }}
-              value={isActive}
+          <View style={styles.fields}>
+            <CheckBox
+              checked={lastName}
+              checkedColor={clr.black}
+              checkedIcon="dot-circle-o"
+              containerStyle={styles.checkbox}
+              onPress={() => setLastName(!lastName)}
+              title="Last Name"
+              uncheckedIcon="circle-o"
             />
+            <CheckBox
+              checked={streetName}
+              checkedColor={clr.black}
+              checkedIcon="dot-circle-o"
+              containerStyle={styles.checkbox}
+              onPress={() => setStreetName(!streetName)}
+              title="Street Name"
+              uncheckedIcon="circle-o"
+            />
+            <CheckBox
+              checked={phoneNumber}
+              checkedColor={clr.black}
+              checkedIcon="dot-circle-o"
+              containerStyle={styles.checkbox}
+              onPress={() => setPhoneNumber(!phoneNumber)}
+              title="Phone Number"
+              uncheckedIcon="circle-o"
+            />
+            <View style={styles.switch}>
+              <Text style={styles.switchLabel}>Active</Text>
+              <Switch
+                onValueChange={() => setActive(!isActive)}
+                thumbColor={clr.black}
+                trackColor={{ false: clr.mdGray, true: clr.mdGray }}
+                value={isActive}
+              />
+            </View>
           </View>
         </View>
       )}

@@ -22,6 +22,11 @@ export const defaults = {
       provinceCode: 'ON',
       street1: '',
       type: 'res',
+      location: {
+        __typename: 'Location',
+        type: '',
+        coordinates: [],
+      },
     },
     email: '',
     name: {
@@ -51,12 +56,24 @@ export const resolvers = {
 
       switch (parts.length) {
         case 2:
-          fragment = gql`
+          if (parts[1] === 'location') {
+            fragment = gql`
+            fragment ${parts.join('')}locationField on Customer {
+              ${parts[0]} {
+                ${parts[1]} {
+                  type
+                  coordinates
+                }
+              }
+            }`
+          } else {
+            fragment = gql`
             fragment ${parts.join('')}field on Customer {
               ${parts[0]} {
                 ${parts[1]}
               }
             }`
+          }
           break
         default:
           fragment = gql`
@@ -70,14 +87,29 @@ export const resolvers = {
 
       switch (parts[0]) {
         case 'address':
-          data = {
-            ...res,
-            address: {
-              __typename: 'Address',
-              ...res.address,
-              id: ADDRESS_ID,
-              [parts[1]]: value,
-            },
+          if (parts[1] === 'location') {
+            data = {
+              ...res,
+              address: {
+                __typename: 'Address',
+                ...res.address,
+                id: ADDRESS_ID,
+                location: {
+                  __typename: 'Location',
+                  ...value,
+                },
+              },
+            }
+          } else {
+            data = {
+              ...res,
+              address: {
+                __typename: 'Address',
+                ...res.address,
+                id: ADDRESS_ID,
+                [parts[1]]: value,
+              },
+            }
           }
           break
         case 'name':
