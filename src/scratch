@@ -30,3 +30,38 @@
 3: {long_name: "Regional Municipality of Niagara", short_name: "Regional Municipality of Niagara", types: Array(2)}
 4: {long_name: "Ontario", short_name: "ON", types: Array(2)}
 5: {long_name: "Canada", short_name: "CA", types: Array(2)}
+
+GraphQL error: MongoError: Can't extract geo keys: { _id: ObjectId('5cdf1587b0429016cd46acf1'), location: { coordinates: [] }, associate: "customer", city: "Pelham", postalCode: "L0S 1E3", provinceCode: "ON", street1: "12 Leslie Pl", type: "res", customerID: ObjectId('5cdf1587b0429090d246acf0'), createdAt: new Date(1558123911451), updatedAt: new Date(1558123911451), __v: 0 }  unknown GeoJSON type: { coordinates: [] }
+
+new
+    bundle.umd.js:85:31
+Object.next
+    bundle.umd.js:890:36
+notifySubscription
+    Observable.js:130:17
+onNotify
+    Observable.js:165:2
+SubscriptionObserver.next
+    Observable.js:219:6
+notifySubscription
+    Observable.js:130:17
+onNotify
+    Observable.js:165:2
+SubscriptionObserver.next
+    Observable.js:219:6
+Object.next
+    offline-link.js:279:45
+notifySubscription
+    Observable.js:130:17
+onNotify
+    Observable.js:165:2
+SubscriptionObserver.next
+    Observable.js:219:6
+notifySubscription
+    Observable.js:130:17
+onNotify
+    Observable.js:165:2
+SubscriptionObserver.next
+    Observable.js:219:6
+notifySubscription
+    Observable.js:130:17

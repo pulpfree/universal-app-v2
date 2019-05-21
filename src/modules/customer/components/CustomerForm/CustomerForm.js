@@ -7,7 +7,7 @@ import {
 
 import * as Yup from 'yup'
 import ramda from 'ramda'
-import { Button, CheckBox, Icon } from 'react-native-elements'
+import { Button, CheckBox } from 'react-native-elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { TextInput } from 'react-native-paper'
 import { withNavigation } from 'react-navigation'
@@ -88,13 +88,16 @@ function CustomerForm({
 }) {
   const [errors, setError] = useState(errorObj)
   const [haveCustomer, setHaveCustomer] = useState(false)
-  const [haveMapParams, setMapParams] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
   const mapParams = navigation.getParam('mapParams', false)
-  if (mapParams && mapParams.address_components && !haveMapParams) {
-    setMapParams(true)
-    console.log('mapParams:', mapParams)
+  if (mapParams && mapParams.address_components) {
+    const location = {
+      type: 'Point',
+      coordinates: [mapParams.geometry.location.lng, mapParams.geometry.location.lat],
+    }
+    // console.log('mapParams:', mapParams)
+    setCustomerField('address.location', location)
     const addr = ramda.clone(mapParams.address_components)
     if (addr.length === 8) {
       addr.splice(2, 1)
@@ -157,19 +160,6 @@ function CustomerForm({
         if (error) return <Error error={error} />
         return (
           <KeyboardAwareScrollView style={styles.container}>
-            {/* <View style={styles.mapLink}>
-              <Icon
-                color={clr.primary}
-                name="map"
-                onPress={() => navigation.navigate('AddressLookup')}
-                raised
-                reverse
-                size={15}
-                type="font-awesome"
-                // iconStyle={{ width: 20 }}
-                // containerStyle={{ padding: 0, width: 50, height: 50 }}
-              />
-            </View> */}
             <Header label="Name" padTop={false} />
             <View style={styles.inputRow}>
               <View style={styles.input}>
@@ -408,6 +398,7 @@ function CustomerForm({
                 }}
               </Mutation>
             </View>
+
             <View style={{ marginTop: 10, flex: 1 }}>
               {errorMsg !== '' && <Error error={errorMsg} />}
             </View>

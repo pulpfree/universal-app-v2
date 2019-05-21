@@ -6,6 +6,7 @@ const removeTypename = ramda.omit(['__typename'])
 export const prepareCustomer = (customer) => {
   const doc = ramda.clone(removeTypename(customer))
   const address = removeTypename(doc.address)
+  address.location = removeTypename(doc.address.location)
 
   let phones = []
   if (Array.isArray(doc.phones)) {
@@ -25,6 +26,9 @@ export const prepareCustomer = (customer) => {
       provinceCode: address.provinceCode,
       street1: address.street1,
       type: address.type,
+      location: {
+        ...address.location,
+      },
     },
   }
 
