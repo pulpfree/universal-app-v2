@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   Picker,
   Text,
   TextInput,
@@ -49,7 +49,7 @@ function WindowForm({
   const costsInstall = useRef(null)
 
   const _handleRemove = (func, windowID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Window',
       'Are you sure you want to delete this item?',
       [
