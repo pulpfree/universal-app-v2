@@ -14,6 +14,11 @@ export default gql`{
       provinceCode
       street1
       type
+      location {
+        __typename
+        type
+        coordinates
+      }
     }
     email
     name {

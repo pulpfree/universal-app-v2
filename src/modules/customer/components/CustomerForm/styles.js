@@ -35,4 +35,11 @@ export default StyleSheet.create({
     flex: 1,
     marginRight: 20,
   },
+  mapLink: {
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    marginTop: -5,
+    marginBottom: -10,
+    paddingRight: 25,
+  },
 })
