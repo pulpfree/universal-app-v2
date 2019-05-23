@@ -1,12 +1,34 @@
 /* eslint-disable import/prefer-default-export */
 import ramda from 'ramda'
+import Geocoder from 'react-native-geocoding'
+
+import { GoogleAPIKey } from '../../../config/constants'
 
 const removeTypename = ramda.omit(['__typename'])
 
-export const prepareCustomer = (customer) => {
+export const prepareCustomer = async (customer) => {
   const doc = ramda.clone(removeTypename(customer))
   const address = removeTypename(doc.address)
   address.location = removeTypename(doc.address.location)
+
+  if (!address.location.coordinates.length) {
+    Geocoder.init(GoogleAPIKey)
+
+    const addressStr = address.postalCode ? `${address.street1} ${address.postalCode}` : `${address.street1} ${address.city}`
+
+    let res
+    try {
+      res = await Geocoder.from(addressStr)
+    } catch (e) {
+      console.error('error:', e) // eslint-disable-line no-console
+    }
+    const mapParams = res.results[0]
+    address.location = {
+      coordinates: [mapParams.geometry.location.lng, mapParams.geometry.location.lat],
+      type: 'Point',
+    }
+  }
+  // console.log('address in prepareCustomer:', address)
 
   let phones = []
   if (Array.isArray(doc.phones)) {

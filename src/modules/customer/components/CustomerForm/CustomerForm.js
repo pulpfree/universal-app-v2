@@ -388,8 +388,8 @@ function CustomerForm({
                         type: 'ionicon',
                         color: 'white',
                       }}
-                      onPress={() => customerPersist(
-                        { variables: prepareCustomer(customer) }
+                      onPress={async () => customerPersist(
+                        { variables: await prepareCustomer(customer) }
                       )}
                       style={{ width: 200 }}
                       title={mutLoading ? 'Stand by...' : 'Submit'}

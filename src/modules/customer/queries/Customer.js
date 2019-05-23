@@ -12,6 +12,10 @@ query Customer($customerID: ID!) {
       city
       country
       countryCode
+      location {
+        type
+        coordinates
+      }
       postalCode
       provinceCode
       street1

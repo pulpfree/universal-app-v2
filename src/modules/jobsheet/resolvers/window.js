@@ -136,6 +136,7 @@ export const resolvers = {
 
       switch (parts[0]) {
         case 'productID':
+          isSetCosts = true
           data = {
             ...res,
             productID: {

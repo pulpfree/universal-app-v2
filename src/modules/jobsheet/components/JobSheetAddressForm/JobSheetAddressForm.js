@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
@@ -19,10 +19,12 @@ function AddressForm({
   handleChange,
   handleSubmit,
   isSubmitting,
+  mapParams,
   setFieldValue,
   values,
 }) {
   const [addressType, setAddressType] = useState(values.addressType)
+  const [haveMapParams, setHaveMapParams] = useState(false)
 
   const _setAddressType = (value) => {
     setAddressType(value)
@@ -40,8 +42,34 @@ function AddressForm({
     handleSubmit(e)
   }
 
+  const setMapParamFields = (params) => {
+    const location = {
+      type: 'Point',
+      coordinates: [params.geometry.location.lng, params.geometry.location.lat],
+    }
+    // console.log('params:', params)
+    setFieldValue('location', location)
+    const addr = ramda.clone(params.address_components)
+    if (addr.length === 8) {
+      addr.splice(2, 1)
+    }
+
+    setFieldValue('street1', `${addr[0].long_name} ${addr[1].short_name}`)
+    setFieldValue('city', addr[2].long_name)
+    if (addr.length === 7) {
+      setFieldValue('postalCode', addr[6].long_name)
+    }
+  }
+
   const city = useRef(null)
   const postalCode = useRef(null)
+
+  useEffect(() => {
+    if (mapParams && mapParams.address_components && !haveMapParams) {
+      setHaveMapParams(true)
+      setMapParamFields(mapParams)
+    }
+  })
 
   return (
     <View style={styles.container}>
@@ -161,6 +189,13 @@ AddressForm.propTypes = {
   isSubmitting: PropTypes.bool.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   values: PropTypes.instanceOf(Object).isRequired,
+  mapParams: PropTypes.oneOfType([
+    PropTypes.instanceOf(Object),
+    PropTypes.bool,
+  ]),
+}
+AddressForm.defaultProps = {
+  mapParams: false,
 }
 
 export default AddressForm

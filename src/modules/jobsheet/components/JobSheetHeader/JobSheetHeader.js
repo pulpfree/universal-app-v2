@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   Text,
   View,
 } from 'react-native'
@@ -39,7 +39,7 @@ Header.propTypes = {
 
 const Menu = ({ jobSheet, navigation, setQuoteFromRemote }) => {
   const _handleRemove = (func, jobSheetID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Job Sheet',
       'Are you sure you want to delete this job sheet?',
       [
@@ -75,13 +75,12 @@ const Menu = ({ jobSheet, navigation, setQuoteFromRemote }) => {
                 size: 35,
                 type: 'ionicon',
               }}
-              title="Delete"
+              title={loading ? 'Stand by...' : 'Delete'}
               type="clear"
               buttonStyle={styles.navButton}
               titleStyle={styles.navButtonTitle}
             />
             {error && <Error error={error} />}
-            {loading && <Loader />}
           </View>
         )}
       </Mutation>

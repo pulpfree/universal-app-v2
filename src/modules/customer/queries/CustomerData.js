@@ -12,6 +12,10 @@ export default gql`
         city
         country
         countryCode
+        location {
+          type
+          coordinates
+        }
         postalCode
         provinceCode
         street1

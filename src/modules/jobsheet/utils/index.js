@@ -22,6 +22,7 @@ export const prepareAddress = (address, customerID) => {
   const newAddress = { ...address }
 
   delete newAddress.__typename
+  delete newAddress.location.__typename
   delete newAddress._id
 
   newAddress.associate = 'jobsheet'
@@ -142,7 +143,7 @@ export const calcCosts = (window, product) => {
     premium = specs.overSize * product.premium.cost
     productCost = product.sizeCost[[maxStdSize]] || 0.00
   } else {
-    productCost = product.sizeCost[[specs.sqft]]
+    productCost = product.sizeCost[[specs.sqft]] || 0.00
   }
 
   retCosts.window = parseFloat(productCost + premium)

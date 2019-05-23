@@ -3,11 +3,13 @@ import * as Yup from 'yup'
 import { withNavigation } from 'react-navigation'
 import { Types } from 'mongoose'
 import { compose, graphql } from 'react-apollo'
+import Geocoder from 'react-native-geocoding'
 
 import { PERSIST_JOBSHEET } from '../../mutations/remote'
 import { CUSTOMER_DATA } from '../../../customer/queries'
 
 import JobSheetAddressForm from './JobSheetAddressForm'
+import { GoogleAPIKey } from '../../../../config/constants'
 
 const ValidateSchema = Yup.object().shape({
   street1: Yup.string()
@@ -35,6 +37,25 @@ const Form = withFormik({
   enableReinitialize: true,
   handleSubmit: async (values, { props }) => {
     const customerID = Types.ObjectId(props.customerID)
+
+    if (!values.location) {
+      Geocoder.init(GoogleAPIKey)
+
+      const addressStr = values.postalCode ? `${values.street1} ${values.postalCode}` : `${values.street1} ${values.city}`
+
+      let res
+      try {
+        res = await Geocoder.from(addressStr)
+      } catch (e) {
+        console.error('error:', e) // eslint-disable-line no-console
+      }
+      const mapParams = res.results[0]
+      values.location = { // eslint-disable-line no-param-reassign
+        coordinates: [mapParams.geometry.location.lng, mapParams.geometry.location.lat],
+        type: 'Point',
+      }
+    }
+
     const variables = {
       jobSheetInput: {
         customerID,
@@ -43,6 +64,7 @@ const Form = withFormik({
         associate: 'jobsheet',
         city: values.city,
         customerID,
+        location: values.location,
         postalCode: values.postalCode,
         provinceCode: values.provinceCode,
         street1: values.street1,
