@@ -11,8 +11,8 @@ mutation toggleQuoteItem($itemID: ID!, $itemType: String!) {
 }`
 
 const TOGGLE_ALL = gql`
-mutation toggleQuoteAll {
-  toggleQuoteAll @client
+mutation toggleQuoteAll($toggleAll: Bool!) {
+  toggleQuoteAll(toggleAll: $toggleAll) @client
 }`
 
 const SET_DISCOUNT = gql`

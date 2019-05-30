@@ -1,67 +1,7 @@
-0: {long_name: "47", short_name: "47", types: Array(1)}
-1: {long_name: "North Street", short_name: "North St", types: Array(1)}
-2: {long_name: "Downtown", short_name: "Downtown", types: Array(2)}
-3: {long_name: "St. Catharines", short_name: "St. Catharines", types: Array(2)}
-4: {long_name: "Regional Municipality of Niagara", short_name: "Regional Municipality of Niagara", types: Array(2)}
-5: {long_name: "Ontario", short_name: "ON", types: Array(2)}
-6: {long_name: "Canada", short_name: "CA", types: Array(2)}
-7: {long_name: "L2R 2S3", short_name: "L2R 2S3", types: Array(1)}
 
-0: {long_name: "4733", short_name: "4733", types: Array(1)}
-1: {long_name: "River Road", short_name: "River Rd", types: Array(1)}
-2: {long_name: "Niagara Falls", short_name: "Niagara Falls", types: Array(2)}
-3: {long_name: "Regional Municipality of Niagara", short_name: "Regional Municipality of Niagara", types: Array(2)}
-4: {long_name: "Ontario", short_name: "ON", types: Array(2)}
-5: {long_name: "Canada", short_name: "CA", types: Array(2)}
-6: {long_name: "L2E 3G3", short_name: "L2E 3G3", types: Array(1)}
 
-0: {long_name: "200", short_name: "200", types: Array(1)}
-1: {long_name: "Vansickle Road", short_name: "Vansickle Rd", types: Array(1)}
-2: {long_name: "Western Hill", short_name: "Western Hill", types: Array(2)}
-3: {long_name: "St. Catharines", short_name: "St. Catharines", types: Array(2)}
-4: {long_name: "Regional Municipality of Niagara", short_name: "Regional Municipality of Niagara", types: Array(2)}
-5: {long_name: "Ontario", short_name: "ON", types: Array(2)}
-6: {long_name: "Canada", short_name: "CA", types: Array(2)}
-7: {long_name: "L2S 3Y3", short_name: "L2S 3Y3", types: Array(1)}
+8 Elmvale Rd L2M 6J2
 
-0: {long_name: "3741", short_name: "3741", types: Array(1)}
-1: {long_name: "Black Creek Road", short_name: "Black Creek Rd", types: Array(1)}
-2: {long_name: "Fort Erie", short_name: "Fort Erie", types: Array(2)}
-3: {long_name: "Regional Municipality of Niagara", short_name: "Regional Municipality of Niagara", types: Array(2)}
-4: {long_name: "Ontario", short_name: "ON", types: Array(2)}
-5: {long_name: "Canada", short_name: "CA", types: Array(2)}
+-79.8660747, 44.5836295 <- should be
 
-GraphQL error: MongoError: Can't extract geo keys: { _id: ObjectId('5cdf1587b0429016cd46acf1'), location: { coordinates: [] }, associate: "customer", city: "Pelham", postalCode: "L0S 1E3", provinceCode: "ON", street1: "12 Leslie Pl", type: "res", customerID: ObjectId('5cdf1587b0429090d246acf0'), createdAt: new Date(1558123911451), updatedAt: new Date(1558123911451), __v: 0 }  unknown GeoJSON type: { coordinates: [] }
-
-new
-    bundle.umd.js:85:31
-Object.next
-    bundle.umd.js:890:36
-notifySubscription
-    Observable.js:130:17
-onNotify
-    Observable.js:165:2
-SubscriptionObserver.next
-    Observable.js:219:6
-notifySubscription
-    Observable.js:130:17
-onNotify
-    Observable.js:165:2
-SubscriptionObserver.next
-    Observable.js:219:6
-Object.next
-    offline-link.js:279:45
-notifySubscription
-    Observable.js:130:17
-onNotify
-    Observable.js:165:2
-SubscriptionObserver.next
-    Observable.js:219:6
-notifySubscription
-    Observable.js:130:17
-onNotify
-    Observable.js:165:2
-SubscriptionObserver.next
-    Observable.js:219:6
-notifySubscription
-    Observable.js:130:17
+-79.8660747, 44.5836295 <- was

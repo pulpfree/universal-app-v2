@@ -15,7 +15,6 @@ export const prepareCustomer = async (customer) => {
     Geocoder.init(GoogleAPIKey)
 
     const addressStr = address.postalCode ? `${address.street1} ${address.postalCode}` : `${address.street1} ${address.city}`
-
     let res
     try {
       res = await Geocoder.from(addressStr)
@@ -28,7 +27,6 @@ export const prepareCustomer = async (customer) => {
       type: 'Point',
     }
   }
-  // console.log('address in prepareCustomer:', address)
 
   let phones = []
   if (Array.isArray(doc.phones)) {

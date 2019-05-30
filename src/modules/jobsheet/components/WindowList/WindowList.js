@@ -85,12 +85,15 @@ class WindowList extends React.Component {
         <TouchableOpacity onPress={() => navigation.navigate('WindowForm', { jobSheet, isNew: true })}>
           <ListHeader navigation={navigation} title="Windows" />
         </TouchableOpacity>
-        {loading && <Loader />}
-        <FlatList
-          data={data}
-          renderItem={this._renderItem}
-          keyExtractor={this._keyExtractor}
-        />
+        {loading
+          ? (<Loader />)
+          : (
+            <FlatList
+              data={data}
+              renderItem={this._renderItem}
+              keyExtractor={this._keyExtractor}
+            />
+          )}
       </View>
     )
   }

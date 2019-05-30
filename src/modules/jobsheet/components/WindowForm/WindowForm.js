@@ -41,6 +41,8 @@ function WindowForm({
   navigation,
   setField,
 }) {
+  const [errorMsg, setErrorMsg] = useState('')
+
   useEffect(() => (
     () => {
       clearWindow()
@@ -105,7 +107,7 @@ function WindowForm({
                 <Text style={styles.cellLabel}>Style</Text>
                 <Picker
                   selectedValue={window.productID._id}
-                  style={styles.picker}
+                  style={[styles.picker, { width: 180 }]}
                   itemStyle={styles.pickerItem}
                   onValueChange={value => setField('productID._id', value)}
                 >
@@ -343,34 +345,37 @@ function WindowForm({
                   { query: JOBSHEET_DATA, variables: { jobSheetID: window.jobsheetID } },
                 ]}
               >
-                {jobSheetRemoveWindow => (
-                  <Button
-                    disabled={!window.windowID}
-                    onPress={() => _handleRemove(jobSheetRemoveWindow, window.windowID)}
-                    title="Delete"
-                    buttonStyle={styles.submitButtonSecondary}
-                    style={{ width: 200 }}
-                    icon={{
-                      name: 'ios-trash',
-                      type: 'ionicon',
-                      color: 'white',
-                    }}
-                  />
-                )}
+                {(jobSheetRemoveWindow, { error: mutError, loading }) => {
+                  if (mutError) setErrorMsg(mutError)
+                  return (
+                    <Button
+                      buttonStyle={styles.submitButtonSecondary}
+                      disabled={!window.windowID || loading}
+                      icon={{
+                        name: 'ios-trash',
+                        type: 'ionicon',
+                        color: 'white',
+                      }}
+                      onPress={() => _handleRemove(jobSheetRemoveWindow, window.windowID)}
+                      style={{ width: 200 }}
+                      title={loading ? 'Stand by...' : 'Delete'}
+                    />
+                  )
+                }}
               </Mutation>
               <Mutation mutation={DUPLICATE_WINDOW}>
                 {setDuplicateWindow => (
                   <Button
                     buttonStyle={styles.submitButtonSecondary}
                     disabled={!window.windowID}
-                    onPress={() => _handleDuplicate(setDuplicateWindow)}
-                    style={{ width: 200 }}
-                    title="Duplicate"
                     icon={{
                       name: 'ios-browsers',
                       type: 'ionicon',
                       color: 'white',
                     }}
+                    onPress={() => _handleDuplicate(setDuplicateWindow)}
+                    style={{ width: 200 }}
+                    title="Duplicate"
                   />
                 )}
               </Mutation>
@@ -381,26 +386,32 @@ function WindowForm({
                 ]}
                 onCompleted={() => navigation.goBack()}
               >
-                {(persistWindow, { error: winError, loading }) => (
-                  <React.Fragment>
-                    <Button
-                      disabled={window.costs.extendTotal <= 0 || loading}
-                      onPress={() => {
-                        persistWindow({ variables: { input: prepareDoc(window) } })
-                      }}
-                      title={loading ? 'Stand by...' : 'Save Window'}
-                      buttonStyle={styles.submitButton}
-                      style={{ width: 200 }}
-                      icon={{
-                        name: 'ios-send',
-                        type: 'ionicon',
-                        color: 'white',
-                      }}
-                    />
-                    {winError && <Error error={winError} />}
-                  </React.Fragment>
-                )}
+                {(persistWindow, { error: winError, loading }) => {
+                  if (winError) setErrorMsg(winError)
+                  return (
+                    <React.Fragment>
+                      <Button
+                        buttonStyle={styles.submitButton}
+                        disabled={window.costs.extendTotal <= 0 || loading}
+                        icon={{
+                          name: 'ios-send',
+                          type: 'ionicon',
+                          color: 'white',
+                        }}
+                        onPress={() => {
+                          persistWindow({ variables: { input: prepareDoc(window) } })
+                        }}
+                        style={{ width: 200 }}
+                        title={loading ? 'Stand by...' : 'Save Window'}
+                      />
+                    </React.Fragment>
+                  )
+                }}
               </Mutation>
+            </View>
+
+            <View style={{ marginTop: 10, flex: 1 }}>
+              {errorMsg !== '' && <Error error={errorMsg} />}
             </View>
           </KeyboardAwareScrollView>
         )

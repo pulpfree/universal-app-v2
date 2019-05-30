@@ -171,6 +171,7 @@ export const resolvers = {
     },
     setCustomerFromObject: (_, { customer }, { cache }) => {
       // todo: need to do similar with group and window objects
+      //  in how we're using the "previous" cache
       const previous = cache.readQuery({ query: CUSTOMER })
       const customerClone = ramda.clone(customer)
       const address = ramda.clone(customer.address)

@@ -44,10 +44,11 @@ import { GroupTypeBuilder } from '../../src/modules/jobsheet/components/GroupTyp
 import Payments from '../../src/modules/quote/screens/Payments'
 import QuotePreview from '../../src/modules/quote/screens/QuotePreview'
 import QuoteSearch from '../../src/modules/quote/screens/QuoteSearch'
+import NearbyJobs from '../../src/modules/quote/screens/NearbyJobs'
 import { DeleteInvoice } from '../../src/modules/quote/components/DeleteInvoice'
 import { DiscountForm } from '../../src/modules/quote/components/DiscountForm'
 import { InvoiceOptions } from '../../src/modules/quote/components/InvoiceOptions'
-import { QuoteForm } from '../../src/modules/quote/components/QuoteForm'
+// import { QuoteForm } from '../../src/modules/quote/components/QuoteForm'
 import { QuoteListHeader } from '../../src/modules/quote/components/QuoteListHeader'
 import { QuoteSearchHeader } from '../../src/modules/quote/components/QuoteSearchHeader'
 import { QuoteSearchList } from '../../src/modules/quote/components/QuoteSearchList'
@@ -58,7 +59,7 @@ import { SignIn as PfSignIn } from '../../src/modules/auth/components/SignIn'
 
 import { Loader } from '../../src/modules/common/components/Loader'
 
-import { jobsheets, quotes } from '../mockData/quotes'
+import { geoAddress, jobsheets, quotes } from '../mockData/quotes'
 import jobSheet from '../mockData/jobSheet'
 import quote from '../mockData/quote'
 import { customers, customerInfo, quotes as customerQuotes } from '../mockData/customer'
@@ -148,15 +149,15 @@ storiesOf('Quotes', module)
     <DiscountForm />
   ))
 
-storiesOf('QuoteForm', module)
+/* storiesOf('QuoteForm', module)
   .add('quote form', () => (
     <QuoteForm data={quote} />
-  ))
+  )) */
 
-storiesOf('QuotePreview', module)
+/* storiesOf('QuotePreview', module)
   .add('quote preview', () => (
     <QuotePreview />
-  ))
+  )) */
 
 storiesOf('InvoiceOptions', module)
   .add('invoice options', () => (
@@ -177,6 +178,12 @@ storiesOf('Notes', module)
   .add('notes modal', () => (
     <Notes />
   ))
+
+storiesOf('NearbyJobs', module)
+  .add('screen', () => (
+    <NearbyJobs address={geoAddress} />
+  ))
+
 /*
 * ======================== Address =====================================
 */

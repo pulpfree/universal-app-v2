@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native'
 
-import clr from '../../../../config/colors'
+// import clr from '../../../../config/colors'
 import { styles } from '../../../common/components/Modal'
+import { styles as listStyles } from '../../../common/components/ListMenu'
 
 export default StyleSheet.create({
   container: {
@@ -9,20 +10,16 @@ export default StyleSheet.create({
   },
   modalBox: {
     ...StyleSheet.flatten(styles.modalBox),
-    height: 300,
+    height: 350,
     width: 400,
   },
   body: {
     ...StyleSheet.flatten(styles.body),
   },
-  optRow: {
-    flexDirection: 'row',
-    paddingBottom: 10,
-    paddingTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: clr.mdGray,
+  menuRow: {
+    ...StyleSheet.flatten(listStyles.menuRow),
   },
-  optText: {
-    fontSize: 18,
+  menuText: {
+    ...StyleSheet.flatten(listStyles.menuText),
   },
 })

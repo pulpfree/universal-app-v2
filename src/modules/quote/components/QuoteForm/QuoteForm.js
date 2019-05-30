@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -11,21 +11,29 @@ import { Button } from 'react-native-elements'
 import { Mutation, Query } from 'react-apollo'
 import { withNavigation } from 'react-navigation'
 
-import { QUOTE_JOBSHEET } from '../../queries/local'
-import { TOGGLE_ALL } from '../../mutations/local'
 import { CREATE_INVOICE, PERSIST_QUOTE, REMOVE_QUOTE } from '../../mutations/remote'
 import { CUSTOMER_DATA } from '../../../customer/queries'
+import { QUOTE_JOBSHEET } from '../../queries.local'
+import { TOGGLE_ALL } from '../../mutations/local'
 
+import clr from '../../../../config/colors'
+import styles from './styles'
+import { Error } from '../../../common/components/Error'
 import { GroupList } from '../GroupList'
-import { WindowList } from '../WindowList'
 import { OtherList } from '../OtherList'
 import { QuoteFormFooter } from '../QuoteFormFooter'
-import styles from './styles'
-import clr from '../../../../config/colors'
+import { WindowList } from '../WindowList'
 import { fmtMoney } from '../../../../util/fmt'
-import { Error } from '../../../common/components/Error'
-import { Loader } from '../../../common/components/Loader'
 import { pdfPreviewArgs, prepareQuote } from '../../utils'
+
+const extractAddress = (quote) => {
+  const { addressID: addr } = quote.jobsheetID
+  return {
+    city: addr.city,
+    street1: addr.street1,
+    coordinates: addr.location.coordinates,
+  }
+}
 
 const SubTotal = ({ subTotal }) => {
   if (!subTotal) return null
@@ -40,8 +48,14 @@ SubTotal.propTypes = {
 }
 
 const QuoteForm = ({ isNew, navigation }) => {
+  const [toggleAll, setToggleAll] = useState(true)
+
+  useEffect(() => (
+    () => setToggleAll(true)
+  ), [])
+
   const _handleRemove = (func, quoteID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Quote',
       'Are you sure you want to delete this quote?',
       [
@@ -55,6 +69,8 @@ const QuoteForm = ({ isNew, navigation }) => {
       ]
     )
   }
+
+  const toggleIcon = toggleAll ? 'ios-checkbox' : 'ios-checkbox-outline'
 
   return (
     <Query query={QUOTE_JOBSHEET}>
@@ -83,14 +99,16 @@ const QuoteForm = ({ isNew, navigation }) => {
               <View style={styles.navBar}>
                 <Mutation
                   mutation={TOGGLE_ALL}
+                  onCompleted={() => setToggleAll(!toggleAll)}
+                  variables={{ toggleAll }}
                 >
                   {toggleQuoteAll => (
                     <Button
-                      onPress={() => toggleQuoteAll()}
+                      onPress={() => toggleQuoteAll(toggleAll)}
                       icon={{
                         containerStyle: styles.navButtonIconCont,
                         iconStyle: styles.navButtonIcon,
-                        name: 'ios-checkbox',
+                        name: toggleIcon,
                         size: 35,
                         type: 'ionicon',
                       }}
@@ -119,6 +137,23 @@ const QuoteForm = ({ isNew, navigation }) => {
                   buttonStyle={styles.navButton}
                   titleStyle={styles.navButtonTitle}
                 />
+                <Button
+                  icon={{
+                    containerStyle: styles.navButtonIconCont,
+                    iconStyle: styles.navButtonIcon,
+                    size: 35,
+                    type: 'ionicon',
+                    name: 'ios-navigate',
+                  }}
+                  onPress={() => navigation.navigate(
+                    'NearbyJobs',
+                    { address: extractAddress(quote) }
+                  )}
+                  title="Nearby Jobs"
+                  type="clear"
+                  buttonStyle={styles.navButton}
+                  titleStyle={styles.navButtonTitle}
+                />
                 <Mutation
                   mutation={REMOVE_QUOTE}
                   onCompleted={() => navigation.goBack()}
@@ -129,7 +164,8 @@ const QuoteForm = ({ isNew, navigation }) => {
                   {(quoteRemove, { error, loading }) => (
                     <View style={{ flexDirection: 'column' }}>
                       <Button
-                        onPress={() => _handleRemove(quoteRemove, quote.quoteID)}
+                        buttonStyle={styles.navButton}
+                        disabled={loading}
                         icon={{
                           containerStyle: styles.navButtonIconCont,
                           iconStyle: styles.navButtonIcon,
@@ -137,13 +173,12 @@ const QuoteForm = ({ isNew, navigation }) => {
                           size: 35,
                           type: 'ionicon',
                         }}
-                        title="Delete"
+                        onPress={() => _handleRemove(quoteRemove, quote.quoteID)}
+                        title={loading ? 'Stand by...' : 'Delete'}
                         type="clear"
-                        buttonStyle={styles.navButton}
                         titleStyle={styles.navButtonTitle}
                       />
                       {error && <Error error={error} />}
-                      {loading && <Loader />}
                     </View>
                   )}
                 </Mutation>

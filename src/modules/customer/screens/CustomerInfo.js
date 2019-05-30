@@ -1,16 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  ScrollView,
-} from 'react-native'
-
+import { ScrollView } from 'react-native'
 import { Query } from 'react-apollo'
+
+import { CUSTOMER_DATA } from '../queries'
 
 import { CustomerInfoHeader } from '../components/CustomerInfoHeader'
 import { CustomerQuoteList } from '../components/CustomerQuoteList'
-import { JobSheetList } from '../../jobsheet/components/JobSheetList'
-import { CUSTOMER_DATA } from '../queries'
 import { Error } from '../../common/components/Error'
+import { JobSheetList } from '../../jobsheet/components/JobSheetList'
 import { Loader } from '../../common/components/Loader'
 
 // todo: issue regarding Flatlist inside ScrollView, see:

@@ -11,7 +11,7 @@ import { withNavigation } from 'react-navigation'
 import { Button } from 'react-native-elements'
 import { Mutation, Query } from 'react-apollo'
 
-import { PAYMENTS, QUOTE_PAYMENT } from '../../queries/remote'
+import { PAYMENTS, QUOTE_PAYMENT } from '../../queries.remote'
 import { PERSIST_PAYMENT, REMOVE_PAYMENT } from '../../mutations/remote'
 import { CUSTOMER_DATA } from '../../../customer/queries'
 

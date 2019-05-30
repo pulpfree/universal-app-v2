@@ -21,9 +21,9 @@ import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindow
 
 import Payments from '../modules/quote/screens/Payments'
 import QuoteEdit from '../modules/quote/screens/QuoteEdit'
-import QuoteNew from '../modules/quote/screens/QuoteNew'
 import QuotePreview from '../modules/quote/screens/QuotePreview'
 import QuoteSearch from '../modules/quote/screens/QuoteSearch'
+import NearbyJobs from '../modules/quote/screens/NearbyJobs'
 import { DeleteInvoice } from '../modules/quote/components/DeleteInvoice'
 import { DiscountForm } from '../modules/quote/components/DiscountForm'
 import { InvoiceOptions } from '../modules/quote/components/InvoiceOptions'
@@ -114,12 +114,6 @@ const HomeStack = createStackNavigator(
         title: 'Other Item Form',
       },
     },
-    QuoteNew: {
-      screen: QuoteNew,
-      navigationOptions: {
-        title: 'Add Quote',
-      },
-    },
     QuotePreview: {
       screen: QuotePreview,
       navigationOptions: {
@@ -136,6 +130,12 @@ const HomeStack = createStackNavigator(
       screen: WorkSheet,
       navigationOptions: {
         title: 'WorkSheet PDF',
+      },
+    },
+    NearbyJobs: {
+      screen: NearbyJobs,
+      navigationOptions: {
+        title: 'Nearby Jobs',
       },
     },
   },
