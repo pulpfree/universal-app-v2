@@ -5,7 +5,7 @@ import { withNavigation } from 'react-navigation'
 import { Query } from 'react-apollo'
 
 import { CUSTOMER } from '../../../customer/queries'
-import { QUOTE_PAYMENT } from '../../queries/remote'
+import { QUOTE_PAYMENT } from '../../queries.remote'
 
 import { fmtMoney } from '../../../../util/fmt'
 import styles from './styles'

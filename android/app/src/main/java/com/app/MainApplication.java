@@ -3,6 +3,7 @@ package com.app;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.bugsnag.BugsnagReactNative;
 import com.masteratul.exceptionhandler.ReactNativeExceptionHandlerPackage;
 import com.tkporter.sendsms.SendSMSPackage;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new MapsPackage(),
             BugsnagReactNative.getPackage(),
             new ReactNativeExceptionHandlerPackage(),
             SendSMSPackage.getInstance(),

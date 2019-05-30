@@ -65,6 +65,9 @@ export default gql`{
         _id
         street1
         city
+        location {
+          coordinates
+        }
       }
     }
     discount {

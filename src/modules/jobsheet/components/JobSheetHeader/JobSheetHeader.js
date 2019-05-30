@@ -101,6 +101,7 @@ const Menu = ({ jobSheet, navigation, setQuoteFromRemote }) => {
         {(quotePersist, { error, loading }) => (
           <View style={{ flexDirection: 'column' }}>
             <Button
+              disabled={loading}
               onPress={() => quotePersist({
                 variables: {
                   input: {
@@ -116,13 +117,12 @@ const Menu = ({ jobSheet, navigation, setQuoteFromRemote }) => {
                 size: 30,
                 type: 'foundation',
               }}
-              title="Create Quote"
+              title={loading ? 'Stand by...' : 'Create Quote'}
               type="clear"
               buttonStyle={styles.navButton}
               titleStyle={styles.navButtonTitle}
             />
             {error && <Error error={error} />}
-            {loading && <Loader />}
           </View>
         )}
       </Mutation>

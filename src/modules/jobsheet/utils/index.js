@@ -15,6 +15,18 @@ function calcRound(decimal) {
 }
 
 /**
+ * Expects the width and height decimal values and returns the sqft value
+ * @param {int} w
+ * @param {int} h
+ * @return {int}
+ */
+function calcSqFt(w, h) {
+  const wRd = calcRound(w)
+  const hRd = calcRound(h)
+  return Math.ceil(wRd * hRd / 144)
+}
+
+/**
  * Job Sheet functions
  */
 
@@ -86,10 +98,8 @@ export const calcSizes = (window) => {
   newWin.dims.height.decimal = parseFloat(newWin.dims.height.inch + decimal)
   newWin.dims.height.round = calcRound(newWin.dims.height.decimal)
 
-  const sqft = newWin.dims.width.round * newWin.dims.height.round / 144
-  newWin.specs.sqft = Math.ceil(sqft)
+  newWin.specs.sqft = calcSqFt(newWin.dims.width.decimal, newWin.dims.height.decimal)
   newWin.specs.extendSqft = newWin.specs.sqft * window.qty
-
   return newWin
 }
 
@@ -105,7 +115,7 @@ export const validateSizes = (window, product) => {
   }
   const winW = Math.ceil(window.dims.width.decimal)
   const winH = Math.ceil(window.dims.height.decimal)
-  const sqft = Math.ceil(winW * winH / 144)
+  const sqft = calcSqFt(window.dims.width.decimal, window.dims.height.decimal)
 
   if (winW > product.maxWidth) {
     newWin.dims.width.overSize = (winW - product.maxWidth)
@@ -122,7 +132,6 @@ export const validateSizes = (window, product) => {
   if (sqft > product.premium.oversizeLimit) {
     newWin.specs.overSize = (sqft - product.premium.oversizeLimit)
   }
-
   return newWin
 }
 
@@ -138,7 +147,6 @@ export const calcCosts = (window, product) => {
     discounted: parseFloat(costs.discounted) || 0,
     trim: parseFloat(costs.trim) || 0,
   }
-
   if (specs.overSize) {
     premium = specs.overSize * product.premium.cost
     productCost = product.sizeCost[[maxStdSize]] || 0.00

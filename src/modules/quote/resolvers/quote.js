@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 import ramda from 'ramda'
 
-import { QUOTE_JOBSHEET } from '../queries/remote'
-import { JOBSHEET as JOBSHEET_LOCAL, QUOTE_JOBSHEET as QUOTE_JS_LOCAL } from '../queries/local'
+import { QUOTE_JOBSHEET } from '../queries.remote'
+import { JOBSHEET as JOBSHEET_LOCAL, QUOTE_JOBSHEET as QUOTE_JS_LOCAL } from '../queries.local'
 import client from '../../../apollo'
 import constants from '../config/constants'
 
@@ -34,6 +34,10 @@ export const defaults = {
         __typename: 'Address',
         street1: '',
         city: '',
+        location: {
+          __typename: 'Location',
+          coordinates: [],
+        },
       },
     },
     discount: {
@@ -186,16 +190,16 @@ export const resolvers = {
       resolvers.Mutation.calculateQuote(_, null, { cache })
       return null
     },
-    toggleQuoteAll: (_, _args, { cache }) => {
+    toggleQuoteAll: (_, { toggleAll }, { cache }) => {
       const id = QUOTE_ID_KEY
 
       // fetch jobsheet
       const jsRes = cache.readQuery({ query: JOBSHEET_LOCAL })
 
       // extract all items
-      const jsGroups = jsRes.jobSheet.groups.map(w => w._id)
-      const jsOther = jsRes.jobSheet.other.map(w => w._id)
-      const jsWins = jsRes.jobSheet.windows.map(w => w._id)
+      const jsGroups = toggleAll ? jsRes.jobSheet.groups.map(w => w._id) : []
+      const jsOther = toggleAll ? jsRes.jobSheet.other.map(w => w._id) : []
+      const jsWins = toggleAll ? jsRes.jobSheet.windows.map(w => w._id) : []
 
       const fragment = gql`
       fragment QuoteItemToggle on Quote {

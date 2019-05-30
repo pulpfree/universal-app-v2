@@ -17,45 +17,39 @@ function InvoiceOptions({ navigation }) {
         <ModalHeader title="Invoice Options" />
 
         <View style={styles.body}>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate(
-              'QuotePreview',
-              { previewArgs: pdfPreviewArgs(quote), customerID }
-            )
-          }}
-          >
-            <View style={styles.optRow}>
-              <Text style={styles.optText}>PDF Preview</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('QuotePreview', { previewArgs: pdfPreviewArgs(quote), customerID })}>
+            <View style={styles.menuRow}>
+              <Text style={styles.menuText}>PDF Preview</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Payments', { quote, customerID })}>
-            <View style={styles.optRow}>
-              <Text style={styles.optText}>View/Record Payments</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('CustomerInfo', { customerID })}>
+            <View style={styles.menuRow}>
+              <Text style={styles.menuText}>Customer Details</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('DiscountForm', { quote, customerID })}>
-            <View style={styles.optRow}>
-              <Text style={styles.optText}>Adjust Discount</Text>
+            <View style={styles.menuRow}>
+              <Text style={styles.menuText}>Adjust Discount</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => {
-            navigation.navigate(
-              'WorkSheet',
-              { fileArgs: workSheetArgs(quote) }
-            )
-          }}
-          >
-            <View style={styles.optRow}>
-              <Text style={styles.optText}>View Worksheet</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('WorkSheet', { fileArgs: workSheetArgs(quote) })}>
+            <View style={styles.menuRow}>
+              <Text style={styles.menuText}>View Worksheet</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate('Payments', { quote, customerID })}>
+            <View style={styles.menuRow}>
+              <Text style={styles.menuText}>View/Record Payments</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('DeleteInvoice', { quote, customerID })}>
-            <View style={styles.optRow}>
-              <Text style={styles.optText}>Delete Invoice</Text>
+            <View style={styles.menuRow}>
+              <Text style={styles.menuText}>Delete Invoice</Text>
             </View>
           </TouchableOpacity>
 

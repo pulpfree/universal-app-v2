@@ -87,7 +87,7 @@ const signedUrlApi = (args) => {
     return () => {
       didCancel = true
       RNFetchBlob.fs.unlink(filePath).then(() => {
-        console.log('filePath unlinked in signedUrlApi') // eslint-disable-line no-console
+        // console.log('filePath unlinked in signedUrlApi') // eslint-disable-line no-console
       })
     }
   }, [args])

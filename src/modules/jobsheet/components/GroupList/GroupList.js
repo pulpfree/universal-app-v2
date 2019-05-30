@@ -82,12 +82,16 @@ class GroupList extends React.Component {
         <TouchableOpacity onPress={() => navigation.navigate('GroupForm', { jobSheet, isNew: true })}>
           <ListHeader navigation={navigation} title="Groups" />
         </TouchableOpacity>
-        {loading && <Loader />}
-        <FlatList
-          data={data}
-          renderItem={this._renderItem}
-          keyExtractor={this._keyExtractor}
-        />
+        {loading
+          ? (<Loader />)
+          : (
+            <FlatList
+              data={data}
+              renderItem={this._renderItem}
+              keyExtractor={this._keyExtractor}
+            />
+          )
+        }
       </View>
     )
   }

@@ -62,6 +62,9 @@ query QuoteJobSheet($jobSheetID: ID!, $quoteID: ID!) {
         _id
         street1
         city
+        location {
+          coordinates
+        }
       }
     }
     discount {

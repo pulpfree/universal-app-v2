@@ -10,7 +10,7 @@ import {
 import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
 
-import { QUOTE_SEARCH } from '../../queries/remote'
+import { QUOTE_SEARCH } from '../../queries.remote'
 import { SET_QUOTE } from '../../mutations/local'
 
 import styles from './styles'
@@ -25,13 +25,13 @@ const ListItem = ({ item }) => (
     <View style={[styles.itemCell, { flex: 0.3 }]}>
       <Text>{item.number}</Text>
     </View>
-    <View style={styles.itemCell}>
+    <View style={[styles.itemCell, { flex: 1.25 }]}>
       <Text>{`${item.customerID.name.last}, ${item.customerID.name.first}`}</Text>
     </View>
-    <View style={[styles.itemCell, { flex: 1.5 }]}>
-      <Text>{`${item.jobsheetID.addressID.street1}, ${item.jobsheetID.addressID.city}`}</Text>
+    <View style={[styles.itemCell, { flex: 1.25 }]}>
+      <Text numberOfLines={1} ellipsizeMode="tail">{`${item.jobsheetID.addressID.street1}, ${item.jobsheetID.addressID.city}`}</Text>
     </View>
-    <View style={[styles.itemCell, { flex: 0.75 }]}>
+    <View style={[styles.itemCell, { flex: 0.65 }]}>
       <Text style={{ textAlign: 'right' }}>{fmtMoney(item.quotePrice.total, null, true)}</Text>
     </View>
     <View style={[styles.itemCell, { flex: 0.75 }]}>
