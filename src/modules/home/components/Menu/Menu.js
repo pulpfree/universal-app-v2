@@ -35,6 +35,16 @@ export default function Menu({
               color: clr.white,
               size: 32,
             }}
+            onPress={() => navigation.navigate('CustomerRecent')}
+            title="Recent Customers"
+          />
+          <Button
+            buttonStyle={styles.button}
+            icon={{
+              name: 'group',
+              color: clr.white,
+              size: 32,
+            }}
             onPress={() => navigation.navigate('CustomerSearch')}
             title="Search Customers"
           />

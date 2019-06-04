@@ -85,6 +85,7 @@ function GroupForm({
     }
   ), [])
   const [isDuplicate, setDuplicate] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const costsInstall = useRef(null)
   const scrollTop = useRef(null)
@@ -525,6 +526,12 @@ function GroupForm({
               </View>
             </View>
 
+            {errorMsg !== '' && (
+              <View style={{ marginTop: 10 }}>
+                <Error error={errorMsg} />
+              </View>
+            )}
+
             <View style={styles.buttonRow}>
               <Mutation
                 mutation={REMOVE_GROUP}
@@ -533,23 +540,23 @@ function GroupForm({
                   { query: JOBSHEET_DATA, variables: { jobSheetID: group.jobsheetID } },
                 ]}
               >
-                {(jobSheetRemoveGroup, { error, loading }) => ( // eslint-disable-line no-shadow
-                  <React.Fragment>
+                {(jobSheetRemoveGroup, { error: remError, loading }) => {
+                  if (remError) setErrorMsg(remError)
+                  return (
                     <Button
-                      disabled={!group.groupID || loading}
-                      onPress={() => _handleRemove(jobSheetRemoveGroup, group.groupID)}
-                      title="Delete Group"
                       buttonStyle={styles.submitButtonSecondary}
-                      style={{ width: 200 }}
+                      disabled={!group.groupID || loading}
                       icon={{
                         name: 'ios-trash',
                         type: 'ionicon',
                         color: 'white',
                       }}
+                      onPress={() => _handleRemove(jobSheetRemoveGroup, group.groupID)}
+                      style={{ width: 200 }}
+                      title={loading ? 'Stand by...' : 'Delete Group'}
                     />
-                    {error && <Error error={error} />}
-                  </React.Fragment>
-                )}
+                  )
+                }}
               </Mutation>
               <Mutation mutation={DUPLICATE_GROUP}>
                 {setDuplicateGroup => (
@@ -574,8 +581,9 @@ function GroupForm({
                 ]}
                 onCompleted={() => navigation.goBack()}
               >
-                {(persistGroup, { error: grpError, loading }) => (
-                  <React.Fragment>
+                {(persistGroup, { error: grpError, loading }) => {
+                  if (grpError) setErrorMsg(grpError)
+                  return (
                     <Button
                       buttonStyle={styles.submitButton}
                       disabled={loading || !group.costs.extendTotal}
@@ -590,9 +598,8 @@ function GroupForm({
                       style={{ width: 200 }}
                       title={loading ? 'Stand by...' : 'Save Group'}
                     />
-                    {grpError && <Error error={grpError} />}
-                  </React.Fragment>
-                )}
+                  )
+                }}
               </Mutation>
             </View>
           </KeyboardAwareScrollView>

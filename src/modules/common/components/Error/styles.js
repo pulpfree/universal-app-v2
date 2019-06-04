@@ -4,9 +4,8 @@ import clr from '../../../../config/colors'
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'flex-start',
-    minHeight: 250,
+    minHeight: 50,
   },
   text: {
     backgroundColor: clr.alert,

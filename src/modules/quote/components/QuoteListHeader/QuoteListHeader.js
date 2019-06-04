@@ -12,13 +12,13 @@ export default function QuoteListHeader() {
       <View style={[styles.cell, { flex: 0.3 }]}>
         <Text style={styles.cellText}>No</Text>
       </View>
-      <View style={[styles.cell, { flex: 1 }]}>
+      <View style={[styles.cell, { flex: 1.25 }]}>
         <Text style={styles.cellText}>Name</Text>
       </View>
-      <View style={[styles.cell, { flex: 1.5 }]}>
+      <View style={[styles.cell, { flex: 1.25 }]}>
         <Text style={styles.cellText}>Address</Text>
       </View>
-      <View style={[styles.cell, { flex: 0.75 }]}>
+      <View style={[styles.cell, { flex: 0.65 }]}>
         <Text style={[styles.cellText, { textAlign: 'right' }]}>Cost</Text>
       </View>
       <View style={[styles.cell, { flex: 0.75 }]}>

@@ -41,15 +41,16 @@ function WindowForm({
   navigation,
   setField,
 }) {
-  const [errorMsg, setErrorMsg] = useState('')
-
   useEffect(() => (
     () => {
       clearWindow()
     }
   ), [])
   const [isDuplicate, setDuplicate] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
+
   const costsInstall = useRef(null)
+  const scrollTop = useRef(null)
 
   const _handleRemove = (func, windowID) => {
     Alert.alert(
@@ -70,6 +71,7 @@ function WindowForm({
   const _handleDuplicate = (func) => {
     setDuplicate(true)
     func()
+    scrollTop.current.scrollTo({ x: 0, y: 0, animated: true })
   }
 
   return (
@@ -78,7 +80,7 @@ function WindowForm({
         if (error) return <Error error={error} />
 
         return (
-          <KeyboardAwareScrollView style={styles.formCont}>
+          <KeyboardAwareScrollView style={styles.formCont} ref={scrollTop}>
             {isDuplicate && (
               <Duplicate />
             )}
@@ -337,6 +339,12 @@ function WindowForm({
               </View>
             </View>
 
+            {errorMsg !== '' && (
+              <View style={{ marginTop: 10 }}>
+                <Error error={errorMsg} />
+              </View>
+            )}
+
             <View style={styles.buttonRow}>
               <Mutation
                 mutation={REMOVE_WINDOW}
@@ -358,7 +366,7 @@ function WindowForm({
                       }}
                       onPress={() => _handleRemove(jobSheetRemoveWindow, window.windowID)}
                       style={{ width: 200 }}
-                      title={loading ? 'Stand by...' : 'Delete'}
+                      title={loading ? 'Stand by...' : 'Delete Window'}
                     />
                   )
                 }}
@@ -410,9 +418,6 @@ function WindowForm({
               </Mutation>
             </View>
 
-            <View style={{ marginTop: 10, flex: 1 }}>
-              {errorMsg !== '' && <Error error={errorMsg} />}
-            </View>
           </KeyboardAwareScrollView>
         )
       }}

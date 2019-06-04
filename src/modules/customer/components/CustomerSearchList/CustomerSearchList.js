@@ -71,7 +71,7 @@ class CustomerSearchList extends React.Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <FlatList
           data={results}
           renderItem={this._renderItem}
@@ -108,7 +108,6 @@ const SearchList = graphql(SEARCH_CUSTOMER, {
     if (props.isActive !== 'undefined') variables.active = props.isActive
     return {
       variables,
-      // fetchPolicy: 'network-only',
       fetchPolicy: 'cache-and-network',
     }
   },

@@ -6,6 +6,7 @@ import CustomerProfile from '../modules/customer/screens/CustomerProfile'
 import CustomerSearch from '../modules/customer/screens/CustomerSearch'
 import { AddressLookup } from '../modules/customer/components/AddressLookup'
 import { CustomerInfoMenu } from '../modules/customer/components/CustomerInfoMenu'
+import { CustomerRecent } from '../modules/customer/components/CustomerRecent'
 import { DeleteCustomer } from '../modules/customer/components/DeleteCustomer'
 import { Notes as CustomerNotes } from '../modules/customer/components/Notes'
 import { ToggleActive as CustomerToggleActive } from '../modules/customer/components/ToggleActive'
@@ -82,6 +83,12 @@ const HomeStack = createStackNavigator(
       screen: CustomerProfile,
       navigationOptions: {
         title: 'Customer Profile',
+      },
+    },
+    CustomerRecent: {
+      screen: CustomerRecent,
+      navigationOptions: {
+        title: 'Recent Customers',
       },
     },
     JobSheetNew: {

@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   Picker,
   Text,
   TextInput,
@@ -44,8 +44,10 @@ function OtherForm({
     }
   ), [])
 
+  const [errorMsg, setErrorMsg] = useState('')
+
   const _handleRemove = (func, otherID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Other Item',
       'Are you sure you want to delete this item?',
       [
@@ -148,6 +150,12 @@ function OtherForm({
               </View>
             </View>
 
+            {errorMsg !== '' && (
+              <View style={{ marginTop: 10 }}>
+                <Error error={errorMsg} />
+              </View>
+            )}
+
             <View style={styles.buttonRow}>
               <Mutation
                 mutation={REMOVE_OTHER}
@@ -156,23 +164,23 @@ function OtherForm({
                   { query: JOBSHEET_DATA, variables: { jobSheetID: other.jobsheetID } },
                 ]}
               >
-                {(jobSheetRemoveOther, { error, loading }) => ( // eslint-disable-line no-shadow
-                  <React.Fragment>
+                {(jobSheetRemoveOther, { error: remError, loading }) => {
+                  if (remError) setErrorMsg(remError)
+                  return (
                     <Button
-                      disabled={!other.otherID || loading}
-                      onPress={() => _handleRemove(jobSheetRemoveOther, other.otherID)}
-                      title="Delete"
                       buttonStyle={styles.submitButtonSecondary}
-                      style={{ width: 200 }}
+                      disabled={!other.otherID || loading}
                       icon={{
                         name: 'ios-trash',
                         type: 'ionicon',
                         color: 'white',
                       }}
+                      onPress={() => _handleRemove(jobSheetRemoveOther, other.otherID)}
+                      style={{ width: 200 }}
+                      title={loading ? 'Stand by...' : 'Delete Item'}
                     />
-                    {error && <Error error={error} />}
-                  </React.Fragment>
-                )}
+                  )
+                }}
               </Mutation>
               <Mutation
                 mutation={PERSIST_OTHER}
@@ -181,8 +189,9 @@ function OtherForm({
                 ]}
                 onCompleted={() => navigation.goBack()}
               >
-                {(persistOther, { itemError, loading }) => (
-                  <React.Fragment>
+                {(persistOther, { error: saveError, loading }) => {
+                  if (saveError) setErrorMsg(saveError)
+                  return (
                     <Button
                       buttonStyle={styles.submitButton}
                       disabled={loading || !other.costs.extendTotal}
@@ -197,9 +206,8 @@ function OtherForm({
                       style={{ width: 200 }}
                       title={loading ? 'Stand by...' : 'Save Item'}
                     />
-                    {itemError && <Error error={itemError} />}
-                  </React.Fragment>
-                )}
+                  )
+                }}
               </Mutation>
             </View>
           </KeyboardAwareScrollView>
