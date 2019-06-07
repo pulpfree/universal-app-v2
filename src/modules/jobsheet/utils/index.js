@@ -15,14 +15,30 @@ function calcRound(decimal) {
 }
 
 /**
+ * Expects the width and height decimal values and returns the sqft value
+ * @param {int} w
+ * @param {int} h
+ * @return {int}
+ */
+function calcSqFt(w, h) {
+  const wRd = calcRound(w)
+  const hRd = calcRound(h)
+  return Math.ceil(wRd * hRd / 144)
+}
+
+/**
  * Job Sheet functions
  */
 
-export const prepareAddress = (address) => {
+export const prepareAddress = (address, customerID) => {
   const newAddress = { ...address }
 
   delete newAddress.__typename
+  delete newAddress.location.__typename
   delete newAddress._id
+
+  newAddress.associate = 'jobsheet'
+  newAddress.customerID = Types.ObjectId(customerID)
 
   return newAddress
 }
@@ -32,14 +48,17 @@ export const prepareAddress = (address) => {
 */
 
 export const calcSizes = (window) => {
-  if (!ramda.hasPath(['dims', 'height', 'inch'], window) || !ramda.hasPath(['dims', 'height', 'inch'], window)) return false
+  if (
+    !ramda.hasPath(['dims', 'height', 'inch'], window)
+    || !ramda.hasPath(['dims', 'height', 'inch'], window)
+  ) return false
 
   let decimal = 0.00
   const newWin = {
     dims: {
       height: {
         decimal: null,
-        fraction: null,
+        fraction: '',
         inch: null,
         overSize: null,
         round: null,
@@ -47,7 +66,7 @@ export const calcSizes = (window) => {
       },
       width: {
         decimal: null,
-        fraction: null,
+        fraction: '',
         inch: null,
         overSize: null,
         round: null,
@@ -79,10 +98,8 @@ export const calcSizes = (window) => {
   newWin.dims.height.decimal = parseFloat(newWin.dims.height.inch + decimal)
   newWin.dims.height.round = calcRound(newWin.dims.height.decimal)
 
-  const sqft = newWin.dims.width.round * newWin.dims.height.round / 144
-  newWin.specs.sqft = Math.ceil(sqft)
+  newWin.specs.sqft = calcSqFt(newWin.dims.width.decimal, newWin.dims.height.decimal)
   newWin.specs.extendSqft = newWin.specs.sqft * window.qty
-
   return newWin
 }
 
@@ -98,7 +115,7 @@ export const validateSizes = (window, product) => {
   }
   const winW = Math.ceil(window.dims.width.decimal)
   const winH = Math.ceil(window.dims.height.decimal)
-  const sqft = Math.ceil(winW * winH / 144)
+  const sqft = calcSqFt(window.dims.width.decimal, window.dims.height.decimal)
 
   if (winW > product.maxWidth) {
     newWin.dims.width.overSize = (winW - product.maxWidth)
@@ -115,7 +132,6 @@ export const validateSizes = (window, product) => {
   if (sqft > product.premium.oversizeLimit) {
     newWin.specs.overSize = (sqft - product.premium.oversizeLimit)
   }
-
   return newWin
 }
 
@@ -131,12 +147,11 @@ export const calcCosts = (window, product) => {
     discounted: parseFloat(costs.discounted) || 0,
     trim: parseFloat(costs.trim) || 0,
   }
-
   if (specs.overSize) {
     premium = specs.overSize * product.premium.cost
-    productCost = product.sizeCost[[maxStdSize]]
+    productCost = product.sizeCost[[maxStdSize]] || 0.00
   } else {
-    productCost = product.sizeCost[[specs.sqft]]
+    productCost = product.sizeCost[[specs.sqft]] || 0.00
   }
 
   retCosts.window = parseFloat(productCost + premium)
@@ -156,24 +171,24 @@ export const calcCosts = (window, product) => {
 }
 
 export const prepareDoc = (window) => {
-  const newWin = { ...window }
+  const doc = ramda.clone(window)
 
-  delete newWin.__typename
-  delete newWin.costs.__typename
-  delete newWin.dims.__typename
-  delete newWin.dims.height.__typename
-  delete newWin.dims.width.__typename
-  delete newWin.specs.__typename
-  newWin.productID = Types.ObjectId(window.productID._id)
-  newWin.jobsheetID = Types.ObjectId(window.jobsheetID)
+  delete doc.__typename
+  delete doc.costs.__typename
+  delete doc.dims.__typename
+  delete doc.dims.height.__typename
+  delete doc.dims.width.__typename
+  delete doc.specs.__typename
+  doc.productID = Types.ObjectId(window.productID._id)
+  doc.jobsheetID = Types.ObjectId(window.jobsheetID)
   if (window.windowID) {
-    newWin._id = Types.ObjectId(newWin.windowID)
+    doc._id = Types.ObjectId(doc.windowID)
   } else {
-    delete newWin._id
+    delete doc._id
   }
-  delete newWin.windowID
+  delete doc.windowID
 
-  return newWin
+  return doc
 }
 
 /*
@@ -241,13 +256,13 @@ export const calcGroupSizes = (dims) => {
       height: {
         decimal: null,
         diff: null,
-        fraction: null,
+        fraction: '',
         inch: null,
       },
       width: {
         decimal: null,
         diff: null,
-        fraction: null,
+        fraction: '',
         inch: null,
       },
     },
@@ -275,15 +290,15 @@ export const calcGroupSizes = (dims) => {
 }
 
 export const prepareGroupDoc = (group) => {
-  const doc = { ...group }
+  const doc = ramda.clone(group)
 
   delete doc.__typename
+  delete doc.id
   delete doc.costs.__typename
   delete doc.dims.__typename
   delete doc.dims.height.__typename
   delete doc.dims.width.__typename
   delete doc.specs.__typename
-  delete doc.specs.groupType.__typename
 
   for (let i = 0; i < doc.items.length; i += 1) {
     delete doc.items[i].__typename
@@ -305,7 +320,7 @@ export const prepareGroupDoc = (group) => {
   }
   delete doc.groupID
   doc.jobsheetID = Types.ObjectId(doc.jobsheetID)
-  doc.specs.groupType = Types.ObjectId(doc.specs.groupType._id)
+
   return doc
 }
 
@@ -314,7 +329,7 @@ export const prepareGroupDoc = (group) => {
  */
 
 export const prepareOtherDoc = (other) => {
-  const doc = { ...other }
+  const doc = ramda.clone(other)
 
   delete doc.__typename
   delete doc.costs.__typename

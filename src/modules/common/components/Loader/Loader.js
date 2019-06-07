@@ -1,15 +1,23 @@
 import React from 'react'
-import {
-  ActivityIndicator,
-  View,
-} from 'react-native'
+import PropTypes from 'prop-types'
+import { ActivityIndicator, View } from 'react-native'
 
 import styles from './styles'
 
-export default function Loader() {
+export default function Loader({ style }) {
+  let compStyles = styles.container
+  if (style) {
+    compStyles = style
+  }
   return (
-    <View style={styles.container}>
+    <View style={compStyles}>
       <ActivityIndicator size="large" />
     </View>
   )
+}
+Loader.propTypes = {
+  style: PropTypes.instanceOf(Object),
+}
+Loader.defaultProps = {
+  style: null,
 }

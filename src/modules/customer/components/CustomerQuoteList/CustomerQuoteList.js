@@ -8,10 +8,15 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
+import { graphql } from 'react-apollo'
 
-import { CustomerQuoteListHeader } from '../CustomerQuoteListHeader'
+import { SET_QUOTE } from '../../../quote/mutations/local'
+
 import styles from './styles'
+import { CustomerQuoteListHeader } from '../CustomerQuoteListHeader'
 import { fmtDate, fmtMoney } from '../../../../util/fmt'
+import { Loader } from '../../../common/components/Loader'
+
 
 const Header = () => (
   <View style={styles.header}>
@@ -46,7 +51,9 @@ const ListItem = ({ item }) => (
       <Text>{fmtDate(item.updatedAt)}</Text>
     </View>
     <View style={[styles.itemCell, { flex: 1.5 }]}>
-      <Text numberOfLines={1}>{item.jobsheetID.addressID.street1}</Text>
+      <Text numberOfLines={1}>
+        {`${item.jobsheetID.number} (${item.jobsheetID.addressID.street1})`}
+      </Text>
     </View>
     <ShowYes yesFlag={item.invoiced} />
     <ShowYes yesFlag={item.invoiced && item.quotePrice.outstanding === 0} />
@@ -63,40 +70,74 @@ ListItem.propTypes = {
 }
 
 class CustomerQuoteList extends React.Component {
+  state = {
+    loading: false,
+  }
+
   _renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this._onPressItem(item._id, item.jobsheetID._id)}>
+    <TouchableOpacity
+      onPress={() => this._onPressItem(item)}
+    >
       <ListItem item={item} />
     </TouchableOpacity>
   )
 
-  _onPressItem = (quoteID, jobSheetID) => {
-    const { navigation } = this.props
-    navigation.navigate('QuoteEdit', { quoteID, jobSheetID })
+  _onPressItem = (item) => {
+    const { navigation, setQuoteFromRemote } = this.props
+    const customerID = navigation.getParam('customerID')
+
+    if (item.invoiced) {
+      navigation.navigate('InvoiceOptions', { quote: item, customerID })
+      return
+    }
+    const jobSheetID = item.jobsheetID._id
+    const quoteID = item._id
+    const setRes = setQuoteFromRemote(jobSheetID, quoteID)
+    this.setState(() => ({ loading: true }))
+    // blocking navigate action so that the WindowForm component doesn't refresh unnecessarily
+    setRes.then(() => {
+      this.setState(() => ({ loading: false }))
+      navigation.navigate('QuoteEdit', { quoteID, jobSheetID })
+    })
   }
 
   _keyExtractor = item => item._id
 
   render() {
-    const { data } = this.props
-    // console.log('data in CustomerQuoteList render:', data)
-
+    const { data, refetch, networkStatus } = this.props
+    const { loading } = this.state
 
     return (
       <React.Fragment>
-        <Header />
-        <FlatList
-          ListHeaderComponent={CustomerQuoteListHeader}
-          data={data.quotes}
-          renderItem={this._renderItem}
-          keyExtractor={this._keyExtractor}
-        />
+        <TouchableOpacity onPress={() => refetch()}>
+          <Header />
+        </TouchableOpacity>
+        {loading ? (
+          <Loader style={{ marginTop: 20 }} />
+        ) : (
+          <FlatList
+            ListHeaderComponent={CustomerQuoteListHeader}
+            data={data.quotes}
+            keyExtractor={this._keyExtractor}
+            onRefresh={() => refetch()}
+            refreshing={networkStatus === 4}
+            renderItem={this._renderItem}
+          />
+        )}
       </React.Fragment>
     )
   }
 }
 CustomerQuoteList.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
+  networkStatus: PropTypes.number.isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  refetch: PropTypes.func.isRequired,
+  setQuoteFromRemote: PropTypes.func.isRequired,
 }
 
-export default withNavigation(CustomerQuoteList)
+export default graphql(SET_QUOTE, {
+  props: ({ mutate }) => ({
+    setQuoteFromRemote: (jobSheetID, quoteID) => mutate({ variables: { jobSheetID, quoteID } }),
+  }),
+})(withNavigation(CustomerQuoteList))

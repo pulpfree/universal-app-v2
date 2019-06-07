@@ -1,23 +1,38 @@
 import { createAppContainer, createStackNavigator } from 'react-navigation'
 
-import CustomerSearch from '../modules/customer/screens/CustomerSearch'
-import CustomerNew from '../modules/customer/screens/CustomerNew'
 import CustomerInfo from '../modules/customer/screens/CustomerInfo'
+import CustomerNew from '../modules/customer/screens/CustomerNew'
+import CustomerProfile from '../modules/customer/screens/CustomerProfile'
+import CustomerSearch from '../modules/customer/screens/CustomerSearch'
+import { AddressLookup } from '../modules/customer/components/AddressLookup'
+import { CustomerInfoMenu } from '../modules/customer/components/CustomerInfoMenu'
+import { CustomerRecent } from '../modules/customer/components/CustomerRecent'
+import { DeleteCustomer } from '../modules/customer/components/DeleteCustomer'
+import { Notes as CustomerNotes } from '../modules/customer/components/Notes'
+import { ToggleActive as CustomerToggleActive } from '../modules/customer/components/ToggleActive'
 
-import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../modules/jobsheet/screens/JobSheet'
+import JobSheetNew from '../modules/jobsheet/screens/JobSheetNew'
+import WorkSheet from '../modules/jobsheet/screens/WorkSheet'
+import { GroupTypeBuilder } from '../modules/jobsheet/components/GroupTypeBuilder'
+import { SelectFeatures } from '../modules/jobsheet/components/SelectFeatures'
 import { SelectRooms } from '../modules/jobsheet/components/SelectRooms'
-import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
 import { SelectTrim } from '../modules/jobsheet/components/SelectTrim'
+import { SelectWindowOptions } from '../modules/jobsheet/components/SelectWindowOptions'
 
-import QuoteSearch from '../modules/quote/screens/QuoteSearch'
-import QuoteNew from '../modules/quote/screens/QuoteNew'
-import QuotePreview from '../modules/quote/screens/QuotePreview'
+import Payments from '../modules/quote/screens/Payments'
 import QuoteEdit from '../modules/quote/screens/QuoteEdit'
+import QuotePreview from '../modules/quote/screens/QuotePreview'
+import QuoteSearch from '../modules/quote/screens/QuoteSearch'
+import NearbyJobs from '../modules/quote/screens/NearbyJobs'
+import { DeleteInvoice } from '../modules/quote/components/DeleteInvoice'
+import { DiscountForm } from '../modules/quote/components/DiscountForm'
+import { InvoiceOptions } from '../modules/quote/components/InvoiceOptions'
 
 import GroupForm from '../modules/jobsheet/screens/GroupForm'
 import OtherForm from '../modules/jobsheet/screens/OtherForm'
 import WindowForm from '../modules/jobsheet/screens/WindowForm'
+
 
 import Home from '../modules/home/screens/Home'
 
@@ -43,7 +58,7 @@ const HomeStack = createStackNavigator(
     QuoteEdit: {
       screen: QuoteEdit,
       navigationOptions: {
-        title: 'Edit Quotes',
+        title: 'Edit Quote',
       },
     },
     CustomerSearch: {
@@ -62,6 +77,18 @@ const HomeStack = createStackNavigator(
       screen: CustomerInfo,
       navigationOptions: {
         title: 'Customer Details',
+      },
+    },
+    CustomerProfile: {
+      screen: CustomerProfile,
+      navigationOptions: {
+        title: 'Customer Profile',
+      },
+    },
+    CustomerRecent: {
+      screen: CustomerRecent,
+      navigationOptions: {
+        title: 'Recent Customers',
       },
     },
     JobSheetNew: {
@@ -94,16 +121,28 @@ const HomeStack = createStackNavigator(
         title: 'Other Item Form',
       },
     },
-    QuoteNew: {
-      screen: QuoteNew,
-      navigationOptions: {
-        title: 'Add Quote',
-      },
-    },
     QuotePreview: {
       screen: QuotePreview,
       navigationOptions: {
-        title: 'Quote Preview',
+        title: 'PDF Preview',
+      },
+    },
+    Payments: {
+      screen: Payments,
+      navigationOptions: {
+        title: 'Invoice Payments',
+      },
+    },
+    WorkSheet: {
+      screen: WorkSheet,
+      navigationOptions: {
+        title: 'WorkSheet PDF',
+      },
+    },
+    NearbyJobs: {
+      screen: NearbyJobs,
+      navigationOptions: {
+        title: 'Nearby Jobs',
       },
     },
   },
@@ -126,10 +165,20 @@ const RootStack = createStackNavigator(
     Main: {
       screen: HomeStack,
     },
+    AddressLookup,
     ContactSheet,
+    CustomerInfoMenu,
+    CustomerNotes,
+    CustomerToggleActive,
+    DeleteCustomer,
+    DeleteInvoice,
+    DiscountForm,
+    GroupTypeBuilder,
+    InvoiceOptions,
+    SelectFeatures,
     SelectRooms,
-    SelectWindowOptions,
     SelectTrim,
+    SelectWindowOptions,
   },
   {
     mode: 'modal',

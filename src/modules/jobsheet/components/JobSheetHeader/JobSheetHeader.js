@@ -1,19 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   Text,
   View,
 } from 'react-native'
 
 import { Button } from 'react-native-elements'
-import { Mutation } from 'react-apollo'
+import { graphql, Mutation } from 'react-apollo'
+
+import { CUSTOMER_DATA } from '../../../customer/queries'
+import { PERSIST_QUOTE } from '../../../quote/mutations/remote'
+import { REMOVE_JOBSHEET } from '../../mutations/remote'
+import { SET_QUOTE } from '../../../quote/mutations/local'
 
 import styles from './styles'
-import { CUSTOMER_DATA } from '../../../customer/queries'
 import { Error } from '../../../common/components/Error'
 import { Loader } from '../../../common/components/Loader'
-import { REMOVE_JOBSHEET } from '../../mutations/remote'
 
 const Header = ({ jobSheet }) => (
   <View style={styles.headerCont}>
@@ -25,6 +28,8 @@ const Header = ({ jobSheet }) => (
       {jobSheet.addressID.street1}
       ,&nbsp;
       {jobSheet.addressID.city}
+      &nbsp;&mdash;&nbsp;
+      {jobSheet.number}
     </Text>
   </View>
 )
@@ -32,9 +37,9 @@ Header.propTypes = {
   jobSheet: PropTypes.instanceOf(Object).isRequired,
 }
 
-const Menu = ({ jobSheet, navigation }) => {
+const Menu = ({ jobSheet, navigation, setQuoteFromRemote }) => {
   const _handleRemove = (func, jobSheetID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Job Sheet',
       'Are you sure you want to delete this job sheet?',
       [
@@ -70,34 +75,70 @@ const Menu = ({ jobSheet, navigation }) => {
                 size: 35,
                 type: 'ionicon',
               }}
-              title="Delete"
+              title={loading ? 'Stand by...' : 'Delete'}
               type="clear"
               buttonStyle={styles.navButton}
               titleStyle={styles.navButtonTitle}
             />
             {error && <Error error={error} />}
-            {loading && <Loader />}
           </View>
         )}
       </Mutation>
-      <Button
-        icon={{
-          containerStyle: styles.navButtonIconCont,
-          iconStyle: styles.navButtonIcon,
-          name: 'page-multiple',
-          size: 30,
-          type: 'foundation',
+      <Mutation
+        mutation={PERSIST_QUOTE}
+        onCompleted={(data) => {
+          const quoteID = data.quotePersist._id
+          const jobSheetID = jobSheet._id
+          const setRes = setQuoteFromRemote(jobSheetID, quoteID)
+          setRes.then(() => {
+            navigation.navigate('QuoteEdit', { jobSheetID, quoteID, isNew: true })
+          })
         }}
-        title="Create Quote"
-        type="clear"
-        buttonStyle={styles.navButton}
-        titleStyle={styles.navButtonTitle}
-      />
+        refetchQueries={[
+          { query: CUSTOMER_DATA, variables: { customerID: jobSheet.customerID._id } },
+        ]}
+      >
+        {(quotePersist, { error, loading }) => (
+          <View style={{ flexDirection: 'column' }}>
+            <Button
+              disabled={loading}
+              onPress={() => quotePersist({
+                variables: {
+                  input: {
+                    customerID: jobSheet.customerID._id,
+                    jobsheetID: jobSheet._id,
+                  },
+                },
+              })}
+              icon={{
+                containerStyle: styles.navButtonIconCont,
+                iconStyle: styles.navButtonIcon,
+                name: 'page-multiple',
+                size: 30,
+                type: 'foundation',
+              }}
+              title={loading ? 'Stand by...' : 'Create Quote'}
+              type="clear"
+              buttonStyle={styles.navButton}
+              titleStyle={styles.navButtonTitle}
+            />
+            {error && <Error error={error} />}
+          </View>
+        )}
+      </Mutation>
     </View>
   )
 }
 Menu.propTypes = {
   jobSheet: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  setQuoteFromRemote: PropTypes.func.isRequired,
 }
-export { Header, Menu }
+
+const MenuG = graphql(SET_QUOTE, {
+  props: ({ mutate }) => ({
+    setQuoteFromRemote: (jobSheetID, quoteID) => mutate({ variables: { jobSheetID, quoteID } }),
+  }),
+})(Menu)
+
+export { Header, MenuG as Menu }

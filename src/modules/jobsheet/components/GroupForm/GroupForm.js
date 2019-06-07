@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   Picker,
   Text,
   TextInput,
@@ -27,6 +27,7 @@ import {
   SET_GROUP_WINDOW_FIELD,
   SET_WINDOW_FROM_GROUP,
   PERSIST_GROUP_WINDOW,
+  REMOVE_GROUP_WINDOW,
 } from '../../mutations/local'
 import { GROUP_QUERY, GROUP_WINDOW_QUERY } from '../../queries/local'
 import { JOBSHEET_DATA } from '../../queries'
@@ -48,7 +49,9 @@ const Window = ({ item }) => {
   return (
     <Mutation mutation={SET_WINDOW_FROM_GROUP}>
       {setWindowFromGroup => (
-        <TouchableOpacity onPress={() => setWindowFromGroup({ variables: { windowID: item._id } })}>
+        <TouchableOpacity
+          onPress={() => setWindowFromGroup({ variables: { windowID: item._id.toString() } })}
+        >
           <View style={styles.windowRow}>
             <Text style={[styles.windowCell, { flex: 0.5 }]}>{item.qty}</Text>
             <Text style={[styles.windowCell, { flex: 2 }]}>{item.product.name}</Text>
@@ -70,7 +73,6 @@ Window.propTypes = {
 function GroupForm({
   clearGroup,
   clearGroupWindow,
-  groupTypes,
   navigation,
   products,
   setGroupField,
@@ -83,11 +85,13 @@ function GroupForm({
     }
   ), [])
   const [isDuplicate, setDuplicate] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const costsInstall = useRef(null)
+  const scrollTop = useRef(null)
 
   const _handleRemove = (func, groupID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Group',
       'Are you sure you want to delete this item?',
       [
@@ -105,15 +109,17 @@ function GroupForm({
   const _handleDuplicate = (func) => {
     setDuplicate(true)
     func()
+    scrollTop.current.scrollTo({ x: 0, y: 0, animated: true })
   }
-
   return (
-    <Query query={GROUP_QUERY}>
+    <Query
+      query={GROUP_QUERY}
+    >
       {({ error, data: { group } }) => {
-        if (error) return <Error error={error} />
-        // console.log('data.group in Query: ', group)
+        if (error) return <Error style={{ height: '100%' }} error={error} />
+        // console.log('group: ', group)
         return (
-          <KeyboardAwareScrollView style={styles.formCont}>
+          <KeyboardAwareScrollView style={styles.formCont} ref={scrollTop}>
             {isDuplicate && (
               <Duplicate />
             )}
@@ -139,30 +145,24 @@ function GroupForm({
               </View>
 
               <View style={styles.formCell}>
-                <Text style={styles.cellLabel}>Style</Text>
-                <Picker
-                  selectedValue={group.specs.groupType._id}
-                  style={[styles.picker, { width: 250 }]}
-                  itemStyle={styles.pickerItem}
-                  onValueChange={value => setGroupField('specs.groupType._id', value)}
-                >
-                  <Picker.Item label="Select" value="" />
-                  {groupTypes.map(p => (
-                    <Picker.Item
-                      key={p._id}
-                      label={p.name}
-                      value={p._id}
-                    />
-                  ))}
-                </Picker>
+                <TouchableOpacity onPress={() => navigation.navigate('GroupTypeBuilder', { groupType: group.specs.groupTypeDescription })}>
+                  <Text style={[styles.cellLabel, styles.modalLinkText]}>Group Type</Text>
+                </TouchableOpacity>
+                <TextInput
+                  allowFontScaling={false}
+                  editable={false}
+                  style={[styles.dimInput, { width: 250 }]}
+                  value={group.specs.groupTypeDescription}
+                />
               </View>
 
               <View style={styles.formCell}>
                 <Text style={styles.cellLabel}>Opening Width</Text>
                 <View style={styles.dimCell}>
                   <TextInput
-                    style={styles.dimInput}
+                    keyboardType="numeric"
                     onChangeText={text => setGroupField('dims.width.inch', text)}
+                    style={styles.dimInput}
                     value={group.dims.width.inch.toString()}
                   />
                   <Picker
@@ -186,8 +186,9 @@ function GroupForm({
                 <Text style={styles.cellLabel}>Opening Height</Text>
                 <View style={styles.dimCell}>
                   <TextInput
-                    style={styles.dimInput}
+                    keyboardType="numeric"
                     onChangeText={text => setGroupField('dims.height.inch', text)}
+                    style={styles.dimInput}
                     value={group.dims.height.inch.toString()}
                   />
                   <Picker
@@ -224,7 +225,6 @@ function GroupForm({
             <Query query={GROUP_WINDOW_QUERY}>
               {({ error, data: { groupWindow } }) => { // eslint-disable-line no-shadow
                 if (error) return <Error error={error} />
-                // console.log('data.groupWindow: ', groupWindow)
                 return (
                   <View style={styles.formRow}>
                     <View style={styles.formCell}>
@@ -251,7 +251,7 @@ function GroupForm({
                         itemStyle={styles.pickerItem}
                         onValueChange={value => setGroupWindowField('productID', value)}
                         selectedValue={groupWindow.productID}
-                        style={styles.picker}
+                        style={[styles.picker, { width: 170 }]}
                       >
                         <Picker.Item label="Select" value="" />
                         {products.map(p => (
@@ -268,6 +268,7 @@ function GroupForm({
                       <Text style={styles.cellLabel}>Width</Text>
                       <View style={styles.dimCell}>
                         <TextInput
+                          keyboardType="numeric"
                           onChangeText={text => setGroupWindowField('dims.width.inch', text)}
                           style={styles.dimInput}
                           value={groupWindow.dims.width.inch.toString()}
@@ -293,6 +294,7 @@ function GroupForm({
                       <Text style={styles.cellLabel}>Height</Text>
                       <View style={styles.dimCell}>
                         <TextInput
+                          keyboardType="numeric"
                           onChangeText={text => setGroupWindowField('dims.height.inch', text)}
                           style={styles.dimInput}
                           value={groupWindow.dims.height.inch.toString()}
@@ -331,7 +333,6 @@ function GroupForm({
                               disabled={groupWindow.specs.sqft <= 0}
                               onPress={() => {
                                 persistGroupWindow()
-                                // navigation.goBack()
                               }}
                               title="Save"
                               buttonStyle={styles.submitButton}
@@ -356,18 +357,24 @@ function GroupForm({
                             color: 'white',
                           }}
                         />
-                        <Button
-                          disabled={groupWindow.specs.sqft <= 0}
-                          // onPress={() => _handleRemove(jobSheetRemoveWindow, window.windowID)}
-                          title="Delete"
-                          buttonStyle={styles.submitButtonSecondary}
-                          style={{ width: 110 }}
-                          icon={{
-                            name: 'ios-trash',
-                            type: 'ionicon',
-                            color: 'white',
-                          }}
-                        />
+                        <Mutation mutation={REMOVE_GROUP_WINDOW}>
+                          {removeGroupWindow => (
+                            <Button
+                              disabled={groupWindow.specs.sqft <= 0}
+                              onPress={() => removeGroupWindow(
+                                { variables: { windowID: groupWindow.windowID } }
+                              )}
+                              title="Delete"
+                              buttonStyle={styles.submitButtonSecondary}
+                              style={{ width: 110 }}
+                              icon={{
+                                name: 'ios-trash',
+                                type: 'ionicon',
+                                color: 'white',
+                              }}
+                            />
+                          )}
+                        </Mutation>
                       </React.Fragment>
                     </View>
                   </View>
@@ -384,7 +391,7 @@ function GroupForm({
               <Text style={styles.windowCostCell}>Unit</Text>
               <Text style={styles.windowCostCell}>Extend Unit</Text>
             </View>
-            {group.items.length && group.items.map(item => (
+            {group.items.length > 0 && group.items.map(item => (
               <Window item={item} key={item._id} />
             ))}
 
@@ -519,6 +526,12 @@ function GroupForm({
               </View>
             </View>
 
+            {errorMsg !== '' && (
+              <View style={{ marginTop: 10 }}>
+                <Error error={errorMsg} />
+              </View>
+            )}
+
             <View style={styles.buttonRow}>
               <Mutation
                 mutation={REMOVE_GROUP}
@@ -527,23 +540,23 @@ function GroupForm({
                   { query: JOBSHEET_DATA, variables: { jobSheetID: group.jobsheetID } },
                 ]}
               >
-                {(jobSheetRemoveGroup, { error, loading }) => ( // eslint-disable-line no-shadow
-                  <React.Fragment>
+                {(jobSheetRemoveGroup, { error: remError, loading }) => {
+                  if (remError) setErrorMsg(remError)
+                  return (
                     <Button
-                      disabled={!group.groupID || loading}
-                      onPress={() => _handleRemove(jobSheetRemoveGroup, group.groupID)}
-                      title="Delete Group"
                       buttonStyle={styles.submitButtonSecondary}
-                      style={{ width: 200 }}
+                      disabled={!group.groupID || loading}
                       icon={{
                         name: 'ios-trash',
                         type: 'ionicon',
                         color: 'white',
                       }}
+                      onPress={() => _handleRemove(jobSheetRemoveGroup, group.groupID)}
+                      style={{ width: 200 }}
+                      title={loading ? 'Stand by...' : 'Delete Group'}
                     />
-                    {error && <Error error={error} />}
-                  </React.Fragment>
-                )}
+                  )
+                }}
               </Mutation>
               <Mutation mutation={DUPLICATE_GROUP}>
                 {setDuplicateGroup => (
@@ -568,25 +581,25 @@ function GroupForm({
                 ]}
                 onCompleted={() => navigation.goBack()}
               >
-                {(persistGroup, { error, loading }) => ( // eslint-disable-line no-shadow
-                  <React.Fragment>
+                {(persistGroup, { error: grpError, loading }) => {
+                  if (grpError) setErrorMsg(grpError)
+                  return (
                     <Button
-                      disabled={loading || !group.costs.extendTotal}
-                      onPress={() => {
-                        persistGroup({ variables: { input: prepareGroupDoc(group) } })
-                      }}
-                      title="Save Group"
                       buttonStyle={styles.submitButton}
-                      style={{ width: 200 }}
+                      disabled={loading || !group.costs.extendTotal}
                       icon={{
                         name: 'ios-send',
                         type: 'ionicon',
                         color: 'white',
                       }}
+                      onPress={() => {
+                        persistGroup({ variables: { input: prepareGroupDoc(group) } })
+                      }}
+                      style={{ width: 200 }}
+                      title={loading ? 'Stand by...' : 'Save Group'}
                     />
-                    {error && <Error error={error} />}
-                  </React.Fragment>
-                )}
+                  )
+                }}
               </Mutation>
             </View>
           </KeyboardAwareScrollView>
@@ -598,7 +611,6 @@ function GroupForm({
 GroupForm.propTypes = {
   clearGroup: PropTypes.func.isRequired,
   clearGroupWindow: PropTypes.func.isRequired,
-  groupTypes: PropTypes.instanceOf(Object).isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
   products: PropTypes.instanceOf(Object).isRequired,
   setGroupField: PropTypes.func.isRequired,

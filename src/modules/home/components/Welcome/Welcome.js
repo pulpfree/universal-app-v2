@@ -13,17 +13,15 @@ const Welcome = () => {
 
   useEffect(() => {
     fetchUser()
-  }, {})
+  }, [])
 
   return (
     <View style={styles.view}>
-      {user
-        && (
-          <Text style={styles.text}>
-            {`Welcome ${user.attributes.name}`}
-          </Text>
-        )
-      }
+      {user && (
+        <Text style={styles.text}>
+          {`Welcome ${user.attributes.name}`}
+        </Text>
+      )}
       <Text>Select an activity</Text>
     </View>
   )

@@ -22,7 +22,6 @@ const Header = ({ customer, navigation }) => (
       <Icon
         color={clr.ltGray}
         name="add-circle"
-        // onPress={() => navigation.navigate('JobSheetNew')}
         size={24}
       />
     </View>
@@ -35,6 +34,9 @@ Header.propTypes = {
 
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
+    <View style={[styles.itemCell, { flex: 0.25 }]}>
+      <Text>{item.number}</Text>
+    </View>
     <View style={styles.itemCell}>
       <Text>{item.addressID.street1}</Text>
     </View>

@@ -7,5 +7,6 @@ export default {
   black: '#000000',
   white: '#ffffff',
   alert: '#ffeb80',
+  hiLite: '#ffeb8081',
   secondaryHeader: '#D4D6DB',
 }

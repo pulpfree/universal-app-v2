@@ -264,5 +264,15 @@ const jobsheets = [
     updatedAt: '2018-06-13T12:06:08.985Z',
   },
 ]
+const geoAddress = {
+  city: 'Niagara-on-the-Lake',
+  coordinates: [-79.0724475, 43.2552635],
+  street1: '44 Queen St',
+}
 
-export { jobsheets, quotes, invoices }
+export {
+  geoAddress,
+  invoices,
+  jobsheets,
+  quotes,
+}

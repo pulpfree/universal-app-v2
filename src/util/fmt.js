@@ -33,32 +33,21 @@ export function fmtDate(date) {
   return dte.format('YYYY-MM-DD')
 }
 
-export function ucFirst(txt) {
-  return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
-}
-
-export function fmtPhone(value, previousValue) {
-  if (!value) return value
-
+// todo: should put this into the utils file, and rename to phone
+export function fmtPhone(value) {
   const digits = value.replace(/[^\d]/g, '')
-  if (!previousValue || value.length > previousValue.length) {
-    // typing forward
-    if (digits.length === 3) return `(${digits})`
 
-    if (digits.length === 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}-`
-  }
   if (digits.length <= 3) return digits
-
   if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`
-
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`
 }
 
 export function fmtPostalCode(code) {
   const postalCode = code.trim()
+  if (postalCode.length < 6) return postalCode
   const validPat = /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ] ?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
   const valid = validPat.test(postalCode)
-  if (!valid) return false
+  if (!valid) return ''
 
   // add space if missing
   if (postalCode.length === 6) {
@@ -67,4 +56,13 @@ export function fmtPostalCode(code) {
   }
 
   return postalCode
+}
+
+export function ucFirst(s) {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
+}
+
+export function capitalize(s) {
+  return ucFirst(s)
 }

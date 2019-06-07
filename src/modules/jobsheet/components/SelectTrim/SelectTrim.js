@@ -19,10 +19,10 @@ import { TrimOptions } from '../../config/jobSheetConstants'
 function SelectTrim({ navigation }) {
   const trm = navigation.getParam('trim', '')
   const type = navigation.getParam('type')
-  const tmpTrim = trm.length > 0 ? trm.trim().split('\n') : []
+  const tmpTrim = trm && trm.length > 0 ? trm.trim().split('\n') : []
   const [options, setOption] = useState(tmpTrim)
 
-  const cst = navigation.getParam('cost', '')
+  const cst = navigation.getParam('cost', 0.00)
   const [cost, setCost] = useState(cst)
 
   const [customFeature, setCustomFeature] = useState(null)

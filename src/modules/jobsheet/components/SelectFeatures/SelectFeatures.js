@@ -9,14 +9,22 @@ import {
 
 import { Button, Icon } from 'react-native-elements'
 import { withNavigation } from 'react-navigation'
+import { Mutation } from 'react-apollo'
+
+import { PERSIST_FEATURES } from '../../mutations/remote'
 
 import clr from '../../../../config/colors'
 import styles from './styles'
+import { Error } from '../../../common/components/Error'
 import { JobFeatures } from '../../config/jobSheetConstants'
 
 function SelectFeatures({ navigation }) {
-  const [features, setFeatures] = useState([])
+  const jobSheet = navigation.getParam('jobSheet')
+
+  const preppedFeatures = jobSheet.features ? jobSheet.features.split('\n') : []
+  const [features, setFeatures] = useState(preppedFeatures)
   const [customFeature, setCustomFeature] = useState(null)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const addFeature = (feat) => {
     if (features.find(feature => feature === feat)) return false
@@ -85,20 +93,38 @@ function SelectFeatures({ navigation }) {
                     color: 'white',
                   }}
                 />
-                <Button
-                  disabled={!features.length}
-                  // onPress={this._handleSubmit}
-                  title="Save"
-                  buttonStyle={styles.submitButton}
-                  style={{ width: 130, marginLeft: 20 }}
-                  icon={{
-                    name: 'ios-send',
-                    type: 'ionicon',
-                    color: 'white',
+                <Mutation
+                  mutation={PERSIST_FEATURES}
+                  onCompleted={() => navigation.goBack()}
+                  // refetchQueries={[
+                  //   { query: CUSTOMER_DATA, variables: { customerID: quote.customerID._id } },
+                  // ]}
+                >
+                  {(jobSheetPersistFeatures, { error, loading }) => {
+                    if (error) setErrorMsg(error)
+                    return (
+                      <Button
+                        disabled={!features.length || loading}
+                        onPress={() => jobSheetPersistFeatures({
+                          variables: { id: jobSheet._id, features: features.join('\n') },
+                        })}
+                        title="Save"
+                        buttonStyle={styles.submitButton}
+                        style={{ width: 130, marginLeft: 20 }}
+                        icon={{
+                          name: 'ios-send',
+                          type: 'ionicon',
+                          color: 'white',
+                        }}
+                      />
+                    )
                   }}
-                />
+                </Mutation>
               </View>
             </View>
+          </View>
+          <View style={{ marginTop: 10, height: 200 }}>
+            {errorMsg !== '' && <Error error={errorMsg} />}
           </View>
         </View>
       </View>

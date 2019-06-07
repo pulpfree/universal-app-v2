@@ -55,8 +55,9 @@ const WINDOW_QUERY = gql`{
 }`
 
 const GROUP_QUERY = gql`{
+  # group @client(always: true) {
   group @client {
-    _id
+    id
     groupID
     jobsheetID
     costs {
@@ -122,11 +123,7 @@ const GROUP_QUERY = gql`{
     qty
     rooms
     specs {
-      groupID
-      groupType {
-        _id
-        # name
-      }
+      groupTypeDescription
       installType
       options
       sqft
@@ -134,11 +131,11 @@ const GROUP_QUERY = gql`{
       trim
     }
   }
-}
-`
+}`
+
 const GROUP_WINDOW_QUERY = gql`{
   groupWindow @client {
-    # _id
+    _id
     windowID
     costs {
       extendUnit
@@ -172,6 +169,10 @@ const GROUP_WINDOW_QUERY = gql`{
       overSize
       sqft
     }
+  }
+  products @client {
+    _id
+    name
   }
 }`
 

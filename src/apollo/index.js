@@ -11,17 +11,35 @@ const stateLink = createLinkWithCache(cache => withClientState({
   ...graphql,
 }))
 
-const appSyncLink = createAppSyncLink({
-  // disableOffline: true,
-  url: appSyncConfig.aws_appsync_graphqlEndpoint,
-  region: appSyncConfig.aws_appsync_region,
-  auth: {
-    type: appSyncConfig.aws_appsync_authenticationType,
-    jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken(),
+const appSyncLink = createAppSyncLink(
+  {
+    disableOffline: true,
+    url: appSyncConfig.aws_appsync_graphqlEndpoint,
+    region: appSyncConfig.aws_appsync_region,
+    auth: {
+      type: appSyncConfig.aws_appsync_authenticationType,
+      jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken(),
+    },
   },
-})
+  {
+    defaultOptions: {
+      query: {
+        fetchPolicy: 'network-only',
+        errorPolicy: 'all',
+      },
+    },
+  },
+)
 
 const link = ApolloLink.from([stateLink, appSyncLink])
 const client = new AWSAppSyncClient({}, { link })
+/* console.log('client:', client)
+client.cache.writeData({
+  data: {
+    group: {
+      id: '1',
+    },
+  },
+}) */
 
 export default client

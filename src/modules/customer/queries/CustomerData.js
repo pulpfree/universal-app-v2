@@ -12,6 +12,10 @@ export default gql`
         city
         country
         countryCode
+        location {
+          type
+          coordinates
+        }
         postalCode
         provinceCode
         street1
@@ -24,6 +28,7 @@ export default gql`
         last
         spouse
       }
+      notes
       phones {
         _id
         countryCode
@@ -39,9 +44,18 @@ export default gql`
         invoiced
         number
         version
-         quotePrice {
+        quotePrice {
           outstanding
+          payments
+          subtotal
+          tax
           total
+        }
+        itemCosts {
+          group
+          other
+          subtotal
+          window
         }
         jobsheetID {
           _id
@@ -50,6 +64,7 @@ export default gql`
             street1
             city
           }
+          number
         }
         updatedAt
       }
@@ -61,6 +76,7 @@ export default gql`
         street1
         city
       }
+      number
       updatedAt
     }
   }

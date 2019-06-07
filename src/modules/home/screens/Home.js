@@ -1,42 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { Text, View } from 'react-native'
+import { Query } from 'react-apollo'
+import { withAuthenticator } from 'aws-amplify-react-native'
 
-import { View } from 'react-native'
+import { PRODUCTS } from '../../jobsheet/queries'
+
 import { Menu } from '../components/Menu'
 import { Welcome } from '../components/Welcome'
+import { Error } from '../../common/components/Error'
+import { styles } from '../components/Home'
 
-const Home = ({ navigation }) => (
+const Home = ({ authState, navigation }) => {
+  const [loggedIn, setLoggedIn] = useState(false)
 
-  <View
-    style={{
-      flexDirection: 'row',
-    }}
-  >
-    <View
-      style={{
-        flex: 0.75,
-      }}
-    />
-    <View
-      style={{
-        flex: 1.5,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: 400,
-        maxWidth: 600,
-      }}
-    >
-      <Welcome />
-      <Menu navigation={navigation} />
+  useEffect(() => {
+    if (authState === 'signedIn') {
+      setLoggedIn(true)
+    }
+  }, [])
+
+  // We query here for products as a means to 'warm' the lambda, and
+  // to speed up 'products' calls later on.
+  // Using 'network-only' as fetchPolicy to ensure we are indeed making a hit on lambda
+  return (
+    <View style={styles.container}>
+      <Query
+        query={PRODUCTS}
+        fetchPolicy="network-only"
+      >
+        {({ loading, error }) => {
+          if (error) return <Error error={error} />
+          if (loading) {
+            return (
+              <View style={styles.loadView}>
+                <Text style={styles.loadText}>Stand by, preloading products...</Text>
+              </View>
+            )
+          }
+          return (
+            <React.Fragment>
+              <View style={styles.col} />
+              <View style={styles.main}>
+                {loggedIn && <Welcome />}
+                <Menu
+                  loggedIn={loggedIn}
+                  navigation={navigation}
+                  setLoggedIn={setLoggedIn}
+                />
+              </View>
+              <View style={styles.col} />
+            </React.Fragment>
+          )
+        }}
+      </Query>
     </View>
-    <View
-      style={{
-        flex: 0.75,
-      }}
-    />
-  </View>
-)
+  )
+}
 Home.propTypes = {
+  authState: PropTypes.string,
   navigation: PropTypes.instanceOf(Object).isRequired,
 }
-export default Home
+Home.defaultProps = {
+  authState: '',
+}
+
+export default withAuthenticator(Home)

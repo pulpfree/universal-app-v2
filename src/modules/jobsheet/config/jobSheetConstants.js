@@ -2,6 +2,15 @@ export const Fractions = ['', '1/8', '1/4', '3/8', '1/2', '5/8', '3/4', '7/8']
 
 export const Qty = Array(9).fill(1).map((x, y) => x + y)
 
+export const GroupTypeParts = [
+  'Casement',
+  'Fixed',
+  'Double Hung',
+  'Bow Window',
+  'Bay Window',
+  'Arched Top Over',
+]
+
 export const Rooms = [
   { id: 'BH', label: 'Bathroom' },
   { id: 'BR', label: 'Bedroom' },

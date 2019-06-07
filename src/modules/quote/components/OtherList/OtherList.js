@@ -7,6 +7,10 @@ import {
   View,
 } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { graphql } from 'react-apollo'
+
+import { TOGGLE_ITEM } from '../../mutations/local'
+
 import { styles } from './index'
 import { fmtMoney } from '../../../../util/fmt'
 
@@ -50,18 +54,19 @@ class OtherList extends React.Component {
     )
   }
 
-  _onPressItem = (customerID) => {
-    // const { navigation } = this.props
-    // navigation.navigate('CustomerInfo', { customerID })
+  _onPressItem = (itemID) => {
+    const { toggleQuoteItem } = this.props
+    toggleQuoteItem(itemID, 'other')
   }
 
   _keyExtractor = item => item._id
 
   render() {
-    const { jobSheetOther } = this.props
+    const { jobSheetOther, quoteOther } = this.props
     return (
       <FlatList
         data={jobSheetOther}
+        extraData={quoteOther}
         renderItem={this._renderItem}
         keyExtractor={this._keyExtractor}
       />
@@ -71,9 +76,14 @@ class OtherList extends React.Component {
 OtherList.propTypes = {
   quoteOther: PropTypes.instanceOf(Object),
   jobSheetOther: PropTypes.instanceOf(Object).isRequired,
+  toggleQuoteItem: PropTypes.func.isRequired,
 }
 OtherList.defaultProps = {
   quoteOther: null,
 }
 
-export default OtherList
+export default graphql(TOGGLE_ITEM, {
+  props: ({ mutate }) => ({
+    toggleQuoteItem: (itemID, itemType) => mutate({ variables: { itemID, itemType } }),
+  }),
+})(OtherList)

@@ -81,12 +81,16 @@ class OtherList extends React.Component {
         <TouchableOpacity onPress={() => navigation.navigate('OtherForm', { jobSheet, isNew: true })}>
           <ListHeader navigation={navigation} title="Other" />
         </TouchableOpacity>
-        {loading && <Loader />}
-        <FlatList
-          data={data}
-          renderItem={this._renderItem}
-          keyExtractor={this._keyExtractor}
-        />
+        {loading
+          ? (<Loader />)
+          : (
+            <FlatList
+              data={data}
+              renderItem={this._renderItem}
+              keyExtractor={this._keyExtractor}
+            />
+          )
+        }
       </View>
     )
   }

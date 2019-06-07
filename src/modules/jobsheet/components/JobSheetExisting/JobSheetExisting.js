@@ -5,17 +5,17 @@ import {
   View,
 } from 'react-native'
 import { Button } from 'react-native-elements'
-
 import { Mutation } from 'react-apollo'
 import { withNavigation } from 'react-navigation'
 
+import { PERSIST_JOBSHEET } from '../../mutations/remote'
+import { CUSTOMER_DATA } from '../../../customer/queries'
+
 import clr from '../../../../config/colors'
 import styles from './styles'
-import { CUSTOMER_DATA } from '../../../customer/queries'
 import { Error } from '../../../common/components/Error'
 import { Header } from '../../../common/components/Header'
-import { Loader } from '../../../common/components/Loader'
-import { PERSIST_JOBSHEET } from '../../mutations/remote'
+import { prepareAddress } from '../../utils'
 
 function JobSheetExisting({ customer, navigation }) {
   return (
@@ -52,11 +52,11 @@ function JobSheetExisting({ customer, navigation }) {
                       jobSheetInput: {
                         customerID: customer._id,
                       },
-                      addressID: customer.address._id,
+                      addressInput: prepareAddress(customer.address, customer._id),
                     },
                   })
                 }}
-                title="Create"
+                title={loading ? 'Stand by...' : 'Create'}
                 buttonStyle={{
                   backgroundColor: clr.primary,
                 }}
@@ -68,7 +68,6 @@ function JobSheetExisting({ customer, navigation }) {
                 }}
               />
               {error && <Error error={error} />}
-              {loading && <Loader />}
             </React.Fragment>
           )}
         </Mutation>

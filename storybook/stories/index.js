@@ -9,10 +9,11 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
 
 // import CenterView from './CenterView'
 
-import { AddressForm } from '../../src/modules/address/components/AddressForm'
+// import { AddressForm } from '../../src/modules/address/components/AddressForm'
 
 import CustomerSearch from '../../src/modules/customer/screens/CustomerSearch'
-import CustomerInfo from '../../src/modules/customer/screens/CustomerInfo'
+// import CustomerInfo from '../../src/modules/customer/screens/CustomerInfo'
+import { CustomerInfoMenu } from '../../src/modules/customer/components/CustomerInfoMenu'
 import { CustomerInfoHeader } from '../../src/modules/customer/components/CustomerInfoHeader'
 import { CustomerQuoteList } from '../../src/modules/customer/components/CustomerQuoteList'
 import { CustomerSearch as CustomerSearchBox } from '../../src/modules/customer/components/CustomerSearch'
@@ -20,9 +21,12 @@ import { CustomerSearchList } from '../../src/modules/customer/components/Custom
 import { CustomerForm } from '../../src/modules/customer/components/CustomerForm'
 import { ContactSheet } from '../../src/modules/customer/components/ContactSheet'
 import { SearchProvider } from '../../src/modules/customer/components/SearchContext'
+import { Notes } from '../../src/modules/customer/components/Notes'
+// import { DeleteCustomer } from '../../src/modules/customer/components/DeleteCustomer'
 
 import JobSheetNew from '../../src/modules/jobsheet/screens/JobSheetNew'
 import JobSheet from '../../src/modules/jobsheet/screens/JobSheet'
+import WorkSheet from '../../src/modules/jobsheet/screens/WorkSheet'
 import { JobSheetList } from '../../src/modules/jobsheet/components/JobSheetList'
 import { GroupList } from '../../src/modules/jobsheet/components/GroupList'
 import { OtherList } from '../../src/modules/jobsheet/components/OtherList'
@@ -31,23 +35,31 @@ import { SelectRooms } from '../../src/modules/jobsheet/components/SelectRooms'
 import { SelectWindowOptions } from '../../src/modules/jobsheet/components/SelectWindowOptions'
 import { SelectTrim } from '../../src/modules/jobsheet/components/SelectTrim'
 import { SelectFeatures } from '../../src/modules/jobsheet/components/SelectFeatures'
-import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
-import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
+// import GroupForm from '../../src/modules/jobsheet/screens/GroupForm'
+// import OtherForm from '../../src/modules/jobsheet/screens/OtherForm'
 // import WindowForm from '../../src/modules/jobsheet/screens/WindowForm'
+import { GroupTypeBuilder } from '../../src/modules/jobsheet/components/GroupTypeBuilder'
 
+
+import Payments from '../../src/modules/quote/screens/Payments'
+import QuotePreview from '../../src/modules/quote/screens/QuotePreview'
 import QuoteSearch from '../../src/modules/quote/screens/QuoteSearch'
+import NearbyJobs from '../../src/modules/quote/screens/NearbyJobs'
+import { DeleteInvoice } from '../../src/modules/quote/components/DeleteInvoice'
+import { DiscountForm } from '../../src/modules/quote/components/DiscountForm'
+import { InvoiceOptions } from '../../src/modules/quote/components/InvoiceOptions'
+// import { QuoteForm } from '../../src/modules/quote/components/QuoteForm'
 import { QuoteListHeader } from '../../src/modules/quote/components/QuoteListHeader'
 import { QuoteSearchHeader } from '../../src/modules/quote/components/QuoteSearchHeader'
 import { QuoteSearchList } from '../../src/modules/quote/components/QuoteSearchList'
 import { SearchProvider as QuoteSearchProvider } from '../../src/modules/quote/components/SearchContext'
-import { QuoteForm } from '../../src/modules/quote/components/QuoteForm'
 
 import { Container } from '../../src/modules/auth/components/Container'
 import { SignIn as PfSignIn } from '../../src/modules/auth/components/SignIn'
 
 import { Loader } from '../../src/modules/common/components/Loader'
 
-import { jobsheets, quotes } from '../mockData/quotes'
+import { geoAddress, jobsheets, quotes } from '../mockData/quotes'
 import jobSheet from '../mockData/jobSheet'
 import quote from '../mockData/quote'
 import { customers, customerInfo, quotes as customerQuotes } from '../mockData/customer'
@@ -101,6 +113,12 @@ storiesOf('Customer', module)
   .add('contact sheet', () => (
     <ContactSheet data={customerInfo} />
   ))
+  .add('info menu', () => (
+    <CustomerInfoMenu />
+  ))
+  /* .add('delete customer', () => (
+    <DeleteCustomer />
+  )) */
 
 storiesOf('Customer Form', module)
   .addDecorator(getStory => <PaperProvider theme={theme}>{getStory()}</PaperProvider>)
@@ -127,19 +145,52 @@ storiesOf('Quotes', module)
   .add('search screen', () => (
     <QuoteSearch />
   ))
+  .add('discount form modal', () => (
+    <DiscountForm />
+  ))
 
-storiesOf('QuoteForm', module)
+/* storiesOf('QuoteForm', module)
   .add('quote form', () => (
     <QuoteForm data={quote} />
+  )) */
+
+/* storiesOf('QuotePreview', module)
+  .add('quote preview', () => (
+    <QuotePreview />
+  )) */
+
+storiesOf('InvoiceOptions', module)
+  .add('invoice options', () => (
+    <InvoiceOptions />
+  ))
+
+storiesOf('Payments', module)
+  .add('payment form', () => (
+    <Payments />
+  ))
+
+storiesOf('DeleteInvoice', module)
+  .add('delete invoice', () => (
+    <DeleteInvoice />
+  ))
+
+storiesOf('Notes', module)
+  .add('notes modal', () => (
+    <Notes />
+  ))
+
+storiesOf('NearbyJobs', module)
+  .add('screen', () => (
+    <NearbyJobs address={geoAddress} />
   ))
 
 /*
 * ======================== Address =====================================
 */
-storiesOf('Address', module)
+/* storiesOf('Address', module)
   .add('address form', () => (
     <AddressForm />
-  ))
+  )) */
 
 /*
 * ======================== JobSheet =====================================
@@ -166,9 +217,9 @@ storiesOf('JobSheets', module)
   /* .add('group form', () => (
     <GroupForm data={jobSheet.jobSheetData.jobsheet} />
   )) */
-  .add('other form', () => (
+  /* .add('other form', () => (
     <OtherForm jobsheet={jobSheet.jobSheetData.jobsheet} />
-  ))
+  )) */
   .add('select rooms modal', () => (
     <SelectRooms />
   ))
@@ -181,6 +232,13 @@ storiesOf('JobSheets', module)
   .add('select job features modal', () => (
     <SelectFeatures />
   ))
+  .add('work sheet screen', () => (
+    <WorkSheet />
+  ))
+  .add('group type builder', () => (
+    <GroupTypeBuilder />
+  ))
+
 
 /*
 * ======================== Auth =====================================

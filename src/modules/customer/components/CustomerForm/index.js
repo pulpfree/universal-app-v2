@@ -1,4 +1,4 @@
-import CustomerForm from './CustomerForm.cntr'
+import CustomerForm from './CustomerForm'
 import styles from './styles'
 
 export { CustomerForm, styles }

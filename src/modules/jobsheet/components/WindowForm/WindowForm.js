@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  AlertIOS,
+  Alert,
   Picker,
   Text,
   TextInput,
@@ -24,14 +24,15 @@ import {
   DUPLICATE_WINDOW,
   SET_FIELD,
 } from '../../mutations/local'
+import { PERSIST_WINDOW, REMOVE_WINDOW } from '../../mutations/remote'
+import { WINDOW_QUERY } from '../../queries/local'
+import { JOBSHEET_DATA } from '../../queries'
+
 import * as jsc from '../../config/jobSheetConstants'
 import styles from './styles'
 import { Duplicate } from '../../../common/components/Duplicate'
 import { Error } from '../../../common/components/Error'
 import { FormHeader } from '../FormHeader'
-import { JOBSHEET_DATA } from '../../queries'
-import { PERSIST_WINDOW, REMOVE_WINDOW } from '../../mutations/remote'
-import { WINDOW_QUERY } from '../../queries/local'
 import { prepareDoc } from '../../utils'
 
 
@@ -46,11 +47,13 @@ function WindowForm({
     }
   ), [])
   const [isDuplicate, setDuplicate] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const costsInstall = useRef(null)
+  const scrollTop = useRef(null)
 
   const _handleRemove = (func, windowID) => {
-    AlertIOS.alert(
+    Alert.alert(
       'Confirm Delete Window',
       'Are you sure you want to delete this item?',
       [
@@ -68,15 +71,16 @@ function WindowForm({
   const _handleDuplicate = (func) => {
     setDuplicate(true)
     func()
+    scrollTop.current.scrollTo({ x: 0, y: 0, animated: true })
   }
 
   return (
     <Query query={WINDOW_QUERY}>
       {({ error, data: { products, window } }) => {
         if (error) return <Error error={error} />
-        // console.log('data.window in Query: ', window)
+
         return (
-          <KeyboardAwareScrollView style={styles.formCont}>
+          <KeyboardAwareScrollView style={styles.formCont} ref={scrollTop}>
             {isDuplicate && (
               <Duplicate />
             )}
@@ -105,7 +109,7 @@ function WindowForm({
                 <Text style={styles.cellLabel}>Style</Text>
                 <Picker
                   selectedValue={window.productID._id}
-                  style={styles.picker}
+                  style={[styles.picker, { width: 180 }]}
                   itemStyle={styles.pickerItem}
                   onValueChange={value => setField('productID._id', value)}
                 >
@@ -125,8 +129,8 @@ function WindowForm({
                 <View style={styles.dimCell}>
                   <TextInput
                     keyboardType="numeric"
-                    style={styles.dimInput}
                     onChangeText={text => setField('dims.width.inch', text)}
+                    style={styles.dimInput}
                     value={window.dims.width.inch.toString()}
                   />
                   <Picker
@@ -150,8 +154,9 @@ function WindowForm({
                 <Text style={styles.cellLabel}>Height</Text>
                 <View style={styles.dimCell}>
                   <TextInput
-                    style={styles.dimInput}
+                    keyboardType="numeric"
                     onChangeText={text => setField('dims.height.inch', text)}
+                    style={styles.dimInput}
                     value={window.dims.height.inch.toString()}
                   />
                   <Picker
@@ -202,7 +207,7 @@ function WindowForm({
                     {
                       options: window.specs.options,
                       cost: window.costs.options,
-                      type: 'group',
+                      type: 'window',
                     }
                   )}
                 >
@@ -222,7 +227,16 @@ function WindowForm({
               </View>
 
               <View style={styles.formDetailRow}>
-                <TouchableOpacity onPress={() => navigation.navigate('SelectTrim', { trim: window.specs.trim, cost: window.costs.trim })}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(
+                    'SelectTrim',
+                    {
+                      trim: window.specs.trim,
+                      cost: window.costs.trim,
+                      type: 'window',
+                    }
+                  )}
+                >
                   <Text style={[styles.detailTextLabel, styles.modalLinkText]}>Trim</Text>
                 </TouchableOpacity>
                 <TextInput
@@ -325,6 +339,12 @@ function WindowForm({
               </View>
             </View>
 
+            {errorMsg !== '' && (
+              <View style={{ marginTop: 10 }}>
+                <Error error={errorMsg} />
+              </View>
+            )}
+
             <View style={styles.buttonRow}>
               <Mutation
                 mutation={REMOVE_WINDOW}
@@ -333,34 +353,37 @@ function WindowForm({
                   { query: JOBSHEET_DATA, variables: { jobSheetID: window.jobsheetID } },
                 ]}
               >
-                {jobSheetRemoveWindow => (
-                  <Button
-                    disabled={!window.windowID}
-                    onPress={() => _handleRemove(jobSheetRemoveWindow, window.windowID)}
-                    title="Delete"
-                    buttonStyle={styles.submitButtonSecondary}
-                    style={{ width: 200 }}
-                    icon={{
-                      name: 'ios-trash',
-                      type: 'ionicon',
-                      color: 'white',
-                    }}
-                  />
-                )}
+                {(jobSheetRemoveWindow, { error: mutError, loading }) => {
+                  if (mutError) setErrorMsg(mutError)
+                  return (
+                    <Button
+                      buttonStyle={styles.submitButtonSecondary}
+                      disabled={!window.windowID || loading}
+                      icon={{
+                        name: 'ios-trash',
+                        type: 'ionicon',
+                        color: 'white',
+                      }}
+                      onPress={() => _handleRemove(jobSheetRemoveWindow, window.windowID)}
+                      style={{ width: 200 }}
+                      title={loading ? 'Stand by...' : 'Delete Window'}
+                    />
+                  )
+                }}
               </Mutation>
               <Mutation mutation={DUPLICATE_WINDOW}>
                 {setDuplicateWindow => (
                   <Button
                     buttonStyle={styles.submitButtonSecondary}
                     disabled={!window.windowID}
-                    onPress={() => _handleDuplicate(setDuplicateWindow)}
-                    style={{ width: 200 }}
-                    title="Duplicate"
                     icon={{
                       name: 'ios-browsers',
                       type: 'ionicon',
                       color: 'white',
                     }}
+                    onPress={() => _handleDuplicate(setDuplicateWindow)}
+                    style={{ width: 200 }}
+                    title="Duplicate"
                   />
                 )}
               </Mutation>
@@ -371,28 +394,30 @@ function WindowForm({
                 ]}
                 onCompleted={() => navigation.goBack()}
               >
-                {(persistWindow, { error }) => ( // eslint-disable-line no-shadow
-                  <React.Fragment>
-                    <Button
-                      disabled={window.costs.extendTotal <= 0}
-                      onPress={() => {
-                        persistWindow({ variables: { input: prepareDoc(window) } })
-                        navigation.goBack()
-                      }}
-                      title="Submit"
-                      buttonStyle={styles.submitButton}
-                      style={{ width: 200 }}
-                      icon={{
-                        name: 'ios-send',
-                        type: 'ionicon',
-                        color: 'white',
-                      }}
-                    />
-                    {error && <Error error={error} />}
-                  </React.Fragment>
-                )}
+                {(persistWindow, { error: winError, loading }) => {
+                  if (winError) setErrorMsg(winError)
+                  return (
+                    <React.Fragment>
+                      <Button
+                        buttonStyle={styles.submitButton}
+                        disabled={window.costs.extendTotal <= 0 || loading}
+                        icon={{
+                          name: 'ios-send',
+                          type: 'ionicon',
+                          color: 'white',
+                        }}
+                        onPress={() => {
+                          persistWindow({ variables: { input: prepareDoc(window) } })
+                        }}
+                        style={{ width: 200 }}
+                        title={loading ? 'Stand by...' : 'Save Window'}
+                      />
+                    </React.Fragment>
+                  )
+                }}
               </Mutation>
             </View>
+
           </KeyboardAwareScrollView>
         )
       }}

@@ -7,26 +7,28 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
-import { compose, Query } from 'react-apollo'
+import { compose, graphql, Query } from 'react-apollo'
+
+import { JOBSHEET_DATA } from '../queries'
+import { SET_PRODUCTS } from '../mutations/local'
 
 import { Error } from '../../common/components/Error'
+import { FeatureList } from '../components/FeatureList'
 import { GroupList } from '../components/GroupList'
 import { Header, Menu } from '../components/JobSheetHeader'
-import { JOBSHEET_DATA } from '../queries'
 import { Loader } from '../../common/components/Loader'
 import { OtherList } from '../components/OtherList'
 import { WindowList } from '../components/WindowList'
 
 
 const JobSheet = ({ navigation }) => {
-  const defJobSheetID = __DEV__ ? '5b1846d52aac0450227ebfe9' : null // eslint-disable-line
-  const jobSheetID = navigation.getParam('jobSheetID', defJobSheetID)
+  const jobSheetID = navigation.getParam('jobSheetID')
 
   return (
     <Query
       query={JOBSHEET_DATA}
       variables={{ jobSheetID }}
-      // fetchPolicy="cache-and-network"
+      fetchPolicy="cache-and-network"
     >
       {({ loading, error, data }) => {
         if (error) return <Error error={error} />
@@ -39,13 +41,14 @@ const JobSheet = ({ navigation }) => {
         } = data.jobSheetData
 
         return (
-          <View>
+          <View style={{ paddingBottom: 50 }}>
             <Header jobSheet={jobsheet} />
             <ScrollView>
               <Menu jobSheet={jobsheet} navigation={navigation} />
               <WindowList data={windows} jobSheet={jobsheet} />
               <GroupList data={groups} jobSheet={jobsheet} />
               <OtherList data={other} jobSheet={jobsheet} />
+              <FeatureList jobSheet={jobsheet} />
             </ScrollView>
           </View>
         )
@@ -57,6 +60,13 @@ JobSheet.propTypes = {
   navigation: PropTypes.instanceOf(Object).isRequired,
 }
 
+const SetProducts = graphql(SET_PRODUCTS, {
+  props: ({ mutate }) => ({
+    setProducts: () => mutate(),
+  }),
+})
+
 export default compose(
+  SetProducts,
   withNavigation,
 )(JobSheet)

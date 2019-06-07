@@ -11,13 +11,14 @@ class SearchProvider extends React.Component {
   }
 
   _handleClosed = (closed) => {
-    // const { invoiced } = this.state
-    // const closedVal = invoiced ? closed : false
     this.setState({ closed })
   }
 
   _handleInvoiced = (invoiced) => {
     this.setState({ invoiced })
+    if (invoiced === false) {
+      this.setState({ closed: false })
+    }
   }
 
   _handlePeriod = (period) => {

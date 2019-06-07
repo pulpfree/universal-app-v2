@@ -124,7 +124,7 @@ export default class ForgotPassword extends AuthPiece {
       </View>
       {!this.state.delivery ? this.forgotBody() : this.submitBody()}
       <View style={styles.footer}>
-        <TouchableHighlight onPress={() => this.changeState('forgosignIntPassword')}>
+        <TouchableHighlight onPress={() => this.changeState('signIn')}>
           <Text style={styles.footerText}>Back to Sign In</Text>
         </TouchableHighlight>
       </View>

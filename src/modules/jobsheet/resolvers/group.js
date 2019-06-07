@@ -22,7 +22,7 @@ const GROUP_WINDOW_ID_KEY = 'JobSheetGroupItem:1'
 export const defaults = {
   group: {
     __typename: 'JobSheetGroup',
-    _id: GROUP_ID,
+    id: GROUP_ID,
     groupID: null,
     jobsheetID: '',
     costs: {
@@ -41,17 +41,17 @@ export const defaults = {
       __typename: 'JobSheetGroupDims',
       height: {
         __typename: 'GroupWindowDims',
-        decimal: '',
-        diff: '',
+        decimal: 0.0,
+        diff: 0.0,
         fraction: '',
-        inch: '',
+        inch: 0,
       },
       width: {
         __typename: 'GroupWindowDims',
-        decimal: '',
-        diff: '',
+        decimal: 0.0,
+        diff: 0.0,
         fraction: '',
-        inch: '',
+        inch: 0,
       },
     },
     items: {
@@ -101,12 +101,7 @@ export const defaults = {
     rooms: [],
     specs: {
       __typename: 'JobSheetGroupSpecs',
-      groupID: '',
-      groupType: {
-        __typename: 'JobSheetGroupType',
-        _id: '',
-        name: '',
-      },
+      groupTypeDescription: '',
       installType: '',
       options: '',
       sqft: '',
@@ -229,27 +224,13 @@ export const resolvers = {
           }
           break
         case 'specs':
-          if (parts[1] === 'groupType') {
-            data = {
-              ...res,
-              specs: {
-                __typename: 'JobSheetGroupSpecs',
-                ...res.specs,
-                [parts[1]]: {
-                  __typename: 'JobSheetGroupType',
-                  _id: value,
-                },
-              },
-            }
-          } else {
-            data = {
-              ...res,
-              specs: {
-                __typename: 'JobSheetGroupSpecs',
-                ...res.specs,
-                [parts[1]]: value,
-              },
-            }
+          data = {
+            ...res,
+            specs: {
+              __typename: 'JobSheetGroupSpecs',
+              ...res.specs,
+              [parts[1]]: value,
+            },
           }
           break
         case 'costs':
@@ -318,9 +299,9 @@ export const resolvers = {
     },
     setWindowFromGroup: (_, { windowID }, { cache }) => {
       const id = GROUP_WINDOW_ID_KEY
-      const res = cache.readQuery({ query: GROUP_QUERY, id })
+      const res = cache.readQuery({ query: GROUP_QUERY, id: GROUP_ID_KEY })
       const { group: { items } } = res
-      const window = items.find(item => (item._id === windowID))
+      const window = items.find(item => (item._id.toString() === windowID))
       const {
         costs,
         dims,
@@ -350,7 +331,7 @@ export const resolvers = {
               ...dims.width,
             },
           },
-          productID,
+          productID: productID.toString(),
           product: {
             __typename: 'Product',
             name: product.name,
@@ -362,7 +343,6 @@ export const resolvers = {
           },
         },
       }
-
       cache.writeData({ data, id })
       return null
     },
@@ -421,6 +401,7 @@ export const resolvers = {
         default:
           data = { ...res, [field]: value }
       }
+
       cache.writeFragment({ fragment, id, data })
       if (isSetSize) {
         resolvers.Mutation.setGroupWindowDetails(_, null, { cache })
@@ -527,7 +508,7 @@ export const resolvers = {
       const id = GROUP_ID_KEY
       const COSTS_QUERY = gql` {
         group @client {
-          _id
+          id
           groupID
           jobsheetID
           costs {
@@ -551,7 +532,6 @@ export const resolvers = {
       }`
       const res = cache.readQuery({ query: COSTS_QUERY, id })
       const { group } = res
-      // console.log('group in setGroupCosts:', group)
       const costs = calcGroupCosts(group)
 
       const fragment = gql`
@@ -572,7 +552,7 @@ export const resolvers = {
 
       const data = {
         __typename: 'JobSheetGroup',
-        _id: GROUP_ID,
+        id: GROUP_ID,
         costs: {
           __typename: 'Costs',
           ...costs,
@@ -600,7 +580,6 @@ export const resolvers = {
         group.items[itemIdx] = groupWindow
       } else {
         groupWindow._id = Types.ObjectId().toHexString()
-        delete groupWindow.windowID
         group.items.push(groupWindow)
       }
 
@@ -619,6 +598,33 @@ export const resolvers = {
 
       cache.writeData({ data: group, id: groupID })
       resolvers.Mutation.clearGroupWindow(_, null, { cache })
+      return null
+    },
+    removeGroupWindow: (_, { windowID }, { cache }) => {
+      const groupID = GROUP_ID_KEY
+      const grpRes = cache.readQuery({ query: GROUP_QUERY, id: groupID })
+      const { group } = grpRes
+
+      // find and remove window from items
+      const itemIdx = ramda.findIndex(ramda.propEq('_id', windowID))(group.items)
+      group.items.splice(itemIdx, 1)
+      // calculate costs
+      const costs = calcGroupCosts(group)
+      group.costs = {
+        __typename: 'JobSheetGroupCosts',
+        ...costs,
+      }
+
+      // update total sqft
+      group.specs.sqft = group.items.reduce(
+        (accumulator, curVal) => accumulator + curVal.specs.extendSqft,
+        0
+      )
+
+      // save everything
+      cache.writeData({ data: group, id: groupID })
+      resolvers.Mutation.clearGroupWindow(_, null, { cache })
+
       return null
     },
     setGroupDuplicate: (_, args, { cache }) => {
@@ -655,6 +661,7 @@ export const resolvers = {
         groupRet = await client.query({
           query: JOBSHEET_GROUP,
           variables: { groupID },
+          fetchPolicy: 'network-only',
         })
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
@@ -689,15 +696,20 @@ export const resolvers = {
           },
         },
       }
-
       cache.writeData({ data, id })
+      // console.log('data written in setGroupFromRemote:', data)
       return data
     },
   },
   Query: {
-
+    group: (_, _args, { cache }) => {
+      const res = cache.readQuery({ query: GROUP_QUERY, id: GROUP_ID_KEY })
+      console.log('resolver group query:', res.group) // eslint-disable-line no-console
+      return res.group
+    },
   },
 }
+
 export const typeDefs = `
   type JobSheetGroup {
     _id: ID!

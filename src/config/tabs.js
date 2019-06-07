@@ -7,12 +7,12 @@ import TestApollo from '../modules/jobsheet/screens/TestApollo'
 
 const TabNavigator = createBottomTabNavigator({
   Storybook,
-  JobSheet: {
+  /* JobSheet: {
     screen: JobSheet,
     navigationOptions: {
       title: 'Job Sheet',
     },
-  },
+  }, */
   TestApollo,
   Home: HomeStack,
 })

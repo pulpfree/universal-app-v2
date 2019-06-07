@@ -1,19 +1,39 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
+  Alert,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { Button } from 'react-native-elements'
+import { Mutation, Query } from 'react-apollo'
+import { withNavigation } from 'react-navigation'
 
+import { CREATE_INVOICE, PERSIST_QUOTE, REMOVE_QUOTE } from '../../mutations/remote'
+import { CUSTOMER_DATA } from '../../../customer/queries'
+import { QUOTE_JOBSHEET } from '../../queries.local'
+import { TOGGLE_ALL } from '../../mutations/local'
+
+import clr from '../../../../config/colors'
+import styles from './styles'
+import { Error } from '../../../common/components/Error'
 import { GroupList } from '../GroupList'
-import { WindowList } from '../WindowList'
 import { OtherList } from '../OtherList'
 import { QuoteFormFooter } from '../QuoteFormFooter'
-import styles from './styles'
-import clr from '../../../../config/colors'
+import { WindowList } from '../WindowList'
 import { fmtMoney } from '../../../../util/fmt'
+import { pdfPreviewArgs, prepareQuote } from '../../utils'
+
+const extractAddress = (quote) => {
+  const { addressID: addr } = quote.jobsheetID
+  return {
+    city: addr.city,
+    street1: addr.street1,
+    coordinates: addr.location.coordinates,
+  }
+}
 
 const SubTotal = ({ subTotal }) => {
   if (!subTotal) return null
@@ -27,128 +47,237 @@ SubTotal.propTypes = {
   subTotal: PropTypes.number.isRequired,
 }
 
-const QuoteForm = ({ data }) => {
-  const { groups, other, windows } = data.jobSheetData
-  const {
-    customerID,
-    discount,
-    items,
-    itemCosts,
-    jobsheetID,
-    quotePrice,
-    number,
-    version,
-  } = data.getQuote
+const QuoteForm = ({ isNew, navigation }) => {
+  const [toggleAll, setToggleAll] = useState(true)
+
+  useEffect(() => (
+    () => setToggleAll(true)
+  ), [])
+
+  const _handleRemove = (func, quoteID) => {
+    Alert.alert(
+      'Confirm Delete Quote',
+      'Are you sure you want to delete this quote?',
+      [
+        { text: 'Cancel' },
+        {
+          text: 'Delete',
+          onPress: () => {
+            func({ variables: { id: quoteID } })
+          },
+        },
+      ]
+    )
+  }
+
+  const toggleIcon = toggleAll ? 'ios-checkbox' : 'ios-checkbox-outline'
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titleHeader}>
-        <Text style={styles.titleText}>
-          {`${customerID.name.first} ${customerID.name.last} - ${jobsheetID.addressID.street1}, ${jobsheetID.addressID.city} - ${number}/${version}`}
-        </Text>
-      </View>
-      <ScrollView style={styles.scrollContainer}>
-        <View style={styles.navBar}>
-          <Button
-            icon={(
-              <Icon
-                name="ios-checkbox-outline"
-                type="ionicon"
-                size={35}
-                containerStyle={styles.navButtonIconCont}
-                iconStyle={styles.navButtonIcon}
-              />
-          )}
-            title="Toggle All"
-            type="clear"
-            buttonStyle={styles.navButton}
-            titleStyle={styles.navButtonTitle}
-          />
-          <Button
-            icon={(
-              <Icon
-                name="ios-eye"
-                type="ionicon"
-                size={35}
-                containerStyle={styles.navButtonIconCont}
-                iconStyle={styles.navButtonIcon}
-              />
-          )}
-            title="Preview"
-            type="clear"
-            buttonStyle={styles.navButton}
-            titleStyle={styles.navButtonTitle}
-          />
-          <Button
-            icon={(
-              <Icon
-                name="ios-trash"
-                type="ionicon"
-                size={35}
-                containerStyle={styles.navButtonIconCont}
-                iconStyle={styles.navButtonIcon}
-              />
-          )}
-            title="Delete"
-            type="clear"
-            buttonStyle={styles.navButton}
-            titleStyle={styles.navButtonTitle}
-          />
-        </View>
+    <Query query={QUOTE_JOBSHEET}>
+      {({ data: { jobSheet, quote } }) => {
+        const { groups, other, windows } = jobSheet
+        const customerID = quote.customerID._id
 
-        {windows.length > 0
-          && (
-            <React.Fragment>
-              <View style={styles.secondaryHeader}>
-                <Text style={styles.secondaryText}>Windows</Text>
+        return (
+          <View style={styles.container}>
+            <View style={styles.titleHeader}>
+              <TouchableOpacity onPress={() => navigation.navigate('CustomerInfo', { customerID })}>
+                <Text style={styles.titleText}>
+                  {quote.customerID.name.first}
+                  &nbsp;
+                  {quote.customerID.name.last}
+                  &nbsp;&mdash;&nbsp;
+                  {quote.jobsheetID.addressID.street1}
+                  ,&nbsp;
+                  {quote.jobsheetID.addressID.city}
+                  &nbsp;&mdash;&nbsp;
+                  {`${quote.number}/${quote.version}`}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.scrollContainer}>
+              <View style={styles.navBar}>
+                <Mutation
+                  mutation={TOGGLE_ALL}
+                  onCompleted={() => setToggleAll(!toggleAll)}
+                  variables={{ toggleAll }}
+                >
+                  {toggleQuoteAll => (
+                    <Button
+                      onPress={() => toggleQuoteAll(toggleAll)}
+                      icon={{
+                        containerStyle: styles.navButtonIconCont,
+                        iconStyle: styles.navButtonIcon,
+                        name: toggleIcon,
+                        size: 35,
+                        type: 'ionicon',
+                      }}
+                      title="Toggle All"
+                      type="clear"
+                      buttonStyle={styles.navButton}
+                      titleStyle={styles.navButtonTitle}
+                    />
+                  )}
+                </Mutation>
+                <Button
+                  disabled={isNew || quote.version <= 0}
+                  icon={{
+                    containerStyle: styles.navButtonIconCont,
+                    iconStyle: styles.navButtonIcon,
+                    size: 35,
+                    type: 'ionicon',
+                    name: 'ios-eye',
+                  }}
+                  onPress={() => navigation.navigate(
+                    'QuotePreview',
+                    { previewArgs: pdfPreviewArgs(quote), customerID: quote.customerID._id }
+                  )}
+                  title="Preview"
+                  type="clear"
+                  buttonStyle={styles.navButton}
+                  titleStyle={styles.navButtonTitle}
+                />
+                <Button
+                  icon={{
+                    containerStyle: styles.navButtonIconCont,
+                    iconStyle: styles.navButtonIcon,
+                    size: 35,
+                    type: 'ionicon',
+                    name: 'ios-navigate',
+                  }}
+                  onPress={() => navigation.navigate(
+                    'NearbyJobs',
+                    { address: extractAddress(quote) }
+                  )}
+                  title="Nearby Jobs"
+                  type="clear"
+                  buttonStyle={styles.navButton}
+                  titleStyle={styles.navButtonTitle}
+                />
+                <Mutation
+                  mutation={REMOVE_QUOTE}
+                  onCompleted={() => navigation.goBack()}
+                  refetchQueries={[
+                    { query: CUSTOMER_DATA, variables: { customerID: quote.customerID._id } },
+                  ]}
+                >
+                  {(quoteRemove, { error, loading }) => (
+                    <View style={{ flexDirection: 'column' }}>
+                      <Button
+                        buttonStyle={styles.navButton}
+                        disabled={loading}
+                        icon={{
+                          containerStyle: styles.navButtonIconCont,
+                          iconStyle: styles.navButtonIcon,
+                          name: 'ios-trash',
+                          size: 35,
+                          type: 'ionicon',
+                        }}
+                        onPress={() => _handleRemove(quoteRemove, quote.quoteID)}
+                        title={loading ? 'Stand by...' : 'Delete'}
+                        type="clear"
+                        titleStyle={styles.navButtonTitle}
+                      />
+                      {error && <Error error={error} />}
+                    </View>
+                  )}
+                </Mutation>
               </View>
-              <WindowList jobSheetWindows={windows} quoteWindows={items.window || null} />
-              {itemCosts.window > 0 && <SubTotal subTotal={itemCosts.window} />}
-            </React.Fragment>
-          )
-        }
 
-        {groups.length > 0
-          && (
-            <React.Fragment>
+              {windows.length > 0 && (
+                <React.Fragment>
+                  <View style={styles.secondaryHeader}>
+                    <Text style={styles.secondaryText}>Windows</Text>
+                  </View>
+                  <WindowList jobSheetWindows={windows} quoteWindows={quote.items.window || null} />
+                  {quote.itemCosts.window > 0 && <SubTotal subTotal={quote.itemCosts.window} />}
+                </React.Fragment>
+              )}
+
+              {groups.length > 0 && (
+                <React.Fragment>
+                  <View style={styles.secondaryHeader}>
+                    <Text style={styles.secondaryText}>Window Groups</Text>
+                  </View>
+                  <GroupList jobSheetGroups={groups} quoteGroups={quote.items.group || null} />
+                  {quote.itemCosts.group > 0 && <SubTotal subTotal={quote.itemCosts.group} />}
+                </React.Fragment>
+              )}
+
+              {other.length > 0 && (
+                <React.Fragment>
+                  <View style={styles.secondaryHeader}>
+                    <Text style={styles.secondaryText}>Other Items</Text>
+                  </View>
+                  <OtherList jobSheetOther={other} quoteOther={quote.items.other || null} />
+                  {quote.itemCosts.other > 0 && <SubTotal subTotal={quote.itemCosts.other} />}
+                </React.Fragment>
+              )}
+
               <View style={styles.secondaryHeader}>
-                <Text style={styles.secondaryText}>Window Groups</Text>
+                <Text style={styles.secondaryText}>Summary</Text>
               </View>
-              <GroupList jobSheetGroups={groups} quoteGroups={items.group || null} />
-              {itemCosts.group > 0 && <SubTotal subTotal={itemCosts.group} />}
-            </React.Fragment>
-          )
-        }
-
-        {other.length > 0
-          && (
-            <React.Fragment>
-              <View style={styles.secondaryHeader}>
-                <Text style={styles.secondaryText}>Other Items</Text>
+              <QuoteFormFooter discount={quote.discount} quote={quote} />
+              <View style={styles.buttonRow}>
+                <Mutation
+                  mutation={PERSIST_QUOTE}
+                  onCompleted={() => navigation.navigate('CustomerInfo', { customerID: quote.customerID._id })}
+                  refetchQueries={[
+                    { query: CUSTOMER_DATA, variables: { customerID: quote.customerID._id } },
+                  ]}
+                >
+                  {(quotePersist, { error, loading }) => (
+                    <View style={{ flexDirection: 'column' }}>
+                      <Button
+                        disabled={loading}
+                        onPress={() => quotePersist({
+                          variables: { input: prepareQuote(quote) },
+                        })}
+                        title={loading ? 'Stand by...' : 'Save Quote'}
+                        raised
+                        color={clr.primary}
+                        buttonStyle={styles.submitButton}
+                        containerStyle={styles.submitButtonCont}
+                      />
+                      {error && <Error error={error} />}
+                    </View>
+                  )}
+                </Mutation>
+                <Mutation
+                  mutation={CREATE_INVOICE}
+                  onCompleted={() => navigation.navigate('CustomerInfo', { customerID: quote.customerID._id })}
+                  refetchQueries={[
+                    { query: CUSTOMER_DATA, variables: { customerID: quote.customerID._id } },
+                  ]}
+                >
+                  {(createInvoice, { error, loading }) => (
+                    <View style={{ flexDirection: 'column' }}>
+                      <Button
+                        disabled={quote.version <= 0 || loading}
+                        onPress={() => createInvoice({
+                          variables: { id: quote.quoteID },
+                        })}
+                        title={loading ? 'Stand by...' : 'Create Invoice'}
+                        raised
+                        color={clr.primary}
+                        buttonStyle={styles.submitButton}
+                        containerStyle={styles.submitButtonCont}
+                      />
+                      {error && <Error error={error} />}
+                    </View>
+                  )}
+                </Mutation>
               </View>
-              <OtherList jobSheetOther={other} quoteOther={items.other || null} />
-              {itemCosts.other > 0 && <SubTotal subTotal={itemCosts.other} />}
-            </React.Fragment>
-          )
-        }
-
-        <View style={styles.secondaryHeader}>
-          <Text style={styles.secondaryText}>Summary</Text>
-        </View>
-        <QuoteFormFooter discount={discount} quotePrice={quotePrice} />
-        <Button
-          title="Save Quote"
-          raised
-          color={clr.primary}
-          buttonStyle={styles.submitButton}
-          containerStyle={styles.submitButtonCont}
-        />
-      </ScrollView>
-    </View>
+            </ScrollView>
+          </View>
+        )
+      }}
+    </Query>
   )
 }
 QuoteForm.propTypes = {
-  data: PropTypes.instanceOf(Object).isRequired,
+  isNew: PropTypes.bool.isRequired,
+  navigation: PropTypes.instanceOf(Object).isRequired,
 }
 
-export default QuoteForm
+export default withNavigation(QuoteForm)

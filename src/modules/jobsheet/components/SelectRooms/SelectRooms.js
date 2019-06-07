@@ -101,7 +101,7 @@ function SelectRooms({ navigation }) {
                   {setField => (
                     <Button
                       buttonStyle={styles.submitButton}
-                      disabled={!rooms.length}
+                      // disabled={!rooms.length}
                       onPress={() => {
                         setField({ variables: { field: 'rooms', value: rooms } })
                         navigation.goBack()

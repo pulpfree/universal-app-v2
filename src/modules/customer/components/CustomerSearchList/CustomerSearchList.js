@@ -11,7 +11,8 @@ import {
 import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
 
-import SearchCustomer from '../../queries/SearchCustomer'
+import { SEARCH_CUSTOMER } from '../../queries'
+
 import styles from './styles'
 import { Error } from '../../../common/components/Error'
 import { Loader } from '../../../common/components/Loader'
@@ -70,7 +71,7 @@ class CustomerSearchList extends React.Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <FlatList
           data={results}
           renderItem={this._renderItem}
@@ -88,7 +89,7 @@ CustomerSearchList.defaultProps = {
   data: null,
 }
 
-const SearchList = graphql(SearchCustomer, {
+const SearchList = graphql(SEARCH_CUSTOMER, {
   skip: ({ searchVal }) => !searchVal,
   options: (props) => {
     const variables = {
@@ -99,9 +100,16 @@ const SearchList = graphql(SearchCustomer, {
       variables.field = 'name.last'
       variables.value = props.searchVal
     }
+    if (props.phoneNumber) {
+      variables.field = 'phones.number'
+      variables.value = props.searchVal
+    }
     if (props.streetName) variables.search = props.searchVal
     if (props.isActive !== 'undefined') variables.active = props.isActive
-    return { variables }
+    return {
+      variables,
+      fetchPolicy: 'cache-and-network',
+    }
   },
 })
 

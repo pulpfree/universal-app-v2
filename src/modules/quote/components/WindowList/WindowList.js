@@ -7,12 +7,16 @@ import {
   View,
 } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { graphql } from 'react-apollo'
+
+import { TOGGLE_ITEM } from '../../mutations/local'
+
 import styles from './styles'
 import { fmtMoney } from '../../../../util/fmt'
 
+
 const ListItem = ({ item, quoteWindows }) => {
-  const product = JSON.parse(item.productID)
-  const { name: productName } = product
+  const { name: productName } = item.productID
   const { _id: itemID, qty } = item
   const { extendUnit, extendTotal } = item.costs
   const isSelected = quoteWindows.includes(itemID)
@@ -44,7 +48,6 @@ ListItem.propTypes = {
 class WindowList extends React.Component {
   _renderItem = ({ item }) => {
     const { quoteWindows } = this.props
-
     return (
       <TouchableOpacity onPress={() => this._onPressItem(item._id)}>
         <ListItem item={item} quoteWindows={quoteWindows} />
@@ -52,19 +55,20 @@ class WindowList extends React.Component {
     )
   }
 
-  _onPressItem = (customerID) => {
-    // const { navigation } = this.props
-    // navigation.navigate('CustomerInfo', { customerID })
+  _onPressItem = (itemID) => {
+    const { toggleQuoteItem } = this.props
+    toggleQuoteItem(itemID, 'window')
   }
 
   _keyExtractor = item => item._id
 
   render() {
-    const { jobSheetWindows } = this.props
+    const { jobSheetWindows, quoteWindows } = this.props
 
     return (
       <FlatList
         data={jobSheetWindows}
+        extraData={quoteWindows}
         renderItem={this._renderItem}
         keyExtractor={this._keyExtractor}
       />
@@ -74,9 +78,16 @@ class WindowList extends React.Component {
 WindowList.propTypes = {
   quoteWindows: PropTypes.instanceOf(Object),
   jobSheetWindows: PropTypes.instanceOf(Object).isRequired,
+  toggleQuoteItem: PropTypes.func.isRequired,
 }
 WindowList.defaultProps = {
   quoteWindows: null,
 }
 
-export default WindowList
+export default graphql(TOGGLE_ITEM, {
+  props: ({ mutate }) => ({
+    toggleQuoteItem: (itemID, itemType) => mutate(
+      { variables: { itemID, itemType } }
+    ),
+  }),
+})(WindowList)

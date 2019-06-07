@@ -73,7 +73,6 @@ export const defaults = {
       trim: '',
     },
   },
-  // products: [],
 }
 
 export const resolvers = {
@@ -137,6 +136,7 @@ export const resolvers = {
 
       switch (parts[0]) {
         case 'productID':
+          isSetCosts = true
           data = {
             ...res,
             productID: {
@@ -348,6 +348,7 @@ export const resolvers = {
         windowRet = await client.query({
           query: JOBSHEET_WINDOW,
           variables: { windowID },
+          fetchPolicy: 'network-only',
         })
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
@@ -425,24 +426,6 @@ export const resolvers = {
     },
   },
   Query: {
-    products: async (_, _args, { cache }) => {
-      const id = 'Products:1'
-      // console.log('products local query -- should be loading this once')
-
-      const query = PRODUCTS
-      let productRet
-      try {
-        productRet = await client.query({
-          query,
-        })
-      } catch (e) {
-        console.error(e) // eslint-disable-line no-console
-        return null
-      }
-      const { data } = productRet
-      cache.writeData({ data, id })
-      return data.products
-    },
     searchProduct: (_, { productID }, { cache }) => {
       const query = PRODUCTS
       const pd = cache.readQuery({ query })

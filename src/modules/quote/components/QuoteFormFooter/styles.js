@@ -6,6 +6,8 @@ export default StyleSheet.create({
   container: {
     flexDirection: 'column',
     padding: 16,
+    paddingRight: 20,
+    paddingBottom: 0,
     flex: 1,
   },
   row: {
@@ -18,6 +20,11 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  linked: {
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'dotted',
+    textDecorationColor: clr.primary,
+  },
   totalsVal: {
     fontSize: 18,
     fontWeight: '600',
@@ -28,7 +35,7 @@ export default StyleSheet.create({
     fontSize: 20,
   },
   strikeThrough: {
-    textDecorationStyle: 'solid',
     textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
   },
 })

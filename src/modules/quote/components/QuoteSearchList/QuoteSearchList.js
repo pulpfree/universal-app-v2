@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   FlatList,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -11,26 +10,28 @@ import {
 import { withNavigation } from 'react-navigation'
 import { graphql, compose } from 'react-apollo'
 
-import { QuoteListHeader } from '../QuoteListHeader'
+import { QUOTE_SEARCH } from '../../queries.remote'
+import { SET_QUOTE } from '../../mutations/local'
+
 import styles from './styles'
-import { fmtMoney } from '../../../../util/fmt'
-import SearchQuotes from '../../queries/SearchQuotes'
-import { withSearch } from '../SearchContext'
 import { Error } from '../../../common/components/Error'
 import { Loader } from '../../../common/components/Loader'
+import { QuoteListHeader } from '../QuoteListHeader'
+import { fmtMoney } from '../../../../util/fmt'
+import { withSearch } from '../SearchContext'
 
 const ListItem = ({ item }) => (
   <View style={styles.itemRow}>
     <View style={[styles.itemCell, { flex: 0.3 }]}>
       <Text>{item.number}</Text>
     </View>
-    <View style={styles.itemCell}>
+    <View style={[styles.itemCell, { flex: 1.25 }]}>
       <Text>{`${item.customerID.name.last}, ${item.customerID.name.first}`}</Text>
     </View>
-    <View style={[styles.itemCell, { flex: 1.5 }]}>
-      <Text>{`${item.jobsheetID.addressID.street1}, ${item.jobsheetID.addressID.city}`}</Text>
+    <View style={[styles.itemCell, { flex: 1.25 }]}>
+      <Text numberOfLines={1} ellipsizeMode="tail">{`${item.jobsheetID.addressID.street1}, ${item.jobsheetID.addressID.city}`}</Text>
     </View>
-    <View style={[styles.itemCell, { flex: 0.75 }]}>
+    <View style={[styles.itemCell, { flex: 0.65 }]}>
       <Text style={{ textAlign: 'right' }}>{fmtMoney(item.quotePrice.total, null, true)}</Text>
     </View>
     <View style={[styles.itemCell, { flex: 0.75 }]}>
@@ -64,15 +65,34 @@ Totals.defaultProps = {
 }
 
 class QuoteSearchList extends React.Component {
+  state = {
+    qteLoading: false,
+  }
+
   _renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this._onPressItem(item.customerID._id)}>
+    <TouchableOpacity onPress={() => this._onPressItem(item)}>
       <ListItem item={item} />
     </TouchableOpacity>
   )
 
-  _onPressItem = (customerID) => {
-    const { navigation } = this.props
-    navigation.navigate('CustomerInfo', { customerID })
+  _onPressItem = (item) => {
+    const { invoiced } = this.props
+    const { navigation, setQuoteFromRemote } = this.props
+    const customerID = item.customerID._id
+    const jobSheetID = item.jobsheetID._id
+    const quoteID = item._id
+
+    if (invoiced) {
+      navigation.navigate('InvoiceOptions', { quote: item, customerID })
+      return
+    }
+    const setRes = setQuoteFromRemote(jobSheetID, quoteID)
+    this.setState(() => ({ qteLoading: true }))
+    // blocking navigate action so that the WindowForm component doesn't refresh unnecessarily
+    setRes.then(() => {
+      this.setState(() => ({ qteLoading: false }))
+      navigation.navigate('QuoteEdit', { quoteID, jobSheetID })
+    })
   }
 
   _keyExtractor = item => item._id
@@ -80,41 +100,42 @@ class QuoteSearchList extends React.Component {
   render() {
     const { data } = this.props
     const { error, loading } = data
+    const { qteLoading } = this.state
 
+    if (loading || qteLoading) return <Loader />
     if (error) return <Error error={error} />
-    if (loading) return <Loader />
 
     const { searchQuotes } = data
     const { quotes, totalInvoiced, totalOutstanding } = searchQuotes
 
     return (
-      <ScrollView>
+      <View style={{ paddingBottom: 100 }}>
         {data.variables.invoiced
           && <Totals totalInvoiced={totalInvoiced} totalOutstanding={totalOutstanding} />
         }
         <FlatList
           ListHeaderComponent={QuoteListHeader}
           data={quotes}
+          refreshing={data.networkStatus === 4}
+          onRefresh={() => data.refetch()}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
         />
-      </ScrollView>
+      </View>
     )
   }
 }
 QuoteSearchList.propTypes = {
   data: PropTypes.instanceOf(Object),
+  invoiced: PropTypes.bool.isRequired,
   navigation: PropTypes.instanceOf(Object).isRequired,
+  setQuoteFromRemote: PropTypes.func.isRequired,
 }
 QuoteSearchList.defaultProps = {
   data: null,
 }
 
-const SearchList = graphql(SearchQuotes, {
-  // fetchPolicy: 'network-only',
-  // fetchPolicy: 'cache-first',
-  // fetchPolicy: 'cache-and-network',
-  // fetchPolicy: 'no-cache',
+const SearchList = graphql(QUOTE_SEARCH, {
   options: (props) => {
     const variables = {
       invoiced: props.invoiced,
@@ -124,12 +145,23 @@ const SearchList = graphql(SearchQuotes, {
     if (props.period) {
       variables.year = props.period
     }
-    return ({ variables })
+    return ({
+      variables,
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
+    })
   },
+})
+
+const QuoteFromRemote = graphql(SET_QUOTE, {
+  props: ({ mutate }) => ({
+    setQuoteFromRemote: (jobSheetID, quoteID) => mutate({ variables: { jobSheetID, quoteID } }),
+  }),
 })
 
 export default compose(
   withSearch,
   withNavigation,
+  QuoteFromRemote,
   SearchList,
 )(QuoteSearchList)

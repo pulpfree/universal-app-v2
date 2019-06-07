@@ -1,6 +1,11 @@
 {
-  "react-native.ios.runArguments.simulator": [
-    "--simulator",
-    "iPad Air 2 (12.1)"
+  "cSpell.words": [
+    "cntr",
+    "ionicon",
+    "jobsheets",
+    "northgate",
+    "rankby",
+    "rehydrated",
+    "strictbounds"
   ]
 }
