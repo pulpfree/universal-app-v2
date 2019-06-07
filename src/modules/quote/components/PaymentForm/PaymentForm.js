@@ -65,7 +65,6 @@ function PaymentForm({ navigation }) {
   const quote = navigation.getParam('quote')
   const customerID = navigation.getParam('customerID')
   const quoteID = quote._id
-  // console.log('quote:', quote)
 
   const [errorMsg, setErrorMsg] = useState('')
   const [paymentType, setPaymentType] = useState('')
@@ -105,7 +104,6 @@ function PaymentForm({ navigation }) {
           if (error) return <Error error={errorMsg} />
           if (loading) return <Loader />
           const { payments } = data
-          console.log('payments: ', payments)
 
           return (
             <View style={styles.formCont}>
