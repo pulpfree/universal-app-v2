@@ -21,7 +21,7 @@
     "bugsnag-react-native": "2.16.0",
     "formik": "1.5.4",
     "graphql-tag": "2.10.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.19",
     "moment": "2.24.0",
     "mongoose": "5.4.20",
     "ramda": "0.26.1",
